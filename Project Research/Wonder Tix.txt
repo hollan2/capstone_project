@@ -1,0 +1,66 @@
+Research Questions for Projects
+
+What languages are required for the project/ What’s the tech stack?
+This will vary depending on the features we choose to implement/iterate on. 
+Note that  additional languages, frameworks, etc may eventually be added due to the fact that the team from the 
+previous term is still working on their project.
+
+    Frontend: 
+    MaterialUI
+    Typescript
+    Tailwind.CSS
+    React.JS
+    Redux
+
+    Backend:
+    Typescript
+    Node for runtime environment
+    Express framework
+    Auth0 and Passport for Authentication 
+    Postgres, Prisma and TypegraphQL for Database management
+    Stripe is the Platform used for managing payments.
+    Bcrypt for Hashing
+
+Short description of what the project is
+    Wonder Tix is a new in-development ticketing and donor management system for Portland Playhouse (PPH). 
+    Currently Wonder Tix is using Salesforce and the goal is to develop Wonder Tix into a much easier to use system. 
+    Wonder Tix is an iterative project with each proceeding team working on one or more features of the software.
+	
+Is it based on a previous project?
+    Yes, five previous teams have designed projects for this system.  
+    Each sequential project iterates and adds new functionality onto the current system.
+
+Is there a similar type of project already in existence?
+    The project is intended to be an improvement and replace PPH’s old ticketing and donor management system, 
+    Patron Manager which is based on the Salesforce Platform.
+
+What is the scope of the project? 
+    The project scope focuses on developing individual features and modules for the software.  	
+
+What are the goals of the project?
+    Features not yet implemented include:
+        Ticket Exchange (6 Weeks): Develop a feature to allow admins and Season Pass holders to exchange tickets for a fee
+
+        Season Tickets (6 Weeks): Users can purchase season tickets which give them an amount of tickets to redeem for any show. 
+        Note that certain shows are not eligible for redemption and there are multiple tears of Season Tickets
+
+        Reporting(2-3 Weeks): Implementing reporting functions to gain insight on various statistics using a database schema.
+        Note that certain report functions are already implemented.  
+        
+        Integration Testing(2-3 Weeks): Only a few modules have been unit tested, there is a need for testing for end to end.
+        
+        Integrate user data into database(1-2 Weeks + Not High Priority): Transferring old user data to WonderTix’s database.
+        
+        Bug Fixes (5 Weeks + Not High Priority): Work on fixing edge cases not solved by previous groups
+
+How many features are required to implement?
+There are a variety of features that need to be implemented but we are not expected to implement them all.
+
+Is it a more front end based project or backend?
+This will vary between features but most seem to focus more on front development.
+
+What kind of hardware/software is required if any?
+No specific hardware.
+
+Are there any foreseeable issues developing the project?
+Deciding on working on too many features could lead to us not being able to finish all of them.
