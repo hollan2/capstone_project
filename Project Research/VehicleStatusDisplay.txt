@@ -1,0 +1,19 @@
+What languages are required for the project/ What’s the tech stack?
+
+Short description of what the project is
+
+Is it based on a previous project?
+
+Is there a similar type of project already in existence?
+
+What is the scope of the project? 
+
+What are the goals of the project?
+
+How many features are required to implement?
+
+Is it a more front end based project or backend?
+
+What kind of hardware/software is required if any?
+
+Are there any foreseeable issues developing the project?
