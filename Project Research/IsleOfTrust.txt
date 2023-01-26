@@ -1,19 +1,81 @@
-What languages are required for the project/ What’s the tech stack?
+Q1: What languages are required for the project/ What’s the tech stack?
 
-Short description of what the project is
+A1: The framework is React with Typescript as it is built ontop of JS, helps reduce errors and 
+good for project scaling.
 
-Is it based on a previous project?
+Package management tools are yarn and npm
 
-Is there a similar type of project already in existence?
+yarn: A package management tool that allows you to add packages quickly and while offline. Saves
+package keys in a .lock file for quicker run times when calling on the packages. 
 
-What is the scope of the project? 
+npm: Also adds packages to your repo but not as quick as yarn, has few extra steps.
 
-What are the goals of the project?
+Uses Prettier formating to keep code consistent throughout the code base.
 
-How many features are required to implement?
+Styling of page was written in HTML and CSS
 
-Is it a more front end based project or backend?
+2D game graphics done with Konva a HTML5 Canvas JavaScript framework that use libraries to allow graphics to be created in web page.
 
-What kind of hardware/software is required if any?
+
+Q2: Short description of what the project is
+
+A2: The Stakeholder for this project is looking to have a play through tutorial added to the already implemented
+game Isle of Trust. It currently is a simple text document that describes how the game is played. 
+
+He also wants the game to be more played through story telling. Sounds like he wants to update how the game
+is played and the stories involved for different scenarios. Said in proposal video that he is confused by 
+how the game reacts sometimes. 
+
+The ultimate goal for this is to teach ethical choices to people and have an educational but fun game to use
+
+Q3. Is it based on a previous project?
+
+A3. Yes a capstone group created the backbone of the game with graphics, AI for the game play and 
+story line. They have decent sized code base I'd assume. We would have to work with learning how the 
+game was structured when they were coding it.
+
+
+Q4: Is there a similar type of project already in existence?
+
+A4: Yes I found a game called quandary that gives storylines of issues and you have to figure out how to 
+resolve while people have differing opinions.
+
+https://www.quandarygame.org/play
+
+
+
+Q5: What is the scope of the project? 
+
+A5: 
+- We would need to learn the code base and be confident and comfortable to work with it
+- We would need to design a playthrough tutorial and figure out implementation
+- We would need to talk with the Stakeholder and figure out how they want to change the gameplay
+- Design and implement the new gameplay features. 
+
+
+Q6: What are the goals of the project?
+
+A6: Design a playthrough tutorial for end users. Implement more features/elements into the gameplay.
+    Push the game to be more educational and to be used as a fun tool.
+
+Q7: How many features are required to implement?
+
+A7: Basically 2 features but the advancement of gameplay and functionality will probably create
+more features as we go over design with Stakeholder. 
+
+Q8: Is it a more front end based project or backend?
+
+A8: This project would have a lot of front end especially with designing the tutorial in the begininng
+but I also do see back end being very important when it comes to editing the previous teams game AI to
+add more gameplay features and scenarios. 
+
+Q9: What kind of hardware/software is required if any?
+
+A9: React and libraries like Konva
 
 Are there any foreseeable issues developing the project?
+
+
+Prisoner's dilemma game theory problem to help teach ethics 
+
+Want a tutorial play through of the game instead of having a text description of directions to play
