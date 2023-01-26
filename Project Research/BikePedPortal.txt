@@ -26,13 +26,16 @@ BikePed Portal is an up and running site that already has licensing.
 
 Both would require signing a contribution form.
 
-Is there a similar type of project already in existence?
+Q4: Is there a similar type of project already in existence?
+
+A4: Not exactly, but there is definitely similar types of things out there including Portal.
 
 What is the scope of the project? 
 
 What are the goals of the project?
 
 How many features are required to implement?
+
 
 Is it a more front end based project or backend?
 
