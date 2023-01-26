@@ -1,19 +1,36 @@
 What languages are required for the project/ What’s the tech stack?
+Typescript using react-native?
 
 Short description of what the project is
+Creating an new app similar to the original Lingo Medico mobile application that allows medical providers to respond
+back across languages to help the traveler. The original app is intended for people traveling to different countries to be able to communication with
+a medical provider who doesn't speak their language.
 
 Is it based on a previous project?
+Yes it is based on the Lingo Medico mobile application which was a previous capstone project.
 
 Is there a similar type of project already in existence?
+Yes the previous project is similar.
 
-What is the scope of the project? 
+What is the scope of the project?
+To create a new application to allow the medical provider to communicate back with the patient on what they need to do as well
+as any other relevant information. This includes both medical and dental. 
 
 What are the goals of the project?
+To create a robust application that includes multiple languages. The original project included Korean and Japanese.
 
 How many features are required to implement?
+Needs to be able to communicate advice, decisions and related information to patient. 
+Must have a user interface and the ability to translate between languages. If time add an auditory compontent.
 
 Is it a more front end based project or backend?
+It seems to be mix of both. It is unclear if this data has to be stored in any way long term.
 
 What kind of hardware/software is required if any?
+An Android device.
 
 Are there any foreseeable issues developing the project?
+Familiarity with other languages besides English.
+
+Notes
+Partner is eager and easy to work with partner that can make time when needed.
