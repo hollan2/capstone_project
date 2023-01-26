@@ -1,19 +1,32 @@
 What languages are required for the project/ What’s the tech stack?
 
+
 Short description of what the project is
+This project is a device and app that will enable peer to peer use of private electric car charging stations.
+The device and app will track the charging station's usage enabling the owner to generate revenue off their station.
 
 Is it based on a previous project?
+No, the project appears to be a new project that does not build off a past project.
 
 Is there a similar type of project already in existence?
 
+
 What is the scope of the project? 
+The scope will be mainly to implment the map, listing, sheduling and charger unlock features of the app.
+The sponser does not that while billing will be implement is currently out of the scope of the project.
 
 What are the goals of the project?
+The development of an mobile app that enables the charger owners to list their electric car chargers on the app
+and for users to find those chargers and be able to use them.
 
 How many features are required to implement?
+Sheduling system to allow the app user to specify when their charging station is availible for use.
+A map that allow the app user to see all nearby availible charging stations in a radius
 
 Is it a more front end based project or backend?
 
+
 What kind of hardware/software is required if any?
+The application is intended to be used with an ESP32 MCU
 
 Are there any foreseeable issues developing the project?
