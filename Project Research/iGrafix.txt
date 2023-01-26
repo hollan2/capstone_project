@@ -1,19 +1,39 @@
-What languages are required for the project/ What’s the tech stack?
+iGrafix Release Dashboard Project 
 
 Short description of what the project is
+    iGrafix wants a release dashboard that shows their team information about different aspects about their release. They want this information accessible and easy to read for anyone in the organization to view. 
+
+    For their dashboard, they want information about QA sign offs, vulnerabilities, code coverage, release notes/documentation, status of stories 
+
+What languages are required for the project/ What’s the tech stack?
+    Frontend: React
+    Backend: Java, NodeJs, MongoDB
+    Integrations: Jira cloud, Confluence, Gitlab, Sonar
 
 Is it based on a previous project?
+    Nope 
 
 Is there a similar type of project already in existence?
+    Yes there are! an example of a company that does it is Bold BI
+
 
 What is the scope of the project? 
+    Primarily a data visualization project but also will use APIs to get information off other platforms 
 
 What are the goals of the project?
+    1. launch a webapp 
+    2. Have webapp talk to different softwares through APIs
+    3. Display data all nicely 
+    4. Save data to bring up later
 
 How many features are required to implement?
+    Of course it's an unknown amount but each software integration will be a big feature, creating the front end web page will be a feature, and saving the information from each release will be another.
 
 Is it a more front end based project or backend?
+    Will be both but primarily front end 
 
 What kind of hardware/software is required if any?
+    Have to have access to Jira cloud, confluence, gitlab, and sonar to make the integrations along with MongoDB to create the database. Will also need intelliJ probably for an IDE
 
 Are there any foreseeable issues developing the project?
+    It doesn't seem like it. The sponsor seems really nice and everything seems clearly outlined.
