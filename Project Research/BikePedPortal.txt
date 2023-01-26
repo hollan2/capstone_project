@@ -1,8 +1,30 @@
-What languages are required for the project/ What’s the tech stack?
+Q1:What languages are required for the project/ What’s the tech stack?
 
-Short description of what the project is
+A1: Both Portal and BikePed Portal are built with the Django Framework with SQL, Python
+and JavaScript.
 
-Is it based on a previous project?
+Q2: Short description of what the project is
+
+A2:   Portal is a data interface that allows users to pull traffic data for running
+analysis. The goal for the project is to create a UI where users of Portal can see
+how much data they have at their disposable. It would show if systems were down and
+if data is missing from a certain timeframe. This is extremely important as analysts 
+need accurate data. 
+
+BikePed Portal is a portal that gives traffic data about non motorized travel
+such as biking or walking. This project also needs a new UI but for allowing the
+end user to update the metadata about certain locations. Right now they have to 
+go into the backend and change things manually through SQL scripts.
+
+
+Q3: Is it based on a previous project?
+
+A3: Portal is currently an up and running softwate and is currently working on
+getting licensing
+
+BikePed Portal is an up and running site that already has licensing.
+
+Both would require signing a contribution form.
 
 Is there a similar type of project already in existence?
 
