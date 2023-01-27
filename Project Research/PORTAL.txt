@@ -1,19 +1,67 @@
-What languages are required for the project/ What’s the tech stack?
+1. What languages are required for the project/ What’s the tech stack?
+    - Python(Django Framework)
+    - SQL
+    - JavaScript
 
-Short description of what the project is
 
-Is it based on a previous project?
+2. Short description of what the project is
+    PORTAL is the regional transportation data lake. It holds about 20TB 
+    (not including Bikeped PORTAL) of data that is collected through scattered 
+    sensors in the Portland OR and Vancouver WA area. Their website 
+    (https://portal.its.pdx.edu/) gives users the ability to view or download sets 
+    of data that they are interested in. A typical user of PORTAL is someone who is 
+    using the data to run analysis on traffic such as average traffic count, congestion, 
+    speed, volume in a specific area, and traffic flow changes. The problem is that sensors 
+    go out all the time anywhere from an hour to several days. PORTAL is able to monitor if 
+    the API feeds are down or not, but it is not able to tell the location and the time the 
+    blackout happened. The goal of this project is to develop a way to tell which sensors 
+    went out, at what locations, and for how long. 
 
-Is there a similar type of project already in existence?
+3. Is it based on a previous project?
+	PORTAL was created in 2005 via a collaboration between the ODOT and PSU, where PSU is 
+    this region's official archiving entity. Our work on this project needs to be integrated 
+    into the existing PORTAL software. I think we would be the first capstone team to work 
+    on this project though. 
 
-What is the scope of the project? 
+4. Is there a similar type of project already in existence?
+    There are three leading transportation data archives in the US – iPeMS, RITIS, and DRIVENet. 
 
-What are the goals of the project?
+    iPeMS: https://udot.utah.gov/connect/business/design/traffic-modeling-guidelines/
+    RITIS: https://ritis.org/login?r=Lw==
+    DRIVENet: Can't find a good link for this one
 
-How many features are required to implement?
+5. What is the scope of the project? 
+    I feel like the scope of this project is fairly small. We would be working on a single feature and 
+    integrating it into an existing software. 
 
-Is it a more front end based project or backend?
+6. What are the goals of the project?
+    Since the users of PORTAL use it to run analysis, it's crucial for them to know if there are 
+    continuity gaps in the data set. Let's say a user is trying to figure out the average traffic 
+    count for a specific highway. They would get vastly different outcomes for a sensor that had 
+    an outage for 8 hrs vs one that was out for 10 mins. They need to be able to see when, where, 
+    and for how long outages in the sensors occurred.
 
-What kind of hardware/software is required if any?
+7. How many features are required to implement?
+    - We would need to write several aggregation scripts that will provide us with details about 
+      archived data such as:
+        - How many rows of data for a particular sensor
+        - How much data for a particular day
+        - How much data for specific time frame such as 15 mins
+    - Develop a visualization tool on the PORTAL website that will show the user how much data is 
+      available and when data is available (e.g. could be heat map, gantt chart, etc.)
 
-Are there any foreseeable issues developing the project?
+8. Is it a more front end based project or backend?
+    Both
+
+9. What kind of hardware/software is required if any?
+    The data being archived at PSU comes from sensors scattered all over Portland and Vancouver. 
+    We don't have to work with the sensors directly. 
+
+    We would be using Docker to develop this project. 
+
+10. Are there any foreseeable issues developing the project?
+    Integration into PORTAL might be tricky, but it seems like the sponsors are readily 
+    available to help if needed. 
+
+Note: They are in the process of licensing PORTAL, so all students working on it need to sign a 
+contribution form in order to get credit and acknowledgement for the project.
