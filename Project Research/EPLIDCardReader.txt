@@ -1,19 +1,63 @@
-What languages are required for the project/ What’s the tech stack?
+What languages are required for the project/ What’s the tech stack?:
 
-Short description of what the project is
+There is no note of certain language requirements and/or tech stack details.
 
-Is it based on a previous project?
+Short description of what the project is:
 
-Is there a similar type of project already in existence?
+This is a check-in system meant for students entering a lab. The UI would display an
+iconographic grid indicating if a student is trained to use various equipment around
+the lab. These icons would change colors to indicate the said status.
 
-What is the scope of the project? 
+It would also facilitate/track safety waivers and emergency contact status for fast
+retrieval by an EPL manager in emergencies, marking a person as "trained" in the system.
 
-What are the goals of the project?
+Is it based on a previous project?:
 
-How many features are required to implement?
+Yes! This builds on the previous ECE capstone RFID badge reader system sponsored by
+the EPL.
 
-Is it a more front end based project or backend?
+Is there a similar type of project already in existence?:
 
-What kind of hardware/software is required if any?
+The doors at PSU already have the ability to read keycards and give access to buildings
+based on what the user has requested (ex. 24-hour access to EB), so there might be some
+inspiration there! In our case, we might display information of the card rather than
+provide access.
 
-Are there any foreseeable issues developing the project?
+What is the scope of the project?:
+
+It doesn't seem like something too large. The ECE capstone has already set-up a foundation
+in terms of hardware, and we're just coming in to assist with the software side of it all.
+However, it seems he also doesn't want us to go overboard, just wants us to provide room
+for the program to grow larger and support more, so it might be a good idea to follow that.
+
+What are the goals of the project?:
+
+1. Create a UI that is simple and displays qualifications information to both students/managers.
+2. Using PSU ID cards, read + store training details of the scanned person and provide tools if
+   they show correct qualifications.
+
+How many features are we required to implement?:
+
+1. The ability for badges to be scanned
+2. Screen displaying name and icon map of different categories of training
+3. Ability to sign a safety waiver
+4. Record of who scanned in that day, alongside their credentials (accesible only to lab managers)
+5. Allow students to see how to get training, and who to talk to in the lab for that information
+6. Give the ability to extend to other machines, perhaps potential to lock out users from machines
+   that they aren't trained for?
+
+Is it a more front-end based project or back-end?:
+
+Definitely seems like a more front-end project. We're looking to design a UI, along with
+providing a visual based on data recieved. There's no note of a full-on website (although that is
+their goal, a mid-long term one).
+
+What kind of hardware/software is required if any?:
+
+We need to be able to utilize PSU's RFID chips contained within every ID card.
+
+Are there any foreseeable issues developing the project?:
+
+The idea of working with RFID cards might be a concern, alongside the fact that we have to operate
+on the machine that scans these cards, and we don't have the details of those quite yet. We don't
+know what languages it'll support, how it'll be attached and operational, etc.
