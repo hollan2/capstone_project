@@ -1,19 +1,80 @@
 What languages are required for the project/ What’s the tech stack?
 
+    The previous group used Python, C, Javascript, HTML/CSS
+
+
 Short description of what the project is
+
+    OreSat Live is a radio-based Wifi link from a low earth orbit satellite to a hand-held ground
+    station built by Oregon high school students.
+
+    Two parts to the software: Flight and Ground
+
+    Flight software runs on the satellite in Linux: takes video from a USB camera and compresses it and sends it to the ground station
+    through a WiFi link and foward error correction (FEC).
+
+    Ground software runs on Raspberry Pi Zero receives the packets and decodes it and serves it over WiFi to local smart devices.
+
+
 
 Is it based on a previous project?
 
+    Yes, we will be building off of another project by Winter-Spring 2021 Capstone team. The previous project is extremely difficult to reproduce.
+
 Is there a similar type of project already in existence?
+
+    Yes, WS2021 Capstone project
 
 What is the scope of the project? 
 
+    Turn the OreSat Live Software from a barely working experimental prototype to robustly working and reproducible software.
+
 What are the goals of the project?
+
+    Recreate the original project, make the build and installation process reproducible,
+    fix issues and bugs, and impletement a build system that makes it easy for OreSat volunteers and future 
+    high school students to use.
 
 How many features are required to implement?
 
+    Fix camera exposure settings
+    Turn this into a Linux library that we can call
+    Reliably build and install it on Debian systems
+
 Is it a more front end based project or backend?
+
+    Both.
 
 What kind of hardware/software is required if any?
 
+    There are two systems in this project: Space and Ground
+
+    Space system:
+        ○ Custom Schmidt-Cassegrain telescope lens (3 cm/px resolution)
+        ○ 13MP Sony IMX214 USB CMOS sensor
+        ○ Octavo OSD335x-SM Cortex A8 computer with 1GB SDRAM / 16GB eMMC flash
+        (equivalent to a BeagleBone Black single board computer)
+            ■ OS: Debian Linux
+            ■ Flight software that grabs images from the Sony sensor, cuts them down to the
+            center n x m pixels, encodes them in an appropriate format, and then sends them
+            down to the ground using "packet injection" on the 802.11b adapter, such that it
+            does not require ESSID transmissions or ACKs from the ground.
+        ○ Atheros AR9721 USB to WiFi (802.11bgn) adapter
+            ■ Transmitting in "802.11b" mode: 1 Mbps BPSK
+        ○ 1W bi-directional power amplifier and high gain helical antenna
+
+    Ground system:
+        ○ High gain helical antenna with low noise amplifier
+        ○ Atheros AR9721 USB to WiFi (802.11bgn) adapter
+        ○ Raspberry Pi Zero W
+            ■ OS: Raspbian Linux
+            ■ Receiver software that runs the AR9721 adapter in monitor mode, grabs received
+            data packets, and decodes and assembles them into an image.
+            ■ AP Host / Display software that runs the Raspberry Pi Zero W's onboard WiFi
+            adapter in AP mode; connecting WiFi devices are directed to a host website that
+            displays the images.
+
+    ***All existing software used in the project should be open source***
+
 Are there any foreseeable issues developing the project?
+
