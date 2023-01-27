@@ -35,6 +35,8 @@ A4: Not exactly, but there is definitely similar types of things out there inclu
 
 Q5: What is the scope of the project? 
 
+A5: Add a feature to the current Bikeped portal software that will allow a user to update a 
+    specific metadata set for a specific location. 
 
 Q6: What are the goals of the project?
 
@@ -58,7 +60,7 @@ A9: Having to work within the website is the only thing required. Docker potenti
 
 
 Q10: Are there any foreseeable issues developing the project?
-
+    Integration into BikePed Portal might be tricky. 
 
 Notes:
 Multiple people in the team that can be contacted.
