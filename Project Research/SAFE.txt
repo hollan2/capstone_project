@@ -1,19 +1,71 @@
-What languages are required for the project/ What’s the tech stack?
+What languages are required for the project/ What’s the tech stack?:
 
-Short description of what the project is
+There doesn't seem to be a hint as to any languages required or a tech stack.
+However, it is notable that we'll want to work on a webpage, and as a result
+may require tools to do that in itself.
 
-Is it based on a previous project?
+Short description of what the project is:
 
-Is there a similar type of project already in existence?
+This project is an anonymous feedback system, allowing users to provide comments
+and/or suggestions anonymously. These comments would be able to be read by the
+chair and/or instructors without identifying the sender.
 
-What is the scope of the project? 
+Is it based on a previous project?:
 
-What are the goals of the project?
+There is no previous project, only a previous external service used.
+Unfortunately, this external service went away so we can't see how the service
+worked for the department previously.
 
-How many features are required to implement?
+Is there a similar type of project already in existence?:
 
-Is it a more front end based project or backend?
+Mark has provided us https://www.incognea.to/ as something to possibly look at,
+but this project is not intended or expected to replicate/imitate this site.
 
-What kind of hardware/software is required if any?
+Google forms already provide this aspect of the request, although simplisticly.
 
-Are there any foreseeable issues developing the project?
+What is the scope of the project?:
+
+The scope of this project initially is simple, completing something similar to
+Google forms shouldn't prove too daunting of a task. However, adding multiple
+features is where the difficulty lies, and increases the scope of the project
+to a very high level of complication.
+
+What are the goals of the project?:
+
+1. Give users a chance to provide anonymous feedback while ensuring that the
+   recipients have a way to organize and respond to these messages.
+2. Ensure that this system is scalable to very high levels of feedback.
+3. Create a webpage widget/mobile app as a way for users to provide feedback
+   and/or manage a user account.
+4. Design a tool to automate the task of deploying the system on a new server.
+
+How many features are required to implement?:
+
+1. Allow users to send comments anonymously.
+2. Give recipients these comments without disclosing user data.
+3. Allow users a chance to direct comments to certain email addresses while
+   maintaining anonymity.
+3. Provide authentication to reduce spam.
+4. Create a UI dashboard for the recipient, allowing them to switch between
+   multiple feedbcak channels, and mechanisms for organizing incoming messages.
+5. Implement a notification system for recievers to alert them of new messages.
+6. Automtic sentiment analysis that can tag incoming messages based on the mood.
+
+Is it a more front end based project or backend?:
+
+This is a mix of both. We're working on a website, which requires both front-end
+and back-end. Similarly so if we do go through with an app.
+
+What kind of hardware/software is required if any?:
+
+No notable hardware/software was mentioned in the project brief, but since we are
+designing what seems to be a website/mobile app, those come with their own set of
+tools and requirements.
+
+Are there any foreseeable issues developing the project?:
+
+- The conversion from website to mobile app might prove tricky, as the two are very
+  different.
+- Authentication might prove challenging, as nowadays there are many ways of confirming
+  authenticity, whether that be through Google, phone, or even PSU's version of two-factor.
+- Automatic sentiment analysis may require the use of an API, which may not be accessible.
