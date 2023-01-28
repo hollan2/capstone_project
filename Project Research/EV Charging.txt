@@ -30,3 +30,60 @@ What kind of hardware/software is required if any?
 The application is intended to be used with an ESP32 MCU
 
 Are there any foreseeable issues developing the project?
+
+
+----------------------------------------------------------
+
+EV Charging
+Description:
+This is a peer to peer auction platform, similar to Airbnb, for charging stations. Where
+users would be able to use a mobile app, or web application, to look for charging
+stations, view prices, view available times, and then book a charging station to
+charge their EV. The purpose is to make EV charging more accessible with the
+emergence of EV vehicles by allowing anyone to share energy and generate
+revenue.
+
+Goals:
+● ** Implementing a smart charger that uses a microcontroller for interacting
+with lock, case, and energy metering technologies.
+● ** Searching charging stations with filters (time, location, type of charger etc)
+● ** Setting auction prices (time of day, location, desired profit)
+● User interface and backend to utilize pre-existing components as much as
+possible to reduce development time.
+● Application should allow users that can add/delete charging stations
+● Application should allow users to search, scan qr codes on locks, and book a
+charging station
+** Innovation should be focused on these features
+
+Notes:
+Large scope, though only focusing on a single station prototype for this project
+Uses hardware
+Backend heavy
+
+Languages:
+Front end javascript/html/reactjs
+python for controller
+
+Hardware:
+Espressif ESP32 microcontroller
+
+Software:
+
+MQTT (messaging protocol)
+● Microcontroller can interact with cloud server
+
+Backend
+● Serverless cloud framework
+● Terraform cloud
+● API gateway for web app
+● Relational Database for charging stations, users, records etc.
+● Mapping API (for displaying searches)
+● Billing
+
+Front-end
+● HTTP requests to api gateway
+● Add chargers, delete chargers, view chargers, billing for charging stations
+● Create account
+
+Testing
+● Ideally 100% Unit testing if possible

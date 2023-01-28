@@ -1,19 +1,36 @@
-What languages are required for the project/ What’s the tech stack?
+Vehicle Status Display
 
-Short description of what the project is
+Description:
+Developing a smart Dash Cam with a Vehicle Status Display. An SBC (raspberry pi) 
+would be used with various sensors to relay information to an external display.
 
-Is it based on a previous project?
 
-Is there a similar type of project already in existence?
+Goals:
+Display should view information for location, altitude, speed of other cars, 
+pitch/roll/yaw, direction of travel, license plates
 
-What is the scope of the project? 
 
-What are the goals of the project?
+Other notes:
+New project
+Various raspberry pi projects can be found to aid in using different sensors
 
-How many features are required to implement?
 
-Is it a more front end based project or backend?
+Software:
+OpenCV (Open Source Computer Vision Library)
+* Detecting license plates
+* Detecting speeds
+GUI for Vehicle display
 
-What kind of hardware/software is required if any?
 
-Are there any foreseeable issues developing the project?
+Languages:
+Python and/or C++
+
+
+Hardware: *provided by client
+SBC 
+* Raspberry pi, Nvidia Jetsons, google coral
+Stereo camera 
+GPS
+Altitude sensor 
+Accelerometer/gyro
+External display
