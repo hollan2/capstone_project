@@ -1,0 +1,293 @@
+@import url("index.css");
+
+body,
+main,
+header,
+footer {
+    min-width: 320px;
+    width: 100%;
+}
+
+body.modal-open,
+.modal-open header {
+    padding-right: 0 !important;
+}
+
+.modal-open .navbar-toggler {
+    margin-right: 0 !important;
+}
+
+main {
+    background-color: var(--light-blue);
+}
+
+header,
+.navbar-collapse {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+footer {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    text-align: center;
+}
+
+.logo {
+    color: darkorange;
+}
+
+.navbar {
+    padding: 5px 5px 5px 15px !important;
+}
+
+.navbar-toggler {
+    border-color: var(--white) !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+.navbar-collapse {
+    width: 200px;
+    top: 50px;
+    right: 0;
+}
+
+#splash,
+#start {
+    width: auto;
+    min-height: calc(100vh - 74px);
+    margin-top: 50px;
+    margin-bottom: 24px;
+    padding: 20px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+}
+
+#start .selection-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+}
+
+#splash img {
+    display: block;
+    width: 80%;
+    position: relative;
+    margin: 0 auto;
+}
+
+#splash h1,
+#start h1 {
+    position: relative;
+    text-align: center;
+    font-size: 2em;
+}
+
+#splash h1 span {
+    position: relative;
+    font-size: 0.5em;
+    top: -15px;
+}
+
+#splash button,
+.start-btn,
+.tutorial-btn {
+    position: relative;
+    display: block;
+    margin: 10px auto 0 auto;
+    padding: 0 20px;
+    font-size: 4vw;
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+    background-color: var(--white);
+    color: var(--dark-blue);
+    text-decoration: none;
+}
+
+.tutorial-btn {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.start-btn-not-rdy {
+    position: relative;
+    display: block;
+    margin: 10px auto 0 auto;
+    padding: 0 20px;
+    font-size: 4vw;
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+    background-color: var(--white);
+    color: grey;
+    text-decoration: none;
+    opacity: 0.7;
+}
+.modal-btn {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-size: 1.5em;
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+    background-color: var(--white);
+    color: var(--dark-blue);
+    text-decoration: none;
+}
+
+.link {
+    text-decoration: none !important;
+}
+
+#splash button:hover,
+.start-btn:hover,
+.tutorial-btn:hover,
+.modal-btn:hover {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+.player-selection,
+.map-selection,
+.start-information {
+    border: 2px solid var(--dark-blue);
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#start label {
+    display: none;
+}
+
+.map-selection h2,
+.map-selection .map-selector {
+    display: inline;
+    position: relative;
+}
+.map-selection .map-selector {
+    top: -3px;
+    padding-left: 3px;
+}
+
+.player-selection {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.selector-stack legend {
+    font-size: 1.2rem;
+}
+
+.player-selection-section {
+    display: flex;
+    flex-direction: row;
+    justify-items: stretch;
+    gap: 5px;
+    width: 100%;
+}
+
+.selector-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 60%;
+}
+
+.selector-stack fieldset {
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+    padding: 5px;
+}
+.selector-stack legend {
+    font-size: 1.2rem;
+}
+
+.selector-pawn {
+    width: 40%;
+}
+
+.player-selection label,
+.player-selection select {
+    width: 100%;
+}
+
+.map-selection {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.pawn-selector {
+    height: 100%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.map-selector {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.pawn-selector img,
+.map-selector img {
+    width: 100%;
+}
+
+.selector {
+    margin: 5px auto 0 auto;
+    width: 100%;
+}
+
+.tutorial ul:nth-child(6) li:nth-child(1) {
+    color: var(--dove-fill);
+}
+.tutorial ul:nth-child(6) li:nth-child(2) {
+    color: var(--hawk-stroke);
+}
+.tutorial ul:nth-child(6) li:nth-child(3) {
+    color: var(--grim-stroke);
+}
+.tutorial ul:nth-child(6) li:nth-child(4) {
+    color: var(--anti-grim-stroke);
+}
+.tutorial ul:nth-child(6) li:nth-child(5) {
+    color: var(--tit-for-tat-stroke);
+}
+.tutorial ul:nth-child(6) li:nth-child(6) {
+    color: var(--tweedle-dum-stroke);
+}
+.tutorial ul:nth-child(6) li:nth-child(7) {
+    color: var(--tweedle-dee-stroke);
+}
+
+@media (width > 568px) {
+    #splash img {
+        width: 40%;
+    }
+}
+
+/*
+@media (width > 1200px) {
+    main,
+    header,
+    footer {
+        width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        border-left: 2px solid var(--dark-blue);
+        border-right: 2px solid var(--dark-blue);
+    }
+}
+*/
