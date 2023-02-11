@@ -1,0 +1,76 @@
+image: node:latest
+
+stages:
+    - build
+    - check
+    - deploy
+
+build:
+    image: node:latest
+    stage: build
+    before_script:
+        - yarn install
+    script:
+        - yarn build
+    artifacts:
+        paths:
+            - build/
+    cache:
+        paths:
+            - node_modules/
+
+test:
+    stage: check
+    dependencies:
+        - build
+    before_script:
+        - yarn install
+    script:
+        - yarn test
+
+format:
+    stage: check
+    before_script:
+        - yarn install
+    script:
+        - npx prettier --check .
+
+pages:
+    stage: deploy
+    only:
+        - main
+    script:
+        - yarn install
+        - yarn run build
+        - rm -rf public
+        - cp build/index.html build/404.html
+        - mv build public
+    artifacts:
+        paths:
+            - public
+    cache:
+        paths:
+            - node_modules/
+
+# https://stackoverflow.com/a/58402821
+pages-develop:
+    stage: deploy
+    only:
+        - develop
+    script:
+        - yarn install
+        - yarn run build
+        - rm -rf public
+        - cp build/index.html build/404.html
+        - mv build public
+    environment:
+        name: develop
+        url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    variables:
+        PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+    artifacts:
+        paths:
+            - public
+    cache:
+        paths:
+            - node_modules/
