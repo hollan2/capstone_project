@@ -287,6 +287,7 @@ function UseStart() {
 }
 
 interface StartState {
+    selectedName: string;
     selectedHat: string;
     selectedFace: string;
     selectedIdeology: string;
@@ -300,7 +301,9 @@ interface StartProps {
 class Start extends React.Component<StartProps, StartState> {
     constructor(props: StartProps) {
         super(props);
+        //the starting values on the select menu
         this.state = {
+            selectedName: "",
             selectedHat: "",
             selectedFace: "",
             selectedIdeology: "",
@@ -308,6 +311,9 @@ class Start extends React.Component<StartProps, StartState> {
             selectedMap: "Choke",
         };
     }
+    handleSelectedName = (selection: string) => {
+        this.setState({ selectedName: selection });
+    };
 
     handleSelectedHat = (selection: string) => {
         this.setState({ selectedHat: selection });
@@ -334,6 +340,7 @@ class Start extends React.Component<StartProps, StartState> {
 
         this.props.navigate("/game", {
             state: {
+                name: this.state.selectedName,
                 hat: this.state.selectedHat,
                 face: this.state.selectedFace,
                 ideologyColor: this.state.selectedIdeology,
@@ -348,6 +355,8 @@ class Start extends React.Component<StartProps, StartState> {
                 <h1>Game Setup</h1>
                 <div className="selection-container">
                     <PlayerSelection
+                        handleSelectedName={this.handleSelectedName}
+                        selectedName={this.state.selectedName}
                         handleSelectedHat={this.handleSelectedHat}
                         selectedHat={this.state.selectedHat}
                         handleSelectedFace={this.handleSelectedFace}
@@ -373,6 +382,8 @@ class Start extends React.Component<StartProps, StartState> {
 }
 
 interface PlayerSelectionProps {
+    selectedName: string;
+    handleSelectedName: (value: string) => void;    
     selectedHat: string;
     handleSelectedHat: (value: string) => void;
     selectedFace: string;
@@ -404,7 +415,10 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                     <div className="selector-stack">
                         <fieldset>
                             <legend>Appearance:</legend>
-
+                            <NameSelector
+                                handleSelectedName={this.props.handleSelectedName}
+                                selectedName={this.props.selectedName}
+                            />
                             <HatSelector
                                 handleSelectedHat={this.props.handleSelectedHat}
                                 selectedHat={this.props.selectedHat}
@@ -506,6 +520,7 @@ class PawnDisplay extends React.Component<PawnDisplayProps, {}> {
 
 export type RGB = { red: number; green: number; blue: number };
 
+//converts Hex values to RGB
 export function HexToRGBObject(hex: string): RGB {
     if (hex.length !== 6 || !hex) {
         hex = "ffffff";
@@ -523,6 +538,7 @@ export function HexToRGBObject(hex: string): RGB {
     }
     return aRgb;
 }
+
 
 const PawnImageGroup = ({
     face,
@@ -546,6 +562,31 @@ const PawnImageGroup = ({
         </RK.Group>
     );
 };
+
+//the code to implement the name input field
+interface NameSelectorProps {
+    selectedName: string;
+    handleSelectedName: (value: string) => void;
+}
+
+class NameSelector extends React.Component<NameSelectorProps, {}> {
+    render() {
+        return (
+            <div className="name-selector selector">
+                <label htmlFor="name-select">Your Name:</label>
+                <input
+                    required
+                    name="names"
+                    id="name-select"
+                    type="text" 
+                    value={this.props.selectedName}
+                    onChange={(e) => {this.props.handleSelectedName(e.target.value);
+                    }}
+                    />
+            </div>
+        );
+    }
+}
 
 interface HatSelectorProps {
     selectedHat: string;

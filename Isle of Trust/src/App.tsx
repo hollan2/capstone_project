@@ -69,7 +69,7 @@ export const MAP_URL: { [key: string]: string } = {
 let currentMap = "Pronged";
 
 const DIFFICULTY_VALUES: { [key: string]: number } = {
-    easy: 20,
+    easy: 19,
     medium: 15,
     hard: 10,
     extreme: 5,
@@ -104,6 +104,7 @@ interface GameViewState {
 
 export interface StartInfo {
     //Using strings until it's connected up
+    name: string;
     hat: string;
     face: string;
     ideologyColor: string;
@@ -124,17 +125,18 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const turnCount = 0;
 
         currentMap = props.mapImage;
-
         // TODO: put this in the JSON
         //A random agent in the graph is selected to be the player
         const player =
             map.getVertices()[
                 Math.floor(Math.random() * map.getVertices().length)
             ];
+
+        //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
-
+            player.name = props.name
             switch (props.ideologyColor) {
                 case "9ec4ea":
                     //Dove
@@ -423,6 +425,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const ideologyAppeal: Map<Ideology, number> = new Map();
         const neighbors = this.state.map.getEdges(agent)!;
         let totalInfluence = 0;
+
+        //calcautes the total influnce of all nehboors
         neighbors.forEach((relation: Relation, neighbor: MetaAgent) => {
             if (neighbor instanceof Agent) {
                 const theirInfluence = this.state.map.getEdge(
@@ -433,7 +437,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 totalInfluence += theirInfluence;
             }
         });
-
+        
         const drifts = new DriftContainer();
         ideologyAppeal.forEach((theirInfluence, ideology) => {
             const drift: number = Math.round(
