@@ -303,7 +303,7 @@ class Start extends React.Component<StartProps, StartState> {
         super(props);
         //the starting values on the select menu
         this.state = {
-            selectedName: "",
+            selectedName: "Name",
             selectedHat: "",
             selectedFace: "",
             selectedIdeology: "",
