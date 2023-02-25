@@ -12,6 +12,7 @@ import ChokeJson from "../data/mapChoke.json";
 import CrescentJson from "../data/mapCrescent.json";
 import RingJson from "../data/mapRing.json";
 import SpokesJson from "../data/mapSpokes.json";
+import SmallJson from "../data/mapSmall.json";
 import * as genA from "./agent";
 
 //import { MAP_INDEX } from "../App";
@@ -58,6 +59,9 @@ export class Map {
                 break;
             case "Crescent":
                 json = CrescentJson;
+                break;
+            case "Small":
+                json = SmallJson;
                 break;
         }
         this.jsonData = JSON.parse(JSON.stringify(json));

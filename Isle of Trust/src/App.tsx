@@ -63,6 +63,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
+    Small: "url(../Maps/mapSmall.png)",
 };
 
 //export let MAP_INDEX = 0;
