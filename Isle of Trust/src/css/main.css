@@ -98,7 +98,7 @@ footer {
 .tutorial-btn {
     position: relative;
     display: block;
-    margin: 10px auto 0 auto;
+    margin: 120px auto;
     padding: 0 20px;
     font-size: 4vw;
     border-radius: 5px;
@@ -106,6 +106,12 @@ footer {
     background-color: var(--white);
     color: var(--dark-blue);
     text-decoration: none;
+}
+
+.start-btn {
+    margin-top: -610px;
+    margin-bottom: 500px;
+    margin-left: 422px;
 }
 
 .tutorial-btn {
