@@ -3,9 +3,9 @@
 
 print(" Github Exercise!\n-------------------")
 print("Roll Call!\n")
+print("Caleb - Yo")
 print("Adam - Here")
-print("Ben - Beyblade, Let it rip!")
-print("Caleb - *silent*")
+print("Ben - Beyblade, Let it rip!"
 print("Chloe - Hi!")
 print("DJ - Here I am!")
 print("Naton - *silent*")
