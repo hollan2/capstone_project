@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
+@import url("https://fontlibrary.org//face/opendyslexic");
+
+:root {
+    --wild-blue-yonder: #a0b6dd;
+    --light-blue: var(--wild-blue-yonder);
+    --lighter-blue: #cfddf4;
+    --midnight-blue: #191657;
+    --dark-blue: var(--midnight-blue);
+    --mid-blue: #48538d;
+    --ivory: #fffff0;
+    --white: white;
+    --opera-mauve: #ae8aa9;
+    --light-violet: var(--opera-mauve);
+    --cerise: #d13f5f;
+    --red: var(--cerise);
+    --green-munsell: #00a771;
+    --green-cyan: #009966;
+    --watercourse: #007a52;
+    --green: var(--watercourse);
+    --purperus: #a13fb6;
+    --purple: var(--purperus);
+    --russian_violet: #21164d;
+    --dark-violet: var(--russian_violet);
+    --cadet-blue: #54abb6;
+    --blue-green: var(--cadet-blue);
+    --tardis-blue: #003b6f;
+    --orange: #ff9500;
+    --dark-orange: #ff6800;
+
+    --dove: #9ec4ea;
+    --dove-stroke: #001e38;
+    --dove-fill: #5a7791;
+    --hawk: #df7e68;
+    --hawk-stroke: #703f34;
+    --hawk-fill: #c9988e;
+    --grim: #f8b365;
+    --grim-stroke: #7c5a32;
+    --grim-fill: #d6b38c;
+    --anti-grim: #ffda5c;
+    --anti-grim-stroke: #806d2e;
+    --anti-grim-fill: #d9c688;
+    --tit-for-tat: #b4a6d8;
+    --tit-for-tat-stroke: #5a526c;
+    --tit-for-tat-fill: #b4acc6;
+    --tweedle-dum: #b5d8a6;
+    --tweedle-dum-stroke: #5a6c53;
+    --tweedle-dum-fill: #b4c5ac;
+    --tweedle-dee: #a1c4ca;
+    --tweedle-dee-stroke: #4f6265;
+    --tweedle-dee-fill: #abbcbe;
+
+    --font-family-Pangolin: "Pangolin", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+        "Droid Sans", "Helvetica Neue", sans-serif;
+    --font-family-Dyslexic: "OpenDyslexic3Regular", "Pangolin", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+        "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    --font-family-Code: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+
+    --std-border-radius: 32px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family-Pangolin) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.dyslexic {
+    font-family: var(--font-family-Dyslexic) !important;
+}
+
+code {
+    font-family: var(--font-family-Code) !important;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+.green {
+    color: var(--green);
+}
+
+.red {
+    color: var(--red);
+}
+
+.purple {
+    color: var(--purple);
+}

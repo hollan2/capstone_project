@@ -1,0 +1,278 @@
+@import url("index.css");
+
+.game {
+    line-height: 1.2;
+    text-transform: lowercase;
+    width: auto;
+    min-height: calc(100vh - 74px);
+    margin-top: 50px;
+    margin-bottom: 24px;
+    display: grid;
+    gap: 5px;
+    padding: 5px;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "board          board"
+        "playerSidebar  selectedSidebar";
+}
+
+.sidebar {
+    grid-area: sidebar;
+    display: grid;
+    gap: 5px;
+}
+
+.playerSidebar {
+    grid-area: playerSidebar;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "playerDisplay"
+        "influenceMenu";
+}
+
+.selectedSidebar {
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    background-color: var(--white);
+    grid-area: selectedSidebar;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "selectedDisplay"
+        "stats";
+}
+
+.agent-type {
+    margin: 10px 10px 0px 10px;
+    font-size: 1.5em;
+}
+
+.agent-name {
+    color: var(--mid-blue);
+}
+
+.playerSidebar .agent-type {
+    text-align: end;
+}
+
+.selectedSidebar .agent-type {
+    text-align: start;
+}
+
+.player-display {
+    background-color: var(--white);
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    grid-area: playerDisplay;
+}
+
+.influence-menu {
+    background-color: var(--white);
+    grid-area: influenceMenu;
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.influence-title {
+    font-size: 1.2em;
+    border-bottom: 2px solid var(--dark-blue);
+}
+
+.influence-options {
+    grid-area: influence-options;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.influence-entry {
+    grid-area: influence-entry;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sidebar-agent-info {
+    display: flex;
+    gap: 5px;
+}
+
+.selected-display {
+    grid-area: selectedDisplay;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.display {
+    grid-area: display;
+    display: grid;
+    gap: 5px;
+    padding: 0px 10px 10px 10px;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.player-display .display {
+    grid-template-areas: "tagline tagline tagline" "agent stats stats" "mood mood mood";
+}
+
+.selected-display .display {
+    grid-template-areas: "tagline tagline tagline" "stats stats agent" "mood mood mood";
+}
+
+.tagline {
+    font-style: oblique;
+    grid-area: tagline;
+    border-bottom: 2px solid black;
+    width: 100%;
+}
+
+.tagline p {
+    margin: 2px;
+}
+
+.sidebar-agent {
+    grid-area: agent;
+}
+
+.sidebar-agent-img {
+    background-color: darkorange;
+    grid-area: agent-img;
+}
+
+.mood {
+    text-align: center;
+    background-color: var(--light-blue);
+    grid-area: mood;
+    border-radius: var(--std-border-radius);
+    padding: 0 20px;
+}
+
+.mood * {
+    margin: 5px;
+    display: inline-block;
+}
+
+.stats {
+    text-align: center;
+    padding: 15px;
+    grid-area: stats;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--lighter-blue);
+    border-radius: var(--std-border-radius);
+}
+
+.stats-container {
+    padding: 10px;
+}
+
+.playerSidebar .tagline {
+    text-align: end;
+    justify-self: end;
+}
+
+.judgement {
+    text-align: center;
+    vertical-align: middle;
+    background-color: var(--light-blue);
+    grid-area: judgement;
+    border-radius: var(--std-border-radius);
+    padding: 10px 20px;
+    margin: 0px 10px;
+}
+
+.you {
+    grid-area: you;
+}
+
+.give {
+    grid-area: give;
+}
+
+.cheat {
+    grid-area: cheat;
+}
+
+.influence {
+    grid-area: influence;
+}
+
+.board {
+    grid-area: board;
+    align-self: center;
+}
+
+.map {
+    aspect-ratio: 4 / 3;
+    max-width: 100vmin;
+    max-height: 100vmin;
+    margin: auto;
+}
+
+.konvajs-content {
+    display: flex;
+    height: 800px;
+    width: 900px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.map-row {
+    /* sett color to see when displayed */
+    background-color: var(--purple);
+}
+
+.sidebar button {
+    border-width: 0;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 10px;
+    transition-duration: 250ms;
+}
+
+.choices button {
+    font-size: 4vh;
+}
+
+.sidebar button:hover {
+    transform: scale(1.05);
+}
+
+.sidebar button:active {
+    transform: translateY(3px);
+    transition-duration: 0s;
+}
+
+.green-button {
+    background-color: var(--green);
+}
+
+.red-button {
+    background-color: var(--red);
+}
+
+.purple-button {
+    background-color: var(--purple);
+}
+
+@media (min-width: 568px) {
+    .game {
+        width: auto;
+        gap: 5px;
+        padding: 5px;
+        background-color: var(--light-blue);
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: auto;
+        align-items: stretch;
+        grid-template-areas: "playerSidebar board selectedSidebar";
+    }
+}
