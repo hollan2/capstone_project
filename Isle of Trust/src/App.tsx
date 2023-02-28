@@ -452,6 +452,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     turnCount={this.state.turnCount}
                     selected={this.state.sidebarState.selected}
                     select={this.state.select.bind(this)}
+                    player = {this.state.sidebarState.player}
                 />
                 <PlayerSidebar
                     map={this.state.map}
@@ -1028,14 +1029,23 @@ interface AliveAgentImageProps {
     y: number;
     selected: boolean;
     data: Agent;
+    player: MetaData;
 }
 
 function AliveAgentImage(props: AliveAgentImageProps) {
     let imageNode = React.useRef<any>(null);
 
-    const defaultScale = 0.12;
-    const selectedScale = 0.18;
-    const hoverScale = 0.14;
+    let defaultScale = 0.12;
+    let selectedScale = 0.18;
+    let hoverScale = 0.14;
+
+    // Make the user's player larger in size 
+    if (props.data.id == props.player.id){
+        defaultScale = 0.25;
+        selectedScale = 0.25;
+        hoverScale = 0.25;
+
+    }
 
     let scale = props.selected ? selectedScale : defaultScale;
 
@@ -1210,6 +1220,7 @@ interface BoardProps {
     turnCount: number;
     selected: MetaAgent;
     select: (agent: MetaAgent) => void;
+    player: MetaData;
 }
 
 class Board extends React.Component<BoardProps> {
@@ -1319,6 +1330,7 @@ class Board extends React.Component<BoardProps> {
                                             y={v.coords[1]}
                                             selected={this.props.selected === v}
                                             data={v}
+                                            player={this.props.player}
                                         />
                                     ) : (
                                         <DeadAgentImage
