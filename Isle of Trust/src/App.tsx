@@ -1029,7 +1029,7 @@ interface AliveAgentImageProps {
     y: number;
     selected: boolean;
     data: Agent;
-    player: MetaData;
+    player: MetaAgent;
 }
 
 function AliveAgentImage(props: AliveAgentImageProps) {
@@ -1220,7 +1220,7 @@ interface BoardProps {
     turnCount: number;
     selected: MetaAgent;
     select: (agent: MetaAgent) => void;
-    player: MetaData;
+    player: MetaAgent;
 }
 
 class Board extends React.Component<BoardProps> {
