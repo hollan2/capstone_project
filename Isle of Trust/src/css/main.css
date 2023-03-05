@@ -184,6 +184,13 @@ footer {
     width: 50%;
 }
 
+/*adds styling for the name input field*/
+.name-selector {
+    display: flex;
+    flex-direction: column;
+    width: 50%;   
+}
+
 .selector-stack legend {
     font-size: 1.2rem;
 }
