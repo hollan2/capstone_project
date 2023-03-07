@@ -45,6 +45,11 @@ export const Maps = [
         value: "Spokes",
         location: "../Maps/mapSpokes.png",
     },
+    {
+        name: "Small",
+        value: "Small",
+        location: "../Maps/mapSmall.png",
+    },
 ];
 
 export const Hats = [
