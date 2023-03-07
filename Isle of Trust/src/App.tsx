@@ -133,6 +133,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             map.getVertices()[
                 Math.floor(Math.random() * map.getVertices().length)
             ];
+        
+        //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
@@ -431,6 +433,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const ideologyAppeal: Map<Ideology, number> = new Map();
         const neighbors = this.state.map.getEdges(agent)!;
         let totalInfluence = 0;
+        
+        //calcautes the total influnce of all nehboors
         neighbors.forEach((relation: Relation, neighbor: MetaAgent) => {
             if (neighbor instanceof Agent) {
                 const theirInfluence = this.state.map.getEdge(
