@@ -69,7 +69,7 @@ export const MAP_URL: { [key: string]: string } = {
 let currentMap = "Pronged";
 
 const DIFFICULTY_VALUES: { [key: string]: number } = {
-    easy: 20,
+    easy: 19,
     medium: 15,
     hard: 10,
     extreme: 5,
@@ -89,8 +89,8 @@ class SidebarState {
     ) {
         this.player = player;
         this.selected = selected;
-            this.playerToSelected = map.getEdge(player, selected)!;
-            this.selectedToPlayer = map.getEdge(selected, player)!;
+        this.playerToSelected = map.getEdge(player, selected)!;
+        this.selectedToPlayer = map.getEdge(selected, player)!;
         this.influenceChoices = new SpendingContainer();
     }
 }
@@ -105,6 +105,7 @@ interface GameViewState {
 
 export interface StartInfo {
     //Using strings until it's connected up
+    name: string;
     hat: string;
     face: string;
     ideologyColor: string;
@@ -135,6 +136,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
+            player.name = props.name
 
             switch (props.ideologyColor) {
                 case "9ec4ea":
@@ -838,7 +840,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
             <div className="selected-display">
                 <div className="agent-type" id="selected-character">
                     <div>
-                        Selected: <span className="agent-name">{name}</span>
+                        selected: <span className="agent-name">{name}</span>
                     </div>
                     <div 
                         className="deselect"
