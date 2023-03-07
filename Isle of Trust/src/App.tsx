@@ -15,9 +15,7 @@ import {
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { Grid } from "./generators/map";
 import {
-    MetaAgent,
     Agent,
-    DeadAgent,
     AGENT_RADIUS,
     Relation,
     Ideology,
@@ -77,16 +75,16 @@ const DIFFICULTY_VALUES: { [key: string]: number } = {
 };
 
 class SidebarState {
-    player: MetaAgent;
-    selected: MetaAgent;
+    player: Agent;
+    selected: Agent;
     playerToSelected: Relation | undefined;
     selectedToPlayer: Relation | undefined;
     influenceChoices: SpendingContainer;
 
     constructor(
-        map: Graph<MetaAgent, Relation>,
-        player: MetaAgent,
-        selected: MetaAgent
+        map: Graph<Agent, Relation>,
+        player: Agent,
+        selected: Agent
     ) {
         this.player = player;
         this.selected = selected;
@@ -97,9 +95,9 @@ class SidebarState {
 }
 
 interface GameViewState {
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     sidebarState: SidebarState;
-    select: (agent: MetaAgent) => void;
+    select: (agent: Agent) => void;
     turnCount: number;
 }
 
@@ -174,7 +172,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         let selected = map.getVertices()[0];
         let sidebarState = new SidebarState(map, player, selected);
 
-        let select = (agent: MetaAgent) => {
+        let select = (agent: Agent) => {
             sidebarState.selected = agent;
             sidebarState.playerToSelected = map.getEdge(player, agent)!;
             sidebarState.selectedToPlayer = map.getEdge(agent, player)!;
@@ -194,7 +192,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     tallyChoicesForAllNeighbors(
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         you: Agent
     ): choiceTally {
         const neighbors = map.getEdges(you);
@@ -211,7 +209,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String {
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String {
         const neighbors = map.getEdges(agent);
         let totalInfluence = 0;
         let numberOfNeighbors = 0;
@@ -249,36 +247,30 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.generateRound(edges);
         this.drainResources(vertices);
 
-        this.handleDead(vertices);
         this.forceUpdate();
     }
 
-    drainResources(vertices: MetaAgent[]) {
+    drainResources(vertices: Agent[]) {
         vertices.forEach((v1) => {
-            if (v1 instanceof Agent) {
-                v1.resources -= RESOURCE_LOST_PER_TURN;
-            }
+            v1.resources -= RESOURCE_LOST_PER_TURN;
         });
     }
 
-    drainInfluence(edges: [MetaAgent, MetaAgent, Relation][]) {
+    drainInfluence(edges: [Agent, Agent, Relation][]) {
         edges.forEach(([v1, v2, e]) => {
-            if (v2 instanceof Agent) {
-                const v2Agent = v2 as Agent;
-                const maxInfluenceChange =
-                    BASE_INFLUENCE_LOST_PER_TURN *
-                    v2Agent.getInfluenceability();
-                e.influence = e.incrementAttributeBy(
-                    -maxInfluenceChange,
-                    e.influence
-                );
-            }
+            const v2Agent = v2 as Agent;
+            const maxInfluenceChange =
+                BASE_INFLUENCE_LOST_PER_TURN *
+                v2Agent.getInfluenceability();
+            e.influence = e.incrementAttributeBy(
+                -maxInfluenceChange,
+                e.influence
+            );
         });
     }
 
-    handleInfluenceChanges(vertices: MetaAgent[]) {
+    handleInfluenceChanges(vertices: Agent[]) {
         vertices.forEach((v1) => {
-            if (v1 instanceof Agent) {
                 const v1Relations = this.state.map.getEdges(v1)!;
                 let spendingMap = new SpendingContainer();
                 if (v1 === this.state.sidebarState.player) {
@@ -297,121 +289,58 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         );
                 });
                 this.driftIdeology(v1);
-            }
         });
     }
 
-    generateRound(edges: [MetaAgent, MetaAgent, Relation][]) {
+    generateRound(edges: [Agent, Agent, Relation][]) {
         const turnsToSample: number = 10;
         edges.forEach(([v1, v2, e1]) => {
-            if (v1 instanceof Agent) {
-                if (v2 instanceof Agent) {
-                    const e2 = this.state.map.getEdge(v2, v1);
-                    if (v1.id < v2.id && e2 instanceof Relation) {
-                        const v1Strat = v1.ideology.toStrategy();
-                        const v2Strat = v2.ideology.toStrategy();
-                        const v1Choice = generateChoice(
-                            v1Strat,
-                            v1.mood,
-                            e2.history
-                        );
-                        const v2Choice = generateChoice(
-                            v2Strat,
-                            v2.mood,
-                            e1.history
-                        );
+            const e2 = this.state.map.getEdge(v2, v1);
+            if (v1.id < v2.id && e2 instanceof Relation) {
+                const v1Strat = v1.ideology.toStrategy();
+                const v2Strat = v2.ideology.toStrategy();
+                const v1Choice = generateChoice(
+                    v1Strat,
+                    v1.mood,
+                    e2.history
+                );
+                const v2Choice = generateChoice(
+                    v2Strat,
+                    v2.mood,
+                    e1.history
+                );
 
-                        let resourceChange = v1.resources;
-                        let moodChange = v1.mood;
+                let resourceChange = v1.resources;
+                let moodChange = v1.mood;
 
-                        v1.rewardResources(v1Choice, v2Choice);
-                        v2.rewardResources(v1Choice, v2Choice);
-                        v1.updateMood(v1Choice, v2Choice);
-                        v2.updateMood(v1Choice, v2Choice);
+                v1.rewardResources(v1Choice, v2Choice);
+                v2.rewardResources(v1Choice, v2Choice);
+                v1.updateMood(v1Choice, v2Choice);
+                v2.updateMood(v1Choice, v2Choice);
 
-                        resourceChange = v1.resources - resourceChange;
-                        moodChange = v1.mood - moodChange;
+                resourceChange = v1.resources - resourceChange;
+                moodChange = v1.mood - moodChange;
 
-                        e1.history.addTurn(new Turn(v1Choice, v1Choice));
-                        e2.history.addTurn(new Turn(v2Choice, v2Choice));
+                e1.history.addTurn(new Turn(v1Choice, v1Choice));
+                e2.history.addTurn(new Turn(v2Choice, v2Choice));
 
-                        let opinionChange = e1.opinion;
-                        e1.updateOpinion(
-                            e2.influence,
-                            e2.history.getAvgChoice(turnsToSample),
-                            v1.personality.getVolatility()
-                        );
-                        e2.updateOpinion(
-                            e1.influence,
-                            e1.history.getAvgChoice(turnsToSample),
-                            v2.personality.getVolatility()
-                        );
-                        opinionChange = e1.opinion - opinionChange;
-                    }
-                }
+                let opinionChange = e1.opinion;
+                e1.updateOpinion(
+                    e2.influence,
+                    e2.history.getAvgChoice(turnsToSample),
+                    v1.personality.getVolatility()
+                );
+                e2.updateOpinion(
+                    e1.influence,
+                    e1.history.getAvgChoice(turnsToSample),
+                    v2.personality.getVolatility()
+                );
+                opinionChange = e1.opinion - opinionChange;
             }
         });
 
         this.setState((state) => {
             return { turnCount: this.state.turnCount + 1 };
-        });
-    }
-
-    handleDead(vertices: MetaAgent[]) {
-        vertices.forEach((v1) => {
-            // If agent has recently hit 0 resources, replace with dead agent. Keep relations but
-            // set influence to 0. Update graph with dead agent and modified relations
-            if (v1 instanceof Agent && v1.resources < 0) {
-                const vDead = new DeadAgent(v1.coords, v1.id);
-                let v1Edges = this.state.map.getEdges(v1);
-                if (v1Edges) {
-                    v1Edges.forEach((e1, v2) => {
-                        e1.influence = 0;
-                        this.state.map.getEdges(v2)?.forEach((e2, v3) => {
-                            if (v3 === v1) {
-                                this.state.map.getEdges(v2)?.delete(v1);
-                                this.state.map.getEdges(v2)?.set(vDead, e2);
-                            }
-                        });
-                    });
-
-                    this.state.map.updateVertex(v1, vDead, v1Edges);
-                }
-            }
-            // If dead agent has been dead long enough, generate new agent with modified
-            // relations and update graph.
-            else if (v1 instanceof DeadAgent && v1.deadCount === 3) {
-                // Make new random agent but keep meta data.
-                const vNew = new Agent(
-                    v1.id.toString(),
-                    new Ideology(10, 10),
-                    new Personality(10, 10),
-                    // TODO: these should be lower
-                    100,
-                    100,
-                    v1.id,
-                    v1.coords
-                );
-                // Maintain edge history but reset influence for new agent
-                let vEdges = this.state.map.getEdges(v1);
-                if (vEdges) {
-                    vEdges.forEach((e1, v2) => {
-                        e1.influence = 0;
-                        this.state.map.getEdges(v2)?.forEach((e2, v3) => {
-                            if (v3 === v1) {
-                                this.state.map.getEdges(v2)?.delete(v1);
-                                this.state.map.getEdges(v2)?.set(vNew, e2);
-                            }
-                        });
-                    });
-
-                    this.state.map.updateVertex(v1, vNew, vEdges);
-                }
-            }
-            // If dead agent has not met maximum dead count, increment dead count
-            else if (v1 instanceof DeadAgent && v1.deadCount < 3) {
-                v1.deadCount += 1;
-            }
         });
     }
 
@@ -428,15 +357,13 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         let totalInfluence = 0;
 
         //calcautes the total influnce of all nehboors
-        neighbors.forEach((relation: Relation, neighbor: MetaAgent) => {
-            if (neighbor instanceof Agent) {
-                const theirInfluence = this.state.map.getEdge(
-                    neighbor,
-                    agent
-                )!.influence;
-                ideologyAppeal.set(neighbor.ideology, theirInfluence);
-                totalInfluence += theirInfluence;
-            }
+        neighbors.forEach((relation: Relation, neighbor: Agent) => {
+            const theirInfluence = this.state.map.getEdge(
+                neighbor,
+                agent
+            )!.influence;
+            ideologyAppeal.set(neighbor.ideology, theirInfluence);
+            totalInfluence += theirInfluence;
         });
         
         const drifts = new DriftContainer();
@@ -479,12 +406,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
 interface PlayerSidebarProps {
     sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
 }
 
@@ -510,12 +437,12 @@ class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> {
 
 interface PlayerDisplayProps {
     sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -546,7 +473,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
 interface InfluenceMenuProps {
     round: () => void;
     sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
 }
 
 class InfluenceMenu extends React.Component<InfluenceMenuProps> {
@@ -573,24 +500,14 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                     <button onClick={this.props.round}>Confirm Choices</button>
                 </div>
             );
-        } else {
-            return (
-                <div className="influence-menu">
-                    <div className="influence-title">
-                        choose how to influence your neighbors:
-                    </div>
-                    <div>You are dead and cannot influence your neighbors!</div>
-                    <button onClick={this.props.round}>Next Round</button>
-                </div>
-            );
         }
     }
 }
 
 interface InfluenceOptionsProps {
-    selected: MetaAgent;
+    selected: Agent;
     player: Agent;
-    neighbors: Map<MetaAgent, Relation>;
+    neighbors: Map<Agent, Relation>;
     spendingMap: SpendingContainer;
 }
 
@@ -670,7 +587,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
 interface InfluenceEntryProps {
     allowResources: (giving: number, increment: number) => number;
     resourcesGiveable: number;
-    agent: MetaAgent;
+    agent: Agent;
     spendingMap: SpendingContainer;
 }
 
@@ -718,7 +635,6 @@ class InfluenceEntry extends React.Component<
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.canvasWidth}
-                                alive={this.props.agent.isAlive()}
                                 data={this.props.agent}
                             />
                         </RK.Layer>
@@ -750,12 +666,12 @@ class InfluenceEntry extends React.Component<
 
 interface SelectedSidebarProps {
     sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
 }
 
@@ -780,13 +696,13 @@ class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
 
 interface SelectedDisplayProps {
     sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
@@ -842,7 +758,7 @@ class Judgement extends React.Component<JudgementProps> {
 interface StatsProps {
     sidebarState: SidebarState;
     tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
+        map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
 }
@@ -891,10 +807,10 @@ interface DisplayState {
 }
 
 interface DisplayProps {
-    map: Graph<MetaAgent, Relation>;
-    agent: MetaAgent;
+    map: Graph<Agent, Relation>;
+    agent: Agent;
     agentChoices: choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
+    countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
 }
 
 class Display extends React.Component<DisplayProps, DisplayState> {
@@ -966,7 +882,6 @@ class Display extends React.Component<DisplayProps, DisplayState> {
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.currentCanvasWidth}
-                                alive={this.props.agent.isAlive()}
                                 data={this.props.agent}
                             />
                         </RK.Layer>
@@ -994,7 +909,7 @@ class Display extends React.Component<DisplayProps, DisplayState> {
 }
 
 interface MoodProps {
-    agent: MetaAgent;
+    agent: Agent;
 }
 
 function Mood(props: MoodProps) {
@@ -1003,17 +918,12 @@ function Mood(props: MoodProps) {
     let moodDesc: String;
     let moodImgPath: string;
 
-    if (props.agent instanceof Agent) {
-        const agent = props.agent as Agent;
-        moodDesc = agent.getMoodDescription();
-        moodImgPath =
-            "images/mood-" +
-            moodDesc.split(" ").join("-").toLowerCase() +
-            ".png";
-    } else {
-        moodDesc = "dead";
-        moodImgPath = "images/mood-dead.png";
-    }
+    const agent = props.agent as Agent;
+    moodDesc = agent.getMoodDescription();
+    moodImgPath =
+        "images/mood-" +
+        moodDesc.split(" ").join("-").toLowerCase() +
+        ".png";
 
     return (
         <div className="mood">
@@ -1028,14 +938,14 @@ function Mood(props: MoodProps) {
     );
 }
 
-interface AliveAgentImageProps {
+interface AgentImageProps {
     x: number;
     y: number;
     selected: boolean;
     data: Agent;
 }
 
-function AliveAgentImage(props: AliveAgentImageProps) {
+function AgentImage(props: AgentImageProps) {
     let imageNode = React.useRef<any>(null);
 
     const defaultScale = 0.12;
@@ -1130,41 +1040,12 @@ function AliveAgentImage(props: AliveAgentImageProps) {
     );
 }
 
-interface DeadAgentImageProps {
-    x: number;
-    y: number;
-}
-
-function DeadAgentImage(props: DeadAgentImageProps) {
-    let imageNode: any = null;
-    const [deadImage] = useImage("pawns/gravestone.png");
-
-    const scale = 0.12;
-
-    return (
-        <RK.Image
-            ref={(node) => {
-                imageNode = node;
-            }}
-            image={deadImage}
-            x={props.x - (AGENT_IMAGE_WIDTH / 2) * scale}
-            y={props.y - (AGENT_IMAGE_HEIGHT / 2) * scale - 20}
-            scaleX={scale}
-            scaleY={scale}
-            offsetX={130 * scale * 2}
-            offsetY={145 * scale * 2}
-        />
-    );
-}
-
 interface SidebarAgentImageType {
     canvasWidth: number;
-    alive: boolean;
-    data: MetaAgent;
+    data: Agent;
 }
 
 function SidebarAgentImage(props: SidebarAgentImageType) {
-    const [deadImage] = useImage("pawns/gravestone.png");
     const scale = props.canvasWidth / AGENT_IMAGE_WIDTH;
 
     let face = Face.Glasses;
@@ -1199,22 +1080,18 @@ function SidebarAgentImage(props: SidebarAgentImageType) {
         }
     }
 
-    if (props.alive) {
-        return (
-            <RK.Group scaleX={scale} scaleY={scale}>
-                {GeneratePawn(hat, face, ideology)}
-            </RK.Group>
-        );
-    } else {
-        return <RK.Image image={deadImage} scaleX={scale} scaleY={scale} />;
-    }
+    return (
+        <RK.Group scaleX={scale} scaleY={scale}>
+            {GeneratePawn(hat, face, ideology)}
+        </RK.Group>
+    );
 }
 
 interface BoardProps {
-    map: Graph<MetaAgent, Relation>;
+    map: Graph<Agent, Relation>;
     turnCount: number;
-    selected: MetaAgent;
-    select: (agent: MetaAgent) => void;
+    selected: Agent;
+    select: (agent: Agent) => void;
 }
 
 class Board extends React.Component<BoardProps> {
@@ -1255,7 +1132,7 @@ class Board extends React.Component<BoardProps> {
         }, RESIZE_TIMEOUT);
     }
 
-    select(pawn: MetaAgent) {
+    select(pawn: Agent) {
         this.props.select(pawn);
     }
 
@@ -1313,24 +1190,17 @@ class Board extends React.Component<BoardProps> {
                                     onClick={(
                                         event: KonvaEventObject<MouseEvent>
                                     ) => {
-                                        if (v.isAlive()) {
+                                        {
                                             this.select(v);
                                         }
                                     }}
                                 >
-                                    {v instanceof Agent ? (
-                                        <AliveAgentImage
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                            selected={this.props.selected === v}
-                                            data={v}
-                                        />
-                                    ) : (
-                                        <DeadAgentImage
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                        />
-                                    )}
+                                    <AgentImage
+                                        x={v.coords[0]}
+                                        y={v.coords[1]}
+                                        selected={this.props.selected === v}
+                                        data={v}
+                                    />
 
                                     {/* Debug text: */}
 

@@ -3,7 +3,6 @@ import * as util from "../utilities";
 import {
     Agent,
     Ideology,
-    MetaAgent,
     Personality,
     Relation,
 } from "../models/agent";
@@ -36,7 +35,7 @@ interface mapJson {
 }
 
 export class Map {
-    protected graph: Graph<MetaAgent, Relation>;
+    protected graph: Graph<Agent, Relation>;
     protected vRadius: number;
     protected jsonData: mapJson | undefined;
 
@@ -67,7 +66,7 @@ export class Map {
         this.jsonData = JSON.parse(JSON.stringify(json));
     }
 
-    getGraph(): Graph<MetaAgent, Relation> {
+    getGraph(): Graph<Agent, Relation> {
         return this.graph;
     }
 }
