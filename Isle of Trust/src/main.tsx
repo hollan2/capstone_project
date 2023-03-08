@@ -385,9 +385,6 @@ class Start extends React.Component<StartProps, StartState> {
                     />
                 </div>
                 <StartInformation />
-                <button className="start-btn" type="submit">
-                    Start
-                </button>
             </form>
         );
     }
@@ -458,6 +455,9 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                                 selectedPoints={this.props.selectedPoints}
                             />
                         </fieldset>
+                        <button className="start-btn" type="submit">
+                            Start
+                        </button>
                         <div className="tutorial-btn">
                             <TutorialOLD text="Tutorial (Recommended)" />
                         </div>
