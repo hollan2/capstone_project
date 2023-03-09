@@ -1041,9 +1041,9 @@ function AliveAgentImage(props: AliveAgentImageProps) {
 
     // Make the user's player larger in size 
     if (props.data.id == props.player.id){
-        defaultScale = 0.25;
-        selectedScale = 0.25;
-        hoverScale = 0.25;
+        defaultScale = 0.2;
+        selectedScale = 0.2;
+        hoverScale = 0.2;
 
     }
 
