@@ -47,28 +47,9 @@ abstract class AttributeContainer {
     }
 }
 
-export abstract class MetaAgent extends AttributeContainer {
+export class Agent extends AttributeContainer {
     public id: number;
     public coords: [number, number];
-
-    constructor(coords: [number, number], id: number) {
-        super();
-        this.id = id;
-        this.coords = coords;
-    }
-
-    abstract isAlive(): boolean;
-}
-
-export class DeadAgent extends MetaAgent {
-    public deadCount: number = 0;
-
-    isAlive(): boolean {
-        return false;
-    }
-}
-
-export class Agent extends MetaAgent {
     public name: string;
     public resources: number;
     public ideology: Ideology;
@@ -87,12 +68,14 @@ export class Agent extends MetaAgent {
         id: number,
         coords: [number, number]
     ) {
-        super(coords, id);
+        super();
         this.name = name;
         this.resources = resources;
         this.ideology = ideology;
         this.personality = personality;
         this.mood = mood;
+        this.id = id;
+        this.coords = coords;
 
         //this is why I hate enums
         //also this should later be changed to a generator function to allow player selected appearance
@@ -106,10 +89,6 @@ export class Agent extends MetaAgent {
             ];
         this.face = Face[randface as keyof typeof Face];
         this.hat = Hat[randhat as keyof typeof Hat];
-    }
-
-    isAlive(): boolean {
-        return true;
     }
 
     // update the personality in response to how the agent was treated in the previous round.
@@ -180,7 +159,7 @@ export class Agent extends MetaAgent {
     // Ideally, this would be some sort of curve, so agents wouldn't use, for example, 10 resources
     // trying to sway a neighbor who would change ideologies for 3 resources.
     autoDisperseInfluence(
-        neighbors: Map<MetaAgent, Relation>
+        neighbors: Map<Agent, Relation>
     ): SpendingContainer {
         const myPreachability = this.getAttributeAsPercentage(
             this.personality.getPreachiness()
@@ -197,11 +176,9 @@ export class Agent extends MetaAgent {
         let influencabilityMap: Map<Agent, number> = new Map();
         let totalInfluenceability: number = 0;
         neighbors.forEach((relation, neighbor) => {
-            if (neighbor instanceof Agent) {
-                const theirInfluenceablitity = neighbor.getInfluenceability();
-                influencabilityMap.set(neighbor, theirInfluenceablitity);
-                totalInfluenceability += theirInfluenceablitity;
-            }
+            const theirInfluenceablitity = neighbor.getInfluenceability();
+            influencabilityMap.set(neighbor, theirInfluenceablitity);
+            totalInfluenceability += theirInfluenceablitity;
         });
 
         influencabilityMap.forEach((theirInfluenceablitity, neighbor) => {

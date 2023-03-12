@@ -12,6 +12,7 @@ import GameView from "../App";
 export default function Tutorial() {
     return (
         <GameView
+            name={"Tutorial Character"}
             hat={"Propeller"}
             face={"Smiley"}
             ideologyColor={"9ec4ea"}
