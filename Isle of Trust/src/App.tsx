@@ -944,7 +944,7 @@ interface AgentImageProps {
     y: number;
     selected: boolean;
     data: Agent;
-    player: MetaAgent;
+    player: Agent;
 }
 
 function AgentImage(props: AgentImageProps) {
