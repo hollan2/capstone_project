@@ -4,7 +4,9 @@ import "./css/main.css";
 import Game from "./routes/game";
 import Test from "./routes/test";
 import About from "./about";
-import Tutorial from "./tutorial";
+
+import TutorialOLD from "./tutorialOLD";
+import Tutorial from "./routes/tutorial";
 
 import { Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate, NavigateFunction } from "react-router-dom";
@@ -44,6 +46,11 @@ export const Maps = [
         name: "Spokes",
         value: "Spokes",
         location: "../Maps/mapSpokes.png",
+    },
+    {
+        name: "Small",
+        value: "Small",
+        location: "../Maps/mapSmall.png",
     },
 ];
 
@@ -199,6 +206,7 @@ class Main extends React.Component {
                         <Route path="start" element={<UseStart />} />
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
+                        <Route path="tutorial" element={<Tutorial />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -230,7 +238,7 @@ function NavBar() {
                         Home
                     </Nav.Link>
                     <Nav.Link eventKey="2" href="">
-                        <Tutorial text="How To Play" />
+                        <TutorialOLD text="How To Play" />
                     </Nav.Link>
                     <Nav.Link eventKey="3" href="">
                         <About />
@@ -274,6 +282,10 @@ function Splash() {
 
             <Link className="link" to="/start">
                 <button>Setup Your Game</button>
+            </Link>
+
+            <Link className="link" to="/tutorial">
+                <button>Tutorial</button>
             </Link>
 
             <section></section>
@@ -373,9 +385,6 @@ class Start extends React.Component<StartProps, StartState> {
                     />
                 </div>
                 <StartInformation />
-                <button className="start-btn" type="submit">
-                    Start
-                </button>
             </form>
         );
     }
@@ -446,8 +455,11 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                                 selectedPoints={this.props.selectedPoints}
                             />
                         </fieldset>
+                        <button className="start-btn" type="submit">
+                            Start
+                        </button>
                         <div className="tutorial-btn">
-                            <Tutorial text="Tutorial (Recommended)" />
+                            <TutorialOLD text="Tutorial (Recommended)" />
                         </div>
                     </div>
                 </div>

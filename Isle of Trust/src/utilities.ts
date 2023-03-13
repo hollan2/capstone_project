@@ -1,4 +1,4 @@
-import { MetaAgent, Agent, AGENT_RADIUS } from "./models/agent";
+import { Agent, AGENT_RADIUS } from "./models/agent";
 
 export function randomIntRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min);
