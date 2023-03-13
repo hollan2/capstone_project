@@ -99,6 +99,7 @@ interface GameViewState {
     sidebarState: SidebarState;
     select: (agent: Agent) => void;
     turnCount: number;
+    selectCharacterDisplay: boolean;
 }
 
 export interface StartInfo {
@@ -124,18 +125,20 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const turnCount = 0;
 
         currentMap = props.mapImage;
+
         // TODO: put this in the JSON
         //A random agent in the graph is selected to be the player
         const player =
             map.getVertices()[
                 Math.floor(Math.random() * map.getVertices().length)
             ];
-
+        
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name
+
             switch (props.ideologyColor) {
                 case "9ec4ea":
                     //Dove
@@ -185,7 +188,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             sidebarState: sidebarState,
             select: select,
             turnCount: turnCount,
+            selectCharacterDisplay: false,
         };
+
+        //Needed for setState function
+        this.deselectCharacter = this.deselectCharacter.bind(this);
+
         //checking to see if props are coming in
         console.log("GameView");
         console.log(props);
@@ -355,7 +363,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const ideologyAppeal: Map<Ideology, number> = new Map();
         const neighbors = this.state.map.getEdges(agent)!;
         let totalInfluence = 0;
-
+        
         //calcautes the total influnce of all nehboors
         neighbors.forEach((relation: Relation, neighbor: Agent) => {
             const theirInfluence = this.state.map.getEdge(
@@ -365,7 +373,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             ideologyAppeal.set(neighbor.ideology, theirInfluence);
             totalInfluence += theirInfluence;
         });
-        
+
         const drifts = new DriftContainer();
         ideologyAppeal.forEach((theirInfluence, ideology) => {
             const drift: number = Math.round(
@@ -376,32 +384,61 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         agent.driftIdeology(drifts);
     }
 
+    deselectCharacter(value: boolean) {
+        this.setState({selectCharacterDisplay: value});
+    }
+
     render() {
-        return (
-            <div className="game">
-                <Board
-                    map={this.state.map}
-                    turnCount={this.state.turnCount}
-                    selected={this.state.sidebarState.selected}
-                    select={this.state.select.bind(this)}
-                    player = {this.state.sidebarState.player}
-                />
-                <PlayerSidebar
-                    map={this.state.map}
-                    round={this.tempTurn.bind(this)}
-                    sidebarState={this.state.sidebarState}
-                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                    countTotalInfluence={this.countTotalInfluence}
-                />
-                <SelectedSidebar
-                    map={this.state.map}
-                    round={this.tempTurn.bind(this)}
-                    sidebarState={this.state.sidebarState}
-                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                    countTotalInfluence={this.countTotalInfluence}
-                />
-            </div>
-        );
+        //if there is a selected player display right sidebar
+        if (this.state.selectCharacterDisplay) {
+            return (
+                <div className="game">
+                        <Board
+                            map={this.state.map}
+                            turnCount={this.state.turnCount}
+                            selected={this.state.sidebarState.selected}
+                            select={this.state.select.bind(this)}
+                            deselectCharacter={this.deselectCharacter}
+                        />
+                        <PlayerSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                        />
+                        <SelectedSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                            deselectCharacter={this.deselectCharacter}
+                        />
+                </div>
+            );
+        } else {
+            return (
+                <div className="game">
+                        <Board
+                            map={this.state.map}
+                            turnCount={this.state.turnCount}
+                            selected={this.state.sidebarState.selected}
+                            select={this.state.select.bind(this)}
+                            deselectCharacter={this.deselectCharacter}
+                            
+                        />
+                        <PlayerSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                        />
+                </div>
+            );
+        }
+
     }
 }
 
@@ -458,7 +495,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         return (
             <div className="player-display">
                 <div className="agent-type">
-                    Player: <span className="agent-name">{name}</span>
+                    Player: <span className="agent-name">{name}</span>                 
                 </div>
                 <Display
                     map={this.props.map}
@@ -674,6 +711,7 @@ interface SelectedSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    deselectCharacter:(value: boolean) => void;
 }
 
 class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
@@ -685,6 +723,7 @@ class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
+                    deselectCharacter={this.props.deselectCharacter}
                 />
                 <Stats
                     sidebarState={this.props.sidebarState}
@@ -702,11 +741,16 @@ interface SelectedDisplayProps {
         map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
+    
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    deselectCharacter:(value: boolean) => void;
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
+    deselectCharacter(value: boolean) {
+        this.props.deselectCharacter(false);
+    }
     render() {
         let choices = new choiceTally();
         let name = "";
@@ -717,8 +761,17 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
         }
         return (
             <div className="selected-display">
-                <div className="agent-type">
-                    Selected: <span className="agent-name">{name}</span>
+                <div className="agent-type" id="selected-character">
+                    <div>
+                        selected: <span className="agent-name">{name}</span>
+                    </div>
+                    <div 
+                        className="deselect"
+                        onClick={() => {
+                            this.deselectCharacter(false);
+                        }}>
+                        &#9746;
+                    </div> 
                 </div>
                 <Display
                     map={this.props.map}
@@ -731,6 +784,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
         );
     }
 }
+
 interface JudgementProps {
     sidebarState: SidebarState;
 }
@@ -1103,6 +1157,7 @@ interface BoardProps {
     selected: Agent;
     select: (agent: Agent) => void;
     player: Agent;
+    deselectCharacter: (value: boolean) => void;
 }
 
 class Board extends React.Component<BoardProps> {
@@ -1145,6 +1200,10 @@ class Board extends React.Component<BoardProps> {
 
     select(pawn: Agent) {
         this.props.select(pawn);
+    }
+
+    deselectCharacter(value: boolean) {
+        this.props.deselectCharacter(value)
     }
 
     render() {
@@ -1197,12 +1256,13 @@ class Board extends React.Component<BoardProps> {
 
                             {this.props.map.getVertices().map((v) => (
                                 <RK.Group
-                                    key={v.id}
+                                    key={v.id} 
                                     onClick={(
                                         event: KonvaEventObject<MouseEvent>
                                     ) => {
                                         {
                                             this.select(v);
+                                            this.deselectCharacter(true);
                                         }
                                     }}
                                 >
