@@ -398,6 +398,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             turnCount={this.state.turnCount}
                             selected={this.state.sidebarState.selected}
                             select={this.state.select.bind(this)}
+                            player = {this.state.sidebarState.player}
                             deselectCharacter={this.deselectCharacter}
                         />
                         <PlayerSidebar
@@ -425,6 +426,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             turnCount={this.state.turnCount}
                             selected={this.state.sidebarState.selected}
                             select={this.state.select.bind(this)}
+                            player = {this.state.sidebarState.player}
                             deselectCharacter={this.deselectCharacter}
                             
                         />
