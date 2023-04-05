@@ -1,4 +1,4 @@
-// The strategy an agent uses is determined during gameplay based on their personality.
+/ The strategy an agent uses is determined during gameplay based on their personality.
 // The associated taglines are used on the front-end to describe each strategy's philosophy.
 export enum Strategy {
     // Pure altruism
@@ -43,6 +43,13 @@ export enum Choice {
     Give,
 }
 
+//NATON added a enum for promises
+export enum Commitment {
+    Cooperate,
+    Recipricate, 
+    Compete,
+}
+
 export const generateChoice = (
     strat: Strategy,
     mood: number,
@@ -74,13 +81,27 @@ export const generateChoice = (
     return Choice.Give;
 };
 
-export class Turn {
-    public choice: Choice;
-    public commitment: Choice;
+//temp function to generate promises Naton
+export const generateCommitment = (
+    strat: Strategy,
+    mood: number,
+    theirHistory: TurnLog
+): Commitment => {
+    return Commitment.Cooperate
+};
 
-    constructor(choice: Choice, commitment: Choice) {
+
+export class Turn {
+    //agent Action NATON
+    public choice: Choice;
+    //agent Promise NATON
+    public commitment: Commitment;
+
+    constructor(choice: Choice, commitment: Commitment) {
+        
         this.choice = choice;
         this.commitment = commitment;
+
     }
 }
 
