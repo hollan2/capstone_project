@@ -92,9 +92,11 @@ export const generateCommitment = (
 export class Turn {
     //agent Action NATON
     public choice: Choice;
-    public commitment: Choice;
+    //changed the unused commitment variable from type Choice to new type Commitment
+    //agent Promise NATON
+    public commitment: Commitment;
 
-    constructor(choice: Choice, commitment: Choice) {
+    constructor(choice: Choice, commitment: Commitment) { 
         this.choice = choice;
         this.commitment = commitment;
 
