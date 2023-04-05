@@ -208,6 +208,7 @@ export class Agent extends AttributeContainer {
         this.resources += dispersal;
     }
 
+    /* This function doesn't serve a purpose anymore, can be removed
     driftIdeology(driftMap: DriftContainer) {
         let totalGenerosityChange = 0;
         let totalForgivenessChange = 0;
@@ -240,6 +241,7 @@ export class Agent extends AttributeContainer {
             );
         }
     }
+    */
 
     spendResources(cost: number) {
         this.resources -= cost;

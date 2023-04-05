@@ -108,7 +108,6 @@ interface GameViewState {
 export interface StartInfo {
     //Using strings until it's connected up
     name: string;
-    id:number;
     hat: string;
     face: string;
     ideologyColor: string;
@@ -118,7 +117,7 @@ export interface StartInfo {
 
 class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
-    public player_id: number;
+    public player_id: number = 0;
 
     constructor(props: StartInfo) {
         super(props);
@@ -144,9 +143,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name;
-            console.log("ID")
-            console.log(player.id)
+
+            //we want to keep track of the player's id so we know who the player is
+            console.log("ID");
+            console.log(player.id);
             this.player_id = player.id;
+            console.log(this.player_id);
 
             switch (props.ideologyColor) {
                 case "9ec4ea":
@@ -224,6 +226,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
+    //Should be removed but too many lines of code rely on this to do it yet
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String {
         const neighbors = map.getEdges(agent);
         let totalInfluence = 0;
@@ -257,20 +260,22 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const vertices = this.state.map.getVertices();
         const edges = this.state.map.getAllEdges();
 
-        this.drainInfluence(edges);
-        this.handleInfluenceChanges(vertices);
+        console.log("TEMP TURN")
+        //can be removed
+        //this.drainInfluence(edges);
+        //this.handleInfluenceChanges(vertices);
         this.generateRound(edges);
         this.drainResources(vertices);
 
         this.forceUpdate();
     }
-
+    
     drainResources(vertices: Agent[]) {
         vertices.forEach((v1) => {
             v1.resources -= RESOURCE_LOST_PER_TURN;
         });
     }
-
+    /* THESE functions don't serve a purpose anymore, can be removed
     drainInfluence(edges: [Agent, Agent, Relation][]) {
         edges.forEach(([v1, v2, e]) => {
             const v2Agent = v2 as Agent;
@@ -306,6 +311,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 this.driftIdeology(v1);
         });
     }
+    */
 
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
@@ -320,35 +326,37 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                 //checks if agent1 is the player agent if so we get the player selected promise
                 if(v1.id == this.player_id){
+                    console.log("PLAYER MATCH");
+                    console.log(v1.name);
+                    console.log(this.player_id);
                     //generates the promise of the agent1
                     //TEMP CODE
                     v1Promise = generateCommitment(
                         v1Strat,
-                        v1.mood,
                         e2.history);
                 }
                 else{
                     //generates the promise of the agent1
                     v1Promise = generateCommitment(
                         v1Strat,
-                        v1.mood,
                         e2.history);
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
-                if(v1.id == this.player_id){
+                if(v2.id == this.player_id){
+                    console.log("PLAYER MATCH");
+                    console.log(v2.name);
+                    console.log(this.player_id);
                     //generates the promise of the agent2
                     //TEMP CODE
                     v2Promise = generateCommitment(
                         v2Strat,
-                        v2.mood,
                         e1.history);
                 }
                 else{
                     //generates the promise of the agent2
                     v2Promise = generateCommitment(
                         v2Strat,
-                        v2.mood,
                         e1.history);
                 }
                 //gets us the full array of promises between agents to pass back to generaterounds
@@ -359,7 +367,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return(Promise_relation)
     }
 
-    //accepts in the edges array with the addtional commitment info.
+    //accepts in the edges array with the addtional commitment info. Then generates the agent's choices
     generateChoiceRound(edges: [Agent, Agent, Relation, Commitment, Commitment][]){
         edges.forEach(([v1, v2, e1, v1Promise, v2Promise]) => {
             const e2 = this.state.map.getEdge(v2, v1);
@@ -374,28 +382,24 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     //code for player choice goes here
                     v1Choice = generateChoice(
                         v1Strat,
-                        v1.mood,
                         e2.history);
                 }
                 else{
                     v1Choice = generateChoice(
                         v1Strat,
-                        v1.mood,
                         e2.history);
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
-                if(v1.id == this.player_id){
+                if(v2.id == this.player_id){
                     //code for player choice goes here
                     v2Choice = generateChoice(
                         v2Strat,
-                        v2.mood,
                         e1.history);
                 }
                 else{
                     v2Choice = generateChoice(
                         v2Strat,
-                        v2.mood,
                         e1.history);
                 }
             
@@ -427,6 +431,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
     }
 
+    /* This function doesn't serve a purpose anymore, can be removed
     driftIdeology(agent: Agent) {
         // Drift factor represents by how many attribute points an agent will drift towards a new ideology.
         // A factor of 4 = an agent will change its ideology by 4 points (dividing the 4 points appropriately
@@ -458,6 +463,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
         agent.driftIdeology(drifts);
     }
+    */
 
     deselectCharacter(value: boolean) {
         this.setState({selectCharacterDisplay: value});

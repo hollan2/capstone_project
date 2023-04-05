@@ -1,4 +1,4 @@
-/ The strategy an agent uses is determined during gameplay based on their personality.
+// The strategy an agent uses is determined during gameplay based on their personality.
 // The associated taglines are used on the front-end to describe each strategy's philosophy.
 export enum Strategy {
     // Pure altruism
@@ -50,15 +50,13 @@ export enum Commitment {
     Compete,
 }
 
+//generates the action the agent will committ to
+//TODO changing the strategies to our new system
 export const generateChoice = (
     strat: Strategy,
-    mood: number,
+    //removed the mood since it wasn't factored into choice rn anyways
     theirHistory: TurnLog
 ): Choice => {
-    // TODO if mood is extreme, roll to choose an action outside of typical strategy
-
-    // this is just an example, but here,
-    // we would determine the default choice based on the passed-in strategy.
     switch (strat) {
         case Strategy.Dove:
             return Choice.Give;
@@ -82,9 +80,9 @@ export const generateChoice = (
 };
 
 //temp function to generate promises Naton
+//TODO impelment new strategies into the promise
 export const generateCommitment = (
     strat: Strategy,
-    mood: number,
     theirHistory: TurnLog
 ): Commitment => {
     return Commitment.Cooperate
@@ -94,11 +92,9 @@ export const generateCommitment = (
 export class Turn {
     //agent Action NATON
     public choice: Choice;
-    //agent Promise NATON
-    public commitment: Commitment;
+    public commitment: Choice;
 
-    constructor(choice: Choice, commitment: Commitment) {
-        
+    constructor(choice: Choice, commitment: Choice) {
         this.choice = choice;
         this.commitment = commitment;
 
