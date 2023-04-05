@@ -3,23 +3,16 @@ import * as RK from "react-konva";
 import "./css/App.css";
 import Konva from "konva";
 import useImage from "use-image";
-import * as util from "./utilities";
-import {
-    AnimResources,
-    AnimInfluence,
-    AnimChoice,
-    AnimMood,
-    AnimChangeIdeology,
-} from "./models/animation";
 
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { PlayerSidebar } from "./components/playerSideBar";
+import { SelectedSidebar } from "./components/selectedSideBar";
+import { Board } from "./components/board";
 import { Grid } from "./generators/map";
 import {
     MetaAgent,
     Agent,
     DeadAgent,
-    AGENT_RADIUS,
     Relation,
     Ideology,
     Personality,
@@ -38,10 +31,6 @@ import {
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
 */
 import { KonvaEventObject } from "konva/lib/Node";
-import { getActiveElement } from "@testing-library/user-event/dist/utils";
-import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
-import { timingSafeEqual } from "crypto";
-import { allowedNodeEnvironmentFlags } from "process";
 /*
 import { timeStamp } from "console";
 */
@@ -65,7 +54,6 @@ export const MAP_URL: { [key: string]: string } = {
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
 };
-
 //export let MAP_INDEX = 0;
 let currentMap = "Pronged";
 
@@ -454,6 +442,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     selected={this.state.sidebarState.selected}
                     select={this.state.select.bind(this)}
                     player = {this.state.sidebarState.player}
+                    current = {currentMap}
                 />
                 <PlayerSidebar
                     map={this.state.map}
@@ -469,145 +458,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                     countTotalInfluence={this.countTotalInfluence}
                 />
-            </div>
-        );
-    }
-}
-
-
-interface SelectedSidebarProps {
-    sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
-    tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
-        agent: Agent
-    ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
-    round: () => void;
-}
-
-class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
-    render() {
-        return (
-            <div className="sidebar selectedSidebar">
-                <SelectedDisplay
-                    map={this.props.map}
-                    sidebarState={this.props.sidebarState}
-                    tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
-                    countTotalInfluence={this.props.countTotalInfluence}
-                />
-                <Stats
-                    sidebarState={this.props.sidebarState}
-                    tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
-                />
-            </div>
-        );
-    }
-}
-
-interface SelectedDisplayProps {
-    sidebarState: SidebarState;
-    map: Graph<MetaAgent, Relation>;
-    tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
-        agent: Agent
-    ) => choiceTally;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
-    countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
-}
-
-class SelectedDisplay extends React.Component<SelectedDisplayProps> {
-    render() {
-        let choices = new choiceTally();
-        let name = "";
-        if (this.props.sidebarState.selected instanceof Agent) {
-            const them = this.props.sidebarState.selected as Agent;
-            choices = this.props.tallyChoicesNeighbors(this.props.map, them);
-            name = them.name;
-        }
-        return (
-            <div className="selected-display">
-                <div className="agent-type">
-                    Selected: <span className="agent-name">{name}</span>
-                </div>
-                <Display
-                    map={this.props.map}
-                    agent={this.props.sidebarState.selected}
-                    agentChoices={choices}
-                    countTotalInfluence={this.props.countTotalInfluence}
-                />
-                <Judgement sidebarState={this.props.sidebarState} />
-            </div>
-        );
-    }
-}
-interface JudgementProps {
-    sidebarState: SidebarState;
-}
-
-class Judgement extends React.Component<JudgementProps> {
-    render() {
-        let judgement: string = "doesn't know you";
-        if (
-            this.props.sidebarState.player === this.props.sidebarState.selected
-        ) {
-            judgement = "that's you!";
-        } else if (
-            this.props.sidebarState.selectedToPlayer instanceof Relation &&
-            this.props.sidebarState.playerToSelected instanceof Relation
-        ) {
-            judgement =
-                this.props.sidebarState.selectedToPlayer.getDescriptiveOpinion() +
-                "; " +
-                this.props.sidebarState.playerToSelected.getDescriptiveInfluence();
-        }
-
-        return <div className="judgement">{judgement}</div>;
-    }
-}
-
-interface StatsProps {
-    sidebarState: SidebarState;
-    tallyChoicesNeighbors: (
-        map: Graph<MetaAgent, Relation>,
-        agent: Agent
-    ) => choiceTally;
-}
-class Stats extends React.Component<StatsProps, unknown> {
-    render() {
-        const theirChoices = new choiceTally();
-        const yourChoices = new choiceTally();
-        let theySpent = 0;
-        let youSpent = 0;
-        if (this.props.sidebarState.selectedToPlayer) {
-            theirChoices.tallyChoices(
-                this.props.sidebarState.selectedToPlayer.history!
-            );
-            theySpent = this.props.sidebarState.selectedToPlayer.resourcesSpent;
-        }
-        if (this.props.sidebarState.playerToSelected) {
-            yourChoices.tallyChoices(
-                this.props.sidebarState.playerToSelected.history!
-            );
-            youSpent = this.props.sidebarState.playerToSelected.resourcesSpent;
-        }
-        return (
-            <div className="stats-container">
-                <div className="stats">
-                    <p>
-                        They've spent {theySpent} resources trying to influence
-                        you, while you've spent {youSpent} resources trying to
-                        influence them.
-                    </p>
-                    <p>
-                        They've given to you {theirChoices.gave} times, while
-                        you've given to them {yourChoices.gave} times.
-                    </p>
-                    <p>
-                        They've cheated you {theirChoices.cheated} times, while
-                        you've cheated them {yourChoices.cheated} times.
-                    </p>
-                </div>
             </div>
         );
     }
@@ -763,7 +613,7 @@ interface AliveAgentImageProps {
     player: MetaAgent;
 }
 
-function AliveAgentImage(props: AliveAgentImageProps) {
+export function AliveAgentImage(props: AliveAgentImageProps) {
     let imageNode = React.useRef<any>(null);
 
     let defaultScale = 0.12;
@@ -871,7 +721,7 @@ interface DeadAgentImageProps {
     y: number;
 }
 
-function DeadAgentImage(props: DeadAgentImageProps) {
+export function DeadAgentImage(props: DeadAgentImageProps) {
     let imageNode: any = null;
     const [deadImage] = useImage("pawns/gravestone.png");
 
@@ -946,234 +796,6 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
     }
 }
 
-interface BoardProps {
-    map: Graph<MetaAgent, Relation>;
-    turnCount: number;
-    selected: MetaAgent;
-    select: (agent: MetaAgent) => void;
-    player: MetaAgent;
-}
-
-class Board extends React.Component<BoardProps> {
-    private containerRef = React.createRef<HTMLDivElement>();
-    private stageRef = React.createRef<Konva.Stage>();
-
-    private resizeTimeout?: NodeJS.Timeout;
-
-    componentDidMount() {
-        this.resizeEvent = this.resizeEvent.bind(this);
-        this.resizeEvent();
-        window.addEventListener("resize", this.resizeEvent);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.resizeEvent);
-    }
-
-    resizeEvent() {
-        if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
-
-        this.resizeTimeout = setTimeout(() => {
-            if (
-                this.containerRef === undefined ||
-                this.containerRef.current == null ||
-                this.stageRef.current == null
-            )
-                return;
-
-            const container = this.containerRef.current;
-            const stage = this.stageRef.current;
-
-            let scale = container.offsetWidth / SCENE_WIDTH;
-
-            stage.width(SCENE_WIDTH * scale);
-            stage.height(SCENE_HEIGHT * scale);
-            stage.scale({ x: scale, y: scale });
-        }, RESIZE_TIMEOUT);
-    }
-
-    select(pawn: MetaAgent) {
-        this.props.select(pawn);
-    }
-
-    render() {
-        return (
-            <div className="board">
-                <div
-                    className="map"
-                    ref={this.containerRef}
-                    style={{
-                        backgroundImage: MAP_URL[currentMap],
-                        backgroundSize: "100%",
-                    }}
-                >
-                    {/* <img src={require("./assets/Maps/prongedMap.png")} /> //not working  */}
-
-                    <RK.Stage ref={this.stageRef}>
-                        <RK.Layer>
-                            {this.props.map.getAllEdges().map(([v1, v2, e]) => (
-                                <RK.Line
-                                    key={v1.id + "->" + v2.id}
-                                    points={util.edgeLinePoints(
-                                        v1.coords[0],
-                                        v1.coords[1],
-                                        v2.coords[0],
-                                        v2.coords[1]
-                                    )}
-                                    strokeLinearGradientStartPointX={
-                                        v1.coords[0]
-                                    }
-                                    strokeLinearGradientStartPointY={
-                                        v1.coords[1]
-                                    }
-                                    strokeLinearGradientEndPointX={v2.coords[0]}
-                                    strokeLinearGradientEndPointY={v2.coords[1]}
-                                    strokeLinearGradientColorStops={[
-                                        0,
-                                        "white",
-                                        1,
-                                        util.colorFromWeight(e.influence),
-                                    ]}
-                                    opacity={0.6}
-                                    strokeWidth={4}
-                                    fillAfterStrokeEnabled={true}
-                                    pointerLength={AGENT_RADIUS / 3}
-                                    pointerWidth={AGENT_RADIUS / 3}
-                                    lineJoin="round"
-                                    lineCap="round"
-                                />
-                            ))}
-
-                            {this.props.map.getVertices().map((v) => (
-                                <RK.Group
-                                    key={v.id}
-                                    onClick={(
-                                        event: KonvaEventObject<MouseEvent>
-                                    ) => {
-                                        if (v.isAlive()) {
-                                            this.select(v);
-                                        }
-                                    }}
-                                >
-                                    {v instanceof Agent ? (
-                                        <AliveAgentImage
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                            selected={this.props.selected === v}
-                                            data={v}
-                                            player={this.props.player}
-                                        />
-                                    ) : (
-                                        <DeadAgentImage
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                        />
-                                    )}
-
-                                    {/* Debug text: */}
-
-                                    {/* <RK.Text
-                                        text={
-                                            v instanceof Agent
-                                                ? v.resources.toString()
-                                                : v instanceof DeadAgent
-                                                ? v.deadCount.toString()
-                                                : v.id.toString()
-                                        }
-                                        x={v.coords[0] - AGENT_RADIUS / 2}
-                                        y={v.coords[1] - AGENT_RADIUS / 2}
-                                        width={AGENT_RADIUS * 3}
-                                        height={AGENT_RADIUS * 3}
-                                        offsetX={AGENT_RADIUS * 3}
-                                        offsetY={AGENT_RADIUS}
-                                        fontSize={AGENT_RADIUS}
-                                        fill={v.isAlive() ? "black" : "red"}
-                                        shadowOffsetX={1}
-                                        shadowOffsetY={1}
-                                        align="center"
-                                        verticalAlign="middle"
-                                    /> */}
-                                </RK.Group>
-                            ))}
-                        </RK.Layer>
-
-                        <RK.Layer>
-                            {this.props.map.getVertices().map((v) => (
-                                <RK.Group key={v.id + " vertex-anim"}>
-                                    {v instanceof Agent && (
-                                        <AnimMood
-                                            turnCount={this.props.turnCount}
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                            mood={
-                                                v instanceof Agent
-                                                    ? v.mood
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
-                                    {v instanceof Agent && (
-                                        <AnimResources
-                                            turnCount={this.props.turnCount}
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                            resources={
-                                                v instanceof Agent
-                                                    ? v.resources
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
-                                    {v instanceof Agent && (
-                                        <AnimChangeIdeology
-                                            turnCount={this.props.turnCount}
-                                            x={v.coords[0]}
-                                            y={v.coords[1]}
-                                            ideology={
-                                                v instanceof Agent
-                                                    ? v.ideology
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
-                                </RK.Group>
-                            ))}
-                        </RK.Layer>
-
-                        <RK.Layer>
-                            {this.props.map.getAllEdges().map(([v1, v2, e]) => (
-                                <RK.Group key={v1.id + " edge-anim " + v2.id}>
-                                    {v1 instanceof Agent &&
-                                        v2 instanceof Agent && (
-                                            <AnimChoice
-                                                turnCount={this.props.turnCount}
-                                                x1={v1.coords[0]}
-                                                y1={v1.coords[1]}
-                                                x2={v2.coords[0]}
-                                                y2={v2.coords[1]}
-                                                history={e.history}
-                                            />
-                                        )}
-                                    {v1 instanceof Agent &&
-                                        v2 instanceof Agent && (
-                                            <AnimInfluence
-                                                turnCount={this.props.turnCount}
-                                                x1={v1.coords[0]}
-                                                y1={v1.coords[1]}
-                                                x2={v2.coords[0]}
-                                                y2={v2.coords[1]}
-                                                influence={e.influence}
-                                            />
-                                        )}
-                                </RK.Group>
-                            ))}
-                        </RK.Layer>
-                    </RK.Stage>
-                </div>
-            </div>
-        );
-    }
-}
 /*
 function give() {
     alert("Gee thanks");

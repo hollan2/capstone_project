@@ -63,6 +63,8 @@ interface PlayerDisplayProps {
     countTotalInfluence(map: Graph<MetaAgent, Relation>, agent: Agent): String;
 }
 
+
+// Display component located in App.tsx
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     render() {
         let choices = new choiceTally();
