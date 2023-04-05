@@ -98,7 +98,7 @@ footer {
 .tutorial-btn {
     position: relative;
     display: block;
-    margin: 10px auto 0 auto;
+    margin: 10px auto;
     padding: 0 20px;
     font-size: 4vw;
     border-radius: 5px;
@@ -182,6 +182,13 @@ footer {
     display: flex;
     flex-direction: column;
     width: 50%;
+}
+
+/*adds styling for the name input field*/
+.name-selector {
+    display: flex;
+    flex-direction: column;
+    width: 50%;   
 }
 
 .selector-stack legend {

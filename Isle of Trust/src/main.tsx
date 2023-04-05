@@ -4,7 +4,9 @@ import "./css/main.css";
 import Game from "./routes/game";
 import Test from "./routes/test";
 import About from "./about";
-import Tutorial from "./tutorial";
+
+import TutorialOLD from "./tutorialOLD";
+import Tutorial from "./routes/tutorial";
 
 import { Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate, NavigateFunction } from "react-router-dom";
@@ -44,6 +46,11 @@ export const Maps = [
         name: "Spokes",
         value: "Spokes",
         location: "../Maps/mapSpokes.png",
+    },
+    {
+        name: "Small",
+        value: "Small",
+        location: "../Maps/mapSmall.png",
     },
 ];
 
@@ -199,6 +206,7 @@ class Main extends React.Component {
                         <Route path="start" element={<UseStart />} />
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
+                        <Route path="tutorial" element={<Tutorial />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -230,7 +238,7 @@ function NavBar() {
                         Home
                     </Nav.Link>
                     <Nav.Link eventKey="2" href="">
-                        <Tutorial text="How To Play" />
+                        <TutorialOLD text="How To Play" />
                     </Nav.Link>
                     <Nav.Link eventKey="3" href="">
                         <About />
@@ -276,6 +284,10 @@ function Splash() {
                 <button>Setup Your Game</button>
             </Link>
 
+            <Link className="link" to="/tutorial">
+                <button>Tutorial</button>
+            </Link>
+
             <section></section>
         </article>
     );
@@ -287,6 +299,7 @@ function UseStart() {
 }
 
 interface StartState {
+    selectedName: string;
     selectedHat: string;
     selectedFace: string;
     selectedIdeology: string;
@@ -300,7 +313,9 @@ interface StartProps {
 class Start extends React.Component<StartProps, StartState> {
     constructor(props: StartProps) {
         super(props);
+        //the starting values on the select menu
         this.state = {
+            selectedName: "Name",
             selectedHat: "",
             selectedFace: "",
             selectedIdeology: "",
@@ -308,6 +323,9 @@ class Start extends React.Component<StartProps, StartState> {
             selectedMap: "Choke",
         };
     }
+    handleSelectedName = (selection: string) => {
+        this.setState({ selectedName: selection });
+    };
 
     handleSelectedHat = (selection: string) => {
         this.setState({ selectedHat: selection });
@@ -334,6 +352,7 @@ class Start extends React.Component<StartProps, StartState> {
 
         this.props.navigate("/game", {
             state: {
+                name: this.state.selectedName,
                 hat: this.state.selectedHat,
                 face: this.state.selectedFace,
                 ideologyColor: this.state.selectedIdeology,
@@ -348,6 +367,8 @@ class Start extends React.Component<StartProps, StartState> {
                 <h1>Game Setup</h1>
                 <div className="selection-container">
                     <PlayerSelection
+                        handleSelectedName={this.handleSelectedName}
+                        selectedName={this.state.selectedName}
                         handleSelectedHat={this.handleSelectedHat}
                         selectedHat={this.state.selectedHat}
                         handleSelectedFace={this.handleSelectedFace}
@@ -364,15 +385,14 @@ class Start extends React.Component<StartProps, StartState> {
                     />
                 </div>
                 <StartInformation />
-                <button className="start-btn" type="submit">
-                    Start
-                </button>
             </form>
         );
     }
 }
 
 interface PlayerSelectionProps {
+    selectedName: string;
+    handleSelectedName: (value: string) => void;    
     selectedHat: string;
     handleSelectedHat: (value: string) => void;
     selectedFace: string;
@@ -404,7 +424,10 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                     <div className="selector-stack">
                         <fieldset>
                             <legend>Appearance:</legend>
-
+                            <NameSelector
+                                handleSelectedName={this.props.handleSelectedName}
+                                selectedName={this.props.selectedName}
+                            />
                             <HatSelector
                                 handleSelectedHat={this.props.handleSelectedHat}
                                 selectedHat={this.props.selectedHat}
@@ -432,8 +455,11 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                                 selectedPoints={this.props.selectedPoints}
                             />
                         </fieldset>
+                        <button className="start-btn" type="submit">
+                            Start
+                        </button>
                         <div className="tutorial-btn">
-                            <Tutorial text="Tutorial (Recommended)" />
+                            <TutorialOLD text="Tutorial (Recommended)" />
                         </div>
                     </div>
                 </div>
@@ -506,6 +532,7 @@ class PawnDisplay extends React.Component<PawnDisplayProps, {}> {
 
 export type RGB = { red: number; green: number; blue: number };
 
+//converts Hex values to RGB
 export function HexToRGBObject(hex: string): RGB {
     if (hex.length !== 6 || !hex) {
         hex = "ffffff";
@@ -523,6 +550,7 @@ export function HexToRGBObject(hex: string): RGB {
     }
     return aRgb;
 }
+
 
 const PawnImageGroup = ({
     face,
@@ -546,6 +574,31 @@ const PawnImageGroup = ({
         </RK.Group>
     );
 };
+
+//the code to implement the name input field
+interface NameSelectorProps {
+    selectedName: string;
+    handleSelectedName: (value: string) => void;
+}
+
+class NameSelector extends React.Component<NameSelectorProps, {}> {
+    render() {
+        return (
+            <div className="name-selector selector">
+                <label htmlFor="name-select">Your Name:</label>
+                <input
+                    required
+                    name="names"
+                    id="name-select"
+                    type="text" 
+                    value={this.props.selectedName}
+                    onChange={(e) => {this.props.handleSelectedName(e.target.value);
+                    }}
+                    />
+            </div>
+        );
+    }
+}
 
 interface HatSelectorProps {
     selectedHat: string;
