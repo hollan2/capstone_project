@@ -28,8 +28,11 @@ import {
     taglineFromStrategy,
     generateChoice,
     Turn,
+    Choice,
+    Commitment,
     choiceTally,
     Strategy,
+    generateCommitment,
 } from "./models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -105,6 +108,7 @@ interface GameViewState {
 export interface StartInfo {
     //Using strings until it's connected up
     name: string;
+    id:number;
     hat: string;
     face: string;
     ideologyColor: string;
@@ -114,6 +118,8 @@ export interface StartInfo {
 
 class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
+    public player_id: number;
+
     constructor(props: StartInfo) {
         super(props);
         // Here may be some kind of switch to generate map
@@ -123,9 +129,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
         const turnCount = 0;
-
+        
         currentMap = props.mapImage;
-
+        
         // TODO: put this in the JSON
         //A random agent in the graph is selected to be the player
         const player =
@@ -137,7 +143,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
-            player.name = props.name
+            player.name = props.name;
+            console.log("ID")
+            console.log(player.id)
+            this.player_id = player.id;
 
             switch (props.ideologyColor) {
                 case "9ec4ea":
@@ -195,8 +204,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.deselectCharacter = this.deselectCharacter.bind(this);
 
         //checking to see if props are coming in
-        console.log("GameView");
-        console.log(props);
     }
 
     tallyChoicesForAllNeighbors(
@@ -300,52 +307,120 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
     }
 
-    generateRound(edges: [Agent, Agent, Relation][]) {
-        const turnsToSample: number = 10;
+    //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
+    generatePromiseRound(edges: [Agent, Agent, Relation][]) {
+        var Promise_relation: [Agent, Agent, Relation, Commitment, Commitment][] = [];
         edges.forEach(([v1, v2, e1]) => {
             const e2 = this.state.map.getEdge(v2, v1);
             if (v1.id < v2.id && e2 instanceof Relation) {
                 const v1Strat = v1.ideology.toStrategy();
                 const v2Strat = v2.ideology.toStrategy();
-                const v1Choice = generateChoice(
-                    v1Strat,
-                    v1.mood,
-                    e2.history
-                );
-                const v2Choice = generateChoice(
-                    v2Strat,
-                    v2.mood,
-                    e1.history
-                );
+                var v1Promise;
+                var v2Promise;
 
+                //checks if agent1 is the player agent if so we get the player selected promise
+                if(v1.id == this.player_id){
+                    //generates the promise of the agent1
+                    //TEMP CODE
+                    v1Promise = generateCommitment(
+                        v1Strat,
+                        v1.mood,
+                        e2.history);
+                }
+                else{
+                    //generates the promise of the agent1
+                    v1Promise = generateCommitment(
+                        v1Strat,
+                        v1.mood,
+                        e2.history);
+                }
+
+                //checks if agent2 is the player agent if so we get the player selected choice
+                if(v1.id == this.player_id){
+                    //generates the promise of the agent2
+                    //TEMP CODE
+                    v2Promise = generateCommitment(
+                        v2Strat,
+                        v2.mood,
+                        e1.history);
+                }
+                else{
+                    //generates the promise of the agent2
+                    v2Promise = generateCommitment(
+                        v2Strat,
+                        v2.mood,
+                        e1.history);
+                }
+                //gets us the full array of promises between agents to pass back to generaterounds
+                Promise_relation.push([v1, v2, e1, v1Promise, v2Promise])
+            }
+        });
+        console.log(Promise_relation)
+        return(Promise_relation)
+    }
+
+    //accepts in the edges array with the addtional commitment info.
+    generateChoiceRound(edges: [Agent, Agent, Relation, Commitment, Commitment][]){
+        edges.forEach(([v1, v2, e1, v1Promise, v2Promise]) => {
+            const e2 = this.state.map.getEdge(v2, v1);
+            if (v1.id < v2.id && e2 instanceof Relation) {
+                const v1Strat = v1.ideology.toStrategy();
+                const v2Strat = v2.ideology.toStrategy();
+                var v1Choice;
+                var v2Choice;
+
+                //checks if agent1 is the player agent if so we get the player selected choice
+                if(v1.id == this.player_id){
+                    //code for player choice goes here
+                    v1Choice = generateChoice(
+                        v1Strat,
+                        v1.mood,
+                        e2.history);
+                }
+                else{
+                    v1Choice = generateChoice(
+                        v1Strat,
+                        v1.mood,
+                        e2.history);
+                }
+
+                //checks if agent2 is the player agent if so we get the player selected choice
+                if(v1.id == this.player_id){
+                    //code for player choice goes here
+                    v2Choice = generateChoice(
+                        v2Strat,
+                        v2.mood,
+                        e1.history);
+                }
+                else{
+                    v2Choice = generateChoice(
+                        v2Strat,
+                        v2.mood,
+                        e1.history);
+                }
+            
                 let resourceChange = v1.resources;
-                let moodChange = v1.mood;
 
                 v1.rewardResources(v1Choice, v2Choice);
                 v2.rewardResources(v1Choice, v2Choice);
-                v1.updateMood(v1Choice, v2Choice);
-                v2.updateMood(v1Choice, v2Choice);
-
                 resourceChange = v1.resources - resourceChange;
-                moodChange = v1.mood - moodChange;
 
-                e1.history.addTurn(new Turn(v1Choice, v1Choice));
-                e2.history.addTurn(new Turn(v2Choice, v2Choice));
+                e1.history.addTurn(new Turn(v1Choice, v1Promise));
+                e2.history.addTurn(new Turn(v2Choice, v2Promise));
 
-                let opinionChange = e1.opinion;
-                e1.updateOpinion(
-                    e2.influence,
-                    e2.history.getAvgChoice(turnsToSample),
-                    v1.personality.getVolatility()
-                );
-                e2.updateOpinion(
-                    e1.influence,
-                    e1.history.getAvgChoice(turnsToSample),
-                    v2.personality.getVolatility()
-                );
-                opinionChange = e1.opinion - opinionChange;
             }
         });
+
+    }
+
+    generateRound(edges: [Agent, Agent, Relation][]) {
+        console.log("PROMISE ROUND START")
+        const promise_relation = this.generatePromiseRound(edges);
+
+        //still not 100% sure how to implement the pausing between rounds
+        console.log("CHOICE ROUND START")
+        this.generateChoiceRound(promise_relation);
+
 
         this.setState((state) => {
             return { turnCount: this.state.turnCount + 1 };
@@ -528,8 +603,8 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
             return (
                 <div className="influence-menu">
                     <div className="influence-title">
-                        spend resources,
-                        <br /> influence your neighbors:
+                        Commit to Promises,
+                        <br />(Or Not):
                     </div>
                     <InfluenceOptions
                         selected={this.props.sidebarState.selected}
@@ -537,6 +612,8 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                         neighbors={neighbors}
                         spendingMap={this.props.sidebarState.influenceChoices}
                     />
+
+                    
                     <button onClick={this.props.round}>Confirm Choices</button>
                 </div>
             );
@@ -650,6 +727,7 @@ class InfluenceEntry extends React.Component<
         this.state = { given: 0 };
     }
 
+
     updateGiven(increment: number) {
         if (this.props.agent instanceof Agent) {
             const newGiven = this.props.allowResources(
@@ -660,6 +738,8 @@ class InfluenceEntry extends React.Component<
             this.props.spendingMap.data.set(this.props.agent, newGiven);
         }
     }
+
+
 
     render() {
         const sMaybe = this.state.given === 1 ? "" : "s";
@@ -703,6 +783,7 @@ class InfluenceEntry extends React.Component<
         );
     }
 }
+
 
 interface SelectedSidebarProps {
     sidebarState: SidebarState;
