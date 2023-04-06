@@ -270,6 +270,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.forceUpdate();
     }
     
+    //calculates the resouces at the end of each round
     drainResources(vertices: Agent[]) {
         vertices.forEach((v1) => {
             v1.resources -= RESOURCE_LOST_PER_TURN;
@@ -363,7 +364,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 Promise_relation.push([v1, v2, e1, v1Promise, v2Promise])
             }
         });
-        console.log(Promise_relation)
         return(Promise_relation)
     }
 
@@ -380,6 +380,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //checks if agent1 is the player agent if so we get the player selected choice
                 if(v1.id == this.player_id){
                     //code for player choice goes here
+                    //needs to be changed
                     v1Choice = generateChoice(
                         v1Strat,
                         e2.history);
@@ -393,6 +394,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //checks if agent2 is the player agent if so we get the player selected choice
                 if(v2.id == this.player_id){
                     //code for player choice goes here
+                    //needs to be changed
                     v2Choice = generateChoice(
                         v2Strat,
                         e1.history);
@@ -403,25 +405,31 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         e1.history);
                 }
             
-                let resourceChange = v1.resources;
 
+                //rewards the agents resouces based on their resources
                 v1.rewardResources(v1Choice, v2Choice);
                 v2.rewardResources(v1Choice, v2Choice);
-                resourceChange = v1.resources - resourceChange;
 
+                //a reward trust function will be need when trust implmented 
+
+                //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise));
-
+                if(v1.id == this.player_id)
+                    console.log(e1.history);
+                if(v2.id == this.player_id)
+                    console.log(e2.history)
             }
         });
 
     }
 
+    //generates each round when player hits confirm choices
     generateRound(edges: [Agent, Agent, Relation][]) {
         console.log("PROMISE ROUND START")
         const promise_relation = this.generatePromiseRound(edges);
 
-        //still not 100% sure how to implement the pausing between rounds
+        //still not 100% sure how to implement the ui changes + pausing between rounds between rounds
         console.log("CHOICE ROUND START")
         this.generateChoiceRound(promise_relation);
 
