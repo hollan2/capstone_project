@@ -55,6 +55,48 @@ footer {
     right: 0;
 }
 
+/* Added a custom .css for the tutorial page. */
+/* Base of every element in the "levels" classid. */
+#levels {
+    width: auto;
+    min-height: calc(100vh - 74px);
+    margin-top: 50px;
+    margin-bottom: 24px;
+    padding: 100px;
+    z-index: 200;
+    display: flex;
+    flex-direction: row;
+}
+
+/* Various settings of the button itself. */
+#levels button {
+    position: relative;
+    display: block;
+    margin: 10px auto;
+    padding: 0 20px;
+    font-size: 4vw;
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+    background-color: var(--white);
+    color: var(--dark-blue);
+    text-decoration: none;
+    flex-direction: row;
+}
+
+/* Changes the color of the button when hovered over. */
+#levels button:hover {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+/* Used purely as space for the buttons... */
+.divider {
+    width: 200px;
+    height: auto;
+    display: inline-block;
+}
+
+/* Used for the very first page of the game. */
 #splash,
 #start {
     width: auto;
