@@ -1,6 +1,8 @@
 // The strategy an agent uses is determined during gameplay based on their personality.
 // The associated taglines are used on the front-end to describe each strategy's philosophy.
 export enum Strategy {
+    // For testing
+    Default,
     // Pure altruism
     Dove,
     // Pure selfishness
@@ -19,6 +21,8 @@ export enum Strategy {
 
 export const taglineFromStrategy = (strat: Strategy): string => {
     switch (strat) {
+        case Strategy.Default:
+            return "I'm just here to try things out.";
         case Strategy.Dove:
             return "Everyone deserves to thrive!";
         case Strategy.Hawk:
@@ -46,7 +50,7 @@ export enum Choice {
 //NATON added a enum for promises
 export enum Commitment {
     Cooperate,
-    Recipricate, 
+    Reciprocate, 
     Compete,
 }
 
@@ -58,6 +62,8 @@ export const generateChoice = (
     theirHistory: TurnLog
 ): Choice => {
     switch (strat) {
+        case Strategy.Default:
+            return Default();
         case Strategy.Dove:
             return Choice.Give;
         case Strategy.Hawk:
@@ -85,7 +91,14 @@ export const generateCommitment = (
     strat: Strategy,
     theirHistory: TurnLog
 ): Commitment => {
-    return Commitment.Cooperate
+    switch (strat) {
+        case Strategy.Default:
+            return Commitment.Cooperate
+        default:
+            console.log(`warn: unknown strategy ${strat}`);
+    }
+    
+    return Commitment.Cooperate;   
 };
 
 
@@ -169,6 +182,12 @@ export class TurnLog {
 
 const CopyCat = function (history: TurnLog): Choice {
     return history.lastAction();
+};
+
+const Default = function (): Choice {
+    if (Math.random() <= 0.1)
+        return Choice.Cheat
+    return Choice.Give;
 };
 
 const Grim = function (history: TurnLog): Choice {

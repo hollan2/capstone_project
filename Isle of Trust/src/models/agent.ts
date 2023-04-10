@@ -309,9 +309,10 @@ export class Ideology extends AttributeContainer {
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return IdeoStratMap[Math.floor(this.forgiveness / 4)][
-            Math.floor(this.generosity / 4)
-        ];
+        return Strategy.Default
+        //return IdeoStratMap[Math.floor(this.forgiveness / 4)][
+        //    Math.floor(this.generosity / 4)
+        //];
     }
 }
 
