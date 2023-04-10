@@ -86,9 +86,14 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    // CP-49
+    stageCount: number;
 }
 
-export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> {
+export class PlayerSidebar extends React.Component<
+    PlayerSidebarProps,
+    unknown
+> {
     render() {
         return (
             <div className="sidebar playerSidebar">
@@ -97,11 +102,15 @@ export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> 
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
+                    //CP-49
+                    stageCount={this.props.stageCount}
                 />
                 <InfluenceMenu
                     round={this.props.round}
                     sidebarState={this.props.sidebarState}
                     map={this.props.map}
+                    //CP-49
+                    stageCount={this.props.stageCount}
                 />
             </div>
         );
@@ -116,6 +125,8 @@ interface PlayerDisplayProps {
         agent: Agent
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    //CP-49
+    stageCount: number;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -128,9 +139,16 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             name = you.name;
         }
         return (
-            <div className="player-display">
+            <div
+                //CP-49
+                className={
+                    this.props.stageCount === 1
+                        ? "player-display spotlight"
+                        : "player-display"
+                }
+            >
                 <div className="agent-type">
-                    Player: <span className="agent-name">{name}</span>                 
+                    Player: <span className="agent-name">{name}</span>
                 </div>
                 <Display
                     map={this.props.map}
@@ -147,6 +165,8 @@ interface InfluenceMenuProps {
     round: () => void;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
+    //CP-49
+    stageCount: number;
 }
 
 class InfluenceMenu extends React.Component<InfluenceMenuProps> {
@@ -159,7 +179,14 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
 
         if (this.props.sidebarState.player instanceof Agent) {
             return (
-                <div className="influence-menu">
+                //CP-49
+                <div
+                    className={
+                        this.props.stageCount === 2
+                            ? "influence-menu spotlight"
+                            : "influence-menu"
+                    }
+                >
                     <div className="influence-title">
                         spend resources,
                         <br /> influence your neighbors:

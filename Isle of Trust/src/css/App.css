@@ -12,10 +12,38 @@
     padding: 5px;
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr 1fr;
+    /* CP-49 */
     grid-template-areas:
-        "board          board"
-        "playerSidebar  selectedSidebar";
+        "board          board           board"
+        "playerSidebar  tutorialGuide   selectedSidebar";
 }
+
+/* CP-49 */
+.tutorialGuide {
+    grid-area: tutorialGuide;
+    display: flex;
+    align-items: flex-end;
+    position: fixed;
+    max-width: 500px;
+    margin-left: -20%;
+    left: 50%;
+    bottom: 50px;
+    z-index: 6;
+}
+
+.textBox {
+    background-color: white;
+    width: 300px;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.btn {
+    position: absolute;
+    bottom: 0;
+    right: 6rem;
+}
+/* END CP-49 */
 
 .sidebar {
     grid-area: sidebar;
@@ -46,13 +74,13 @@
     margin: 10px 10px 0px 10px;
     font-size: 1.5em;
 }
-    
+
 #selected-character {
     display: flex;
     justify-content: space-between;
 }
 
-.deselect{
+.deselect {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -288,4 +316,12 @@
         align-items: stretch;
         grid-template-areas: "playerSidebar board selectedSidebar";
     }
+}
+
+/* CP-49 */
+.spotlight {
+    box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);
+    border: 4px solid;
+    border-color: red;
+    z-index: 5;
 }

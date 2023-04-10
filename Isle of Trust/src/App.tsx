@@ -2,6 +2,13 @@ import React from "react";
 import * as RK from "react-konva";
 import "./css/App.css";
 import Konva from "konva";
+
+//CP-49
+//yarn add react-icons
+//yarn add react-animated-text-content
+import { ImArrowRight } from "react-icons/im";
+import AnimatedText from "react-animated-text-content";
+
 import useImage from "use-image";
 import * as util from "./utilities";
 import {
@@ -78,13 +85,14 @@ const DIFFICULTY_VALUES: { [key: string]: number } = {
     extreme: 5,
 };
 
-
 interface GameViewState {
     map: Graph<Agent, Relation>;
     sidebarState: SidebarState;
     select: (agent: Agent) => void;
     turnCount: number;
     selectCharacterDisplay: boolean;
+    //CP-49
+    stageCount: number;
 }
 
 export interface StartInfo {
@@ -97,6 +105,74 @@ export interface StartInfo {
     mapImage: string;
 }
 
+//CP-49
+interface TutorialGuideProps {
+    turnCount: number;
+    stageCount: number;
+    onClick: () => void;
+}
+class TutorialGuide extends React.Component<TutorialGuideProps> {
+    // constructor(props: TutorialGuideProps) {
+    //     super(props);
+    // }
+
+    getText(stage: number): string {
+        console.log("TEST: " + stage);
+        let text = "";
+        if (stage === 0) {
+            text =
+                "Welcome to Isle of Trust! Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
+        } else if (stage === 1) {
+            text =
+                "This is the player panel. Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
+        } else if (stage === 2) {
+            text =
+                "This is the spend resources panel. Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
+        }
+        return text;
+    }
+
+    render() {
+        return (
+            <div className="tutorialGuide">
+                <div className="textBox">
+                    {/* <p>{this.getText(this.props.stageCount)}</p> */}
+                    <AnimatedText
+                        type="chars" // animate words or chars
+                        animation={{
+                            x: "200px",
+                            y: "-20px",
+                            scale: 1.1,
+                            ease: "ease-in-out",
+                        }}
+                        animationType="wave"
+                        interval={0.06} //controls the text speed
+                        duration={0.5} //controls the text speed
+                        tag="p"
+                        className="animated-paragraph"
+                        includeWhiteSpaces
+                        threshold={0.1}
+                        rootMargin="20%"
+                    >
+                        {this.getText(this.props.stageCount)}
+                    </AnimatedText>
+                    <button className="btn" onClick={this.props.onClick}>
+                        <ImArrowRight size={20} color={"green"} />
+                    </button>
+                </div>
+                <img
+                    src="public/images/professor.png"
+                    alt="professor pawn"
+                    width="96"
+                    height="184"
+                />
+            </div>
+        );
+    }
+}
+
+//END CP-49
+
 class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
     constructor(props: StartInfo) {
@@ -108,6 +184,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
         const turnCount = 0;
+        //CP-49
+        const stageCount = 0;
 
         currentMap = props.mapImage;
 
@@ -117,12 +195,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             map.getVertices()[
                 Math.floor(Math.random() * map.getVertices().length)
             ];
-        
+
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
-            player.name = props.name
+            player.name = props.name;
 
             switch (props.ideologyColor) {
                 case "9ec4ea":
@@ -173,6 +251,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             sidebarState: sidebarState,
             select: select,
             turnCount: turnCount,
+            //CP-49
+            stageCount: stageCount,
             selectCharacterDisplay: false,
         };
 
@@ -253,8 +333,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         edges.forEach(([v1, v2, e]) => {
             const v2Agent = v2 as Agent;
             const maxInfluenceChange =
-                BASE_INFLUENCE_LOST_PER_TURN *
-                v2Agent.getInfluenceability();
+                BASE_INFLUENCE_LOST_PER_TURN * v2Agent.getInfluenceability();
             e.influence = e.incrementAttributeBy(
                 -maxInfluenceChange,
                 e.influence
@@ -264,24 +343,24 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
     handleInfluenceChanges(vertices: Agent[]) {
         vertices.forEach((v1) => {
-                const v1Relations = this.state.map.getEdges(v1)!;
-                let spendingMap = new SpendingContainer();
-                if (v1 === this.state.sidebarState.player) {
-                    spendingMap = this.state.sidebarState.influenceChoices;
-                } else {
-                    spendingMap = v1.autoDisperseInfluence(v1Relations);
-                }
-                spendingMap.data.forEach((allotment, v2) => {
-                    v2.resources += allotment;
-                    v1.resources -= allotment;
-                    this.state.map
-                        .getEdge(v1, v2)!
-                        .addInfluenceBasedOn(
-                            allotment,
-                            v2.personality.getVolatility()
-                        );
-                });
-                this.driftIdeology(v1);
+            const v1Relations = this.state.map.getEdges(v1)!;
+            let spendingMap = new SpendingContainer();
+            if (v1 === this.state.sidebarState.player) {
+                spendingMap = this.state.sidebarState.influenceChoices;
+            } else {
+                spendingMap = v1.autoDisperseInfluence(v1Relations);
+            }
+            spendingMap.data.forEach((allotment, v2) => {
+                v2.resources += allotment;
+                v1.resources -= allotment;
+                this.state.map
+                    .getEdge(v1, v2)!
+                    .addInfluenceBasedOn(
+                        allotment,
+                        v2.personality.getVolatility()
+                    );
+            });
+            this.driftIdeology(v1);
         });
     }
 
@@ -292,16 +371,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             if (v1.id < v2.id && e2 instanceof Relation) {
                 const v1Strat = v1.ideology.toStrategy();
                 const v2Strat = v2.ideology.toStrategy();
-                const v1Choice = generateChoice(
-                    v1Strat,
-                    v1.mood,
-                    e2.history
-                );
-                const v2Choice = generateChoice(
-                    v2Strat,
-                    v2.mood,
-                    e1.history
-                );
+                const v1Choice = generateChoice(v1Strat, v1.mood, e2.history);
+                const v2Choice = generateChoice(v2Strat, v2.mood, e1.history);
 
                 let resourceChange = v1.resources;
                 let moodChange = v1.mood;
@@ -348,7 +419,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const ideologyAppeal: Map<Ideology, number> = new Map();
         const neighbors = this.state.map.getEdges(agent)!;
         let totalInfluence = 0;
-        
+
         //calcautes the total influnce of all nehboors
         neighbors.forEach((relation: Relation, neighbor: Agent) => {
             const theirInfluence = this.state.map.getEdge(
@@ -370,67 +441,89 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     deselectCharacter(value: boolean) {
-        this.setState({selectCharacterDisplay: value});
+        this.setState({ selectCharacterDisplay: value });
     }
+
+    //CP-49
+    //This method keeps track of how many times the arrow button in <TutorialGuide /> has
+    //been clicked. This is used to keep track of which stage in the tutorial story the user is at.
+    handleClick = () => {
+        this.setState({
+            stageCount: this.state.stageCount + 1,
+        });
+    };
 
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                        />
-                        <SelectedSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            deselectCharacter={this.deselectCharacter}
-                        />
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        // CP-49
+                        stageCount={this.state.stageCount}
+                    />
+                    <SelectedSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        deselectCharacter={this.deselectCharacter}
+                    />
+                    {/* CP-49 */}
+                    <TutorialGuide
+                        turnCount={this.state.turnCount}
+                        stageCount={this.state.stageCount}
+                        onClick={this.handleClick}
+                    />
                 </div>
             );
         } else {
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                        />
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        // CP-49
+                        stageCount={this.state.stageCount}
+                    />
+                    {/* CP-49 */}
+                    <TutorialGuide
+                        turnCount={this.state.turnCount}
+                        stageCount={this.state.stageCount}
+                        onClick={this.handleClick}
+                    />
                 </div>
             );
         }
-
     }
 }
-
 
 interface DisplayState {
     scale: number;
@@ -551,9 +644,7 @@ function Mood(props: MoodProps) {
     const agent = props.agent as Agent;
     moodDesc = agent.getMoodDescription();
     moodImgPath =
-        "images/mood-" +
-        moodDesc.split(" ").join("-").toLowerCase() +
-        ".png";
+        "images/mood-" + moodDesc.split(" ").join("-").toLowerCase() + ".png";
 
     return (
         <div className="mood">
