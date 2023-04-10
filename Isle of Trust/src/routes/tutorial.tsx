@@ -21,6 +21,9 @@ export default function Levels() {
                 <br />
                 <span>Start here</span>
             </h1>
+            <h1>
+                Tutorial:
+            </h1>
 
         <span>
             <article id="levels">

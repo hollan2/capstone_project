@@ -59,8 +59,8 @@ footer {
 /* Base of every element in the "levels" classid. */
 #levels {
     width: auto;
-    min-height: calc(100vh - 74px);
-    margin-top: 50px;
+    max-height: 5px;
+    margin-top: 0px;
     margin-bottom: 24px;
     padding: 100px;
     z-index: 200;
@@ -80,7 +80,6 @@ footer {
     background-color: var(--white);
     color: var(--dark-blue);
     text-decoration: none;
-    flex-direction: row;
 }
 
 /* Changes the color of the button when hovered over. */
