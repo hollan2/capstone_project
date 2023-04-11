@@ -16,14 +16,11 @@ export default function Levels() {
         //Note that the div "divider" is purely just a way to create whitespace betewen buttons.
         //The adjustment to the size can be found in main.css! Same for the "levels" article.
         <article id="splash">
-            <h1>
-                Get Introduced To The Game Mechanics!
+            <h2>
+                Tutorial
                 <br />
-                <span>Start here</span>
-            </h1>
-            <h1>
-                Tutorial:
-            </h1>
+                <span>Get Introduced To The Game Mechanics!</span>
+            </h2>
 
         <span>
             <article id="levels">
@@ -38,7 +35,10 @@ export default function Levels() {
                 <Link className="link" to="/level3">
                     <button> 3 </button>
                 </Link>
-                <div className="divider"/>
+            </article>
+        </span>
+        <span>
+            <article id="levels">
                 <Link className="link" to="/level4">
                     <button> 4 </button>
                 </Link>

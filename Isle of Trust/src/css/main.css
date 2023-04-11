@@ -66,6 +66,8 @@ footer {
     z-index: 200;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    margin: auto;
 }
 
 /* Various settings of the button itself. */
@@ -80,6 +82,11 @@ footer {
     background-color: var(--white);
     color: var(--dark-blue);
     text-decoration: none;
+    top: -70px;
+
+    /* Use these to manipulate how big the buttons are. */
+    width: 150px;
+    height: 150px;
 }
 
 /* Changes the color of the button when hovered over. */
@@ -131,6 +138,22 @@ footer {
 #splash h1 span {
     position: relative;
     font-size: 0.5em;
+    top: -15px;
+}
+
+/* Used in particular for the headers of /tutorial. */
+#splash h2 {
+    position: relative;
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+}
+
+/* Only found in the header below the biggest in /tutorial. */
+#splash h2 span {
+    position: relative;
+    font-size: 0.5em;
+    font-weight: normal;
     top: -15px;
 }
 
