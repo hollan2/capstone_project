@@ -16,6 +16,7 @@ import * as RK from "react-konva";
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import Konva from "konva";
 import { RESIZE_TIMEOUT } from "./App";
+import { TutorialDisplay } from "./routes/TutorialGameView";
 
 const PAWN_SCALE = 0.8;
 const PAWN_WIDTH = 400 * PAWN_SCALE;
@@ -207,6 +208,7 @@ class Main extends React.Component {
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
                         <Route path="tutorial" element={<Tutorial />} />
+                        <Route path="level1" element={<TutorialDisplay/>}/>
                     </Routes>
                     <Footer />
                 </BrowserRouter>
