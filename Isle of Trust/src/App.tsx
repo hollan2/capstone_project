@@ -362,11 +362,15 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     //code for player choice goes here
                     //needs to be changed
                     v1Choice = generateChoice(
+                        v1Promise, 
+                        v2Promise,
                         v1Strat,
                         e2.history);
                 }
                 else{
                     v1Choice = generateChoice(
+                        v1Promise, 
+                        v2Promise,
                         v1Strat,
                         e2.history);
                 }
@@ -376,11 +380,15 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     //code for player choice goes here
                     //needs to be changed
                     v2Choice = generateChoice(
+                        v2Promise, 
+                        v1Promise,
                         v2Strat,
                         e1.history);
                 }
                 else{
                     v2Choice = generateChoice(
+                        v2Promise, 
+                        v1Promise,
                         v2Strat,
                         e1.history);
                 }
@@ -395,10 +403,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise));
-                if(v1.id == this.player_id)
-                    console.log(e1.history);
-                if(v2.id == this.player_id)
-                    console.log(e2.history)
+                
+                console.log("AGENT 1",v1Choice, v1Promise);
+                console.log("AGENT 2",v2Choice, v2Promise);
             }
         });
 

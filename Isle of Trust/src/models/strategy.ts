@@ -49,21 +49,24 @@ export enum Choice {
 
 //NATON added a enum for promises
 export enum Commitment {
+    Compete,
     Cooperate,
     Reciprocate, 
-    Compete,
 }
 
 //generates the action the agent will committ to
 //TODO changing the strategies to our new system
 export const generateChoice = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
     strat: Strategy,
     //removed the mood since it wasn't factored into choice rn anyways
     theirHistory: TurnLog
 ): Choice => {
     switch (strat) {
         case Strategy.Default:
-            return Default();
+            return Default(v1Promise, v2Promise);
+        /*
         case Strategy.Dove:
             return Choice.Give;
         case Strategy.Hawk:
@@ -78,6 +81,7 @@ export const generateChoice = (
             return TDee(theirHistory);
         case Strategy.TitForTat:
             return CopyCat(theirHistory);
+        */
         default:
             console.log(`warn: unknown strategy ${strat}`);
     }
@@ -93,13 +97,64 @@ export const generateCommitment = (
 ): Commitment => {
     switch (strat) {
         case Strategy.Default:
-            return Commitment.Cooperate
+            {
+            //randomly chooses between Compete, Cooperate and Reciprocate
+            const randomNum = Math.random();
+            if (randomNum <= 0.3)
+                return Commitment.Compete;
+            if(randomNum > 0.3 && randomNum < 0.6) 
+                return Commitment.Reciprocate;
+            else
+                return Commitment.Cooperate
+            }
+
         default:
             console.log(`warn: unknown strategy ${strat}`);
     }
     
     return Commitment.Cooperate;   
 };
+
+//Gets the opposite choice of the Commitment
+export const getLie = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
+): Choice => {
+    switch (v1Promise){
+        case Commitment.Compete:
+            return Choice.Cheat;
+        case Commitment.Cooperate:
+            return Choice.Cheat;
+        case Commitment.Reciprocate:
+            if(v2Promise == Commitment.Compete)
+                return Choice.Give;
+            else
+                return Choice.Cheat;
+        default:
+            return Choice.Give;
+
+    }
+}
+
+//Get the Choice corsponding to the Commitment
+export const getTruth = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
+): Choice => {
+    switch (v1Promise){
+        case Commitment.Compete:
+            return Choice.Cheat;
+        case Commitment.Cooperate:
+            return Choice.Give;
+        case Commitment.Reciprocate:
+            if(v2Promise == Commitment.Compete)
+                return Choice.Cheat;
+            else
+                return Choice.Give;
+        default:
+            return Choice.Give;
+    }
+}
 
 
 export class Turn {
@@ -184,10 +239,14 @@ const CopyCat = function (history: TurnLog): Choice {
     return history.lastAction();
 };
 
-const Default = function (): Choice {
+//Default has a 10% chance of lying
+const Default = function (v1Promise: Commitment, v2Promise: Commitment): Choice {
+    const lieChoice = getLie(v1Promise, v2Promise);
+    const truthChoice = getTruth(v1Promise, v2Promise);
+
     if (Math.random() <= 0.1)
-        return Choice.Cheat
-    return Choice.Give;
+        return lieChoice
+    return truthChoice;
 };
 
 const Grim = function (history: TurnLog): Choice {
