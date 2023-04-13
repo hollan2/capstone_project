@@ -161,8 +161,8 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
             return (
                 <div className="influence-menu">
                     <div className="influence-title">
-                        spend resources,
-                        <br /> influence your neighbors:
+                        Promise Phase
+                        <br /> Declare your intent with neighbors:
                     </div>
                     <InfluenceOptions
                         selected={this.props.sidebarState.selected}
@@ -293,6 +293,26 @@ class InfluenceEntry extends React.Component<
             this.props.spendingMap.data.set(this.props.agent, newGiven);
         }
     }
+/* steps to do promise rounds
+seperated generate promise and choice round
+Generates promise passed back to action round
+Praise phase
+Buttons change to action phase
+Your neighbor promises them 
+Add a new strategy to to strategy to enum exclusive to player 
+*/
+    cooperate() {
+        
+    }
+
+    reciprocate(){
+
+    }
+
+    compete(){
+
+    }
+
 
     render() {
         const sMaybe = this.state.given === 1 ? "" : "s";
@@ -314,6 +334,30 @@ class InfluenceEntry extends React.Component<
                     </RK.Stage>
                 </div>
                 <div className="sidebar-agent-info">
+                    <button 
+                        id="cooperate" 
+                        onClick={() => {
+                            //cooperate function
+                        }}
+                        > Cooperate
+                    </button>
+                    <button 
+                        id="reciprocate" 
+                        onClick={() => {
+                            //reciprocate function
+                            
+                        }}
+                        > Reciprocate
+                    </button>
+                    <button 
+                        id="compete" 
+                        onClick={() => {
+                            //compete function
+                            
+                        }}
+                        > Compete
+                    </button>
+                {/* old functionality
                     <button
                         className="more-resource"
                         onClick={() => {
@@ -331,6 +375,7 @@ class InfluenceEntry extends React.Component<
                         -
                     </button>
                     <div>{givenString}</div>
+                */}
                 </div>
             </div>
         );
