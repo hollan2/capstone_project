@@ -18,6 +18,7 @@ import { Display } from "../App";
 import { SidebarState } from "./sideBarState";
 import { SidebarAgentImage } from "../App";
 import {
+    userPromise,
     Agent,
     AGENT_RADIUS,
     Relation,
@@ -33,6 +34,7 @@ import {
     Turn,
     choiceTally,
     Strategy,
+    Commitment,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -209,6 +211,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
                         allowResources={this.allowResources}
                         resourcesGiveable={this.props.player.resources}
                         agent={entry[0]}
+                        player={this.props.player}
                         spendingMap={this.props.spendingMap}
                     />
                 );
@@ -261,6 +264,7 @@ interface InfluenceEntryProps {
     allowResources: (giving: number, increment: number) => number;
     resourcesGiveable: number;
     agent: Agent;
+    player: Agent
     spendingMap: SpendingContainer;
 }
 
@@ -280,10 +284,11 @@ class InfluenceEntry extends React.Component<
 
     constructor(props: any) {
         super(props);
-        this.state = { given: 0 };
+        this.state = { 
+            given: 0};
     }
 
-    updateGiven(increment: number) {
+    /*updateGiven(increment: number) {
         if (this.props.agent instanceof Agent) {
             const newGiven = this.props.allowResources(
                 this.state.given,
@@ -292,27 +297,28 @@ class InfluenceEntry extends React.Component<
             this.setState({ given: newGiven });
             this.props.spendingMap.data.set(this.props.agent, newGiven);
         }
-    }
-/* steps to do promise rounds
-seperated generate promise and choice round
-Generates promise passed back to action round
-Praise phase
-Buttons change to action phase
-Your neighbor promises them 
-Add a new strategy to to strategy to enum exclusive to player 
-*/
-    cooperate() {
+    }*/
+
+    //adds user input promises to an array inside player
+    //TODO have ability to change choice selecting a promise
+    updatePromise(userInput: Commitment) {
+        let promiseTo= this.props.agent;
+        let player = this.props.player;
+
+        const newPromise: userPromise = {
+            promise: userInput,
+            promiseTo: promiseTo
+        };
+        const found = player.userPromise.some(e => e.promiseTo === promiseTo)
+
+        if(!found) {
+            player.userPromise.push(newPromise);
+        }
         
-    }
-
-    reciprocate(){
-
-    }
-
-    compete(){
+        console.log("player promises: ");
+        console.log(player.userPromise);
 
     }
-
 
     render() {
         const sMaybe = this.state.given === 1 ? "" : "s";
@@ -334,17 +340,18 @@ Add a new strategy to to strategy to enum exclusive to player
                     </RK.Stage>
                 </div>
                 <div className="sidebar-agent-info">
+
                     <button 
                         id="cooperate" 
                         onClick={() => {
-                            //cooperate function
+                            this.updatePromise(Commitment.Cooperate);
                         }}
                         > Cooperate
                     </button>
                     <button 
                         id="reciprocate" 
                         onClick={() => {
-                            //reciprocate function
+                            this.updatePromise(Commitment.Reciprocate);
                             
                         }}
                         > Reciprocate
@@ -352,12 +359,12 @@ Add a new strategy to to strategy to enum exclusive to player
                     <button 
                         id="compete" 
                         onClick={() => {
-                            //compete function
-                            
+                            this.updatePromise(Commitment.Compete);                            
                         }}
                         > Compete
                     </button>
                 {/* old functionality
+
                     <button
                         className="more-resource"
                         onClick={() => {
@@ -375,7 +382,9 @@ Add a new strategy to to strategy to enum exclusive to player
                         -
                     </button>
                     <div>{givenString}</div>
+<<<<<<< HEAD
                 */}
+
                 </div>
             </div>
         );

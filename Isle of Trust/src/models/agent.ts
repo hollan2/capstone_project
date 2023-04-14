@@ -1,4 +1,4 @@
-import { Strategy, TurnLog, Choice } from "./strategy";
+import { Strategy, TurnLog, Choice, Commitment } from "./strategy";
 import { IdeoStratMap } from "./ideostratmap";
 import { Face, Hat } from "../generators/pawn";
 
@@ -47,6 +47,12 @@ abstract class AttributeContainer {
     }
 }
 
+//holds the user input of promises and who they are promising
+export interface userPromise {
+    promise: Commitment;
+    promiseTo: Agent;
+}
+
 export class Agent extends AttributeContainer {
     public id: number;
     public coords: [number, number];
@@ -55,6 +61,7 @@ export class Agent extends AttributeContainer {
     public ideology: Ideology;
     public personality: Personality;
     public mood: number;
+    public userPromise: userPromise[] = [];
 
     public face: Face;
     public hat: Hat;
@@ -66,7 +73,7 @@ export class Agent extends AttributeContainer {
         resources: number,
         mood: number,
         id: number,
-        coords: [number, number]
+        coords: [number, number],     
     ) {
         super();
         this.name = name;
@@ -90,7 +97,9 @@ export class Agent extends AttributeContainer {
         this.face = Face[randface as keyof typeof Face];
         this.hat = Hat[randhat as keyof typeof Hat];
     }
+    
 
+    /* These functions don't serve a purpose anymore, can be removed
     // update the personality in response to how the agent was treated in the previous round.
     updatePersonality() {}
 
@@ -100,7 +109,9 @@ export class Agent extends AttributeContainer {
     adoptIdeology(i: Ideology) {
         this.ideology = new Ideology(i.getGenerosity(), i.getForgiveness());
     }
+    */
 
+    //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
         if (myChoice === Choice.Give && theirChoice === Choice.Give)
             this.resources += 2;
@@ -110,6 +121,7 @@ export class Agent extends AttributeContainer {
             this.resources += 3;
     }
 
+    /*This function doesn't serve a purpose anymore, can be removed
     updateMood(myChoice: Choice, theirChoice: Choice) {
         // consider that the average volatilityPct will be 0.50
         const volatilityPct = this.getAttributeAsPercentage(
@@ -138,6 +150,7 @@ export class Agent extends AttributeContainer {
             );
         }
     }
+    */
 
     getMoodDescription(): string {
         if (this.mood > 15) {
@@ -153,6 +166,7 @@ export class Agent extends AttributeContainer {
         }
     }
 
+    /*These functions dont serve a purpose anymore, can be removed
     // Currently, the more volatile a neighbor is, the more resources an agent (you) will spend on them.
     // Reasoning: a more volatile agent is more likely to change to your ideology,
     // so it's best to focus your energies on them.
@@ -191,6 +205,7 @@ export class Agent extends AttributeContainer {
 
         return spendingMap;
     }
+    
 
     // the more volatile the neighbor,
     // and the unhappier they are,
@@ -202,12 +217,14 @@ export class Agent extends AttributeContainer {
         const moodPct = this.getAttributeAsPercentage(this.mood);
         return (volatilityPct + (1 - moodPct)) / 2;
     }
+   
 
     acceptInfluenceDispersal(giver: Agent, dispersal: number) {
         giver.resources -= dispersal;
         this.resources += dispersal;
     }
 
+    
     driftIdeology(driftMap: DriftContainer) {
         let totalGenerosityChange = 0;
         let totalForgivenessChange = 0;
@@ -240,12 +257,14 @@ export class Agent extends AttributeContainer {
             );
         }
     }
+    */
 
     spendResources(cost: number) {
         this.resources -= cost;
     }
 
-    updateInfluence() {}
+    //This function doesn't serve a purpose anymore, can be removed
+    //updateInfluence() {}
 }
 
 // The internal ideological state of an agent which effectively determines the
@@ -298,9 +317,10 @@ export class Ideology extends AttributeContainer {
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return IdeoStratMap[Math.floor(this.forgiveness / 4)][
-            Math.floor(this.generosity / 4)
-        ];
+        return Strategy.Default
+        //return IdeoStratMap[Math.floor(this.forgiveness / 4)][
+        //    Math.floor(this.generosity / 4)
+        //];
     }
 }
 
@@ -419,6 +439,7 @@ export class Relation extends AttributeContainer {
         }
     }
 
+    /*This function doesn't serve a purpose anymore, can be removed
     addInfluenceBasedOn(dispersal: number, theirVolatility: number) {
         this.resourcesSpent += dispersal;
         this.influence = this.incrementAttributeBy(
@@ -426,6 +447,7 @@ export class Relation extends AttributeContainer {
             this.influence
         );
     }
+    */
 }
 
 // Use this to keep track of which neighbors an Agent is planning on influencing.
