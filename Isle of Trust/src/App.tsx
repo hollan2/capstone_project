@@ -2,17 +2,7 @@ import React from "react";
 import * as RK from "react-konva";
 import "./css/App.css";
 import Konva from "konva";
-
-//CP-49
-//yarn add react-icons
-//yarn add react-animated-text-content
-import { ImArrowRight } from "react-icons/im";
-import AnimatedText from "react-animated-text-content";
-import { BsExclamationCircleFill } from "react-icons/bs";
-
-import Popover from "react-bootstrap/Popover";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-
+import { getSelectionRange } from "@testing-library/user-event/dist/utils";
 import useImage from "use-image";
 import * as util from "./utilities";
 import {
@@ -29,6 +19,10 @@ import { PlayerSidebar } from "./components/playerSideBar";
 import { SelectedSidebar } from "./components/selectedSideBar";
 import { SidebarState } from "./components/sideBarState";
 import { Board } from "./components/board";
+
+//CP-49
+import { TutorialGuide } from "./components/tutorialGuide";
+
 import {
     Agent,
     AGENT_RADIUS,
@@ -89,132 +83,6 @@ const DIFFICULTY_VALUES: { [key: string]: number } = {
     extreme: 5,
 };
 
-//CP-49
-interface TutorialGuideProps {
-    turnCount: number;
-    stageCount: number;
-    onClick: () => void;
-}
-interface TutorialGuideState {
-    hint: boolean;
-}
-class TutorialGuide extends React.Component<
-    TutorialGuideProps,
-    TutorialGuideState
-> {
-    constructor(props: TutorialGuideProps) {
-        super(props);
-        this.state = {
-            hint: true,
-        };
-    }
-
-    getText(stage: number): string {
-        let text = "";
-
-        //TODO: This should be read from a .txt file, it's polluting the code.
-        if (stage === 0) {
-            text =
-                "Welcome to Isle of Trust! Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
-        } else if (stage === 1) {
-            text =
-                "This is the player panel. Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
-        } else if (stage === 2) {
-            text =
-                "This is the spend resources panel. Blah Blah Blah. Now it's your turn, try to spend some resources.";
-        }
-        if (stage === 3) {
-            this.setState((state) => {
-                return { hint: false };
-            });
-        }
-        return text;
-    }
-
-    //TODO: This render() should be split up into two different components: Professor and Hint
-    //Then it will get simplified to:
-
-    //  if(this.state.hint){
-    //      < Professor/>
-    //  } else {
-    //      < Hint/>
-    //  }
-
-    render() {
-        const popover = (
-            <Popover id="popover-basic">
-                <Popover.Header as="h3">Hint!</Popover.Header>
-                <Popover.Body>
-                    Something <strong>really</strong> helpful.
-                </Popover.Body>
-            </Popover>
-        );
-        if (this.state.hint) {
-            return (
-                <div className="tutorialGuide disable">
-                    <div className="textBox">
-                        <AnimatedText
-                            type="chars" // animate words or chars
-                            animation={{
-                                x: "200px",
-                                y: "-20px",
-                                scale: 1.1,
-                                ease: "ease-in-out",
-                            }}
-                            animationType="wave"
-                            interval={0.06} //controls the text speed
-                            duration={0.5} //controls the text speed
-                            tag="p"
-                            className="animated-paragraph"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                        >
-                            {this.getText(this.props.stageCount)}
-                        </AnimatedText>
-                        <button
-                            className="btn arrowbtn"
-                            onClick={this.props.onClick}
-                        >
-                            <ImArrowRight size={20} color={"green"} />
-                        </button>
-                    </div>
-                    <img
-                        src="public/images/professor.png"
-                        alt="professor pawn"
-                        width="96"
-                        height="184"
-                    />
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <OverlayTrigger
-                        trigger="click"
-                        placement="left"
-                        overlay={popover}
-                    >
-                        <button
-                            type="button"
-                            className="hintbtn btn btn-lg btn-light"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                        >
-                            <BsExclamationCircleFill
-                                size={25}
-                                color="MidnightBlue"
-                            />{" "}
-                            Hint
-                        </button>
-                    </OverlayTrigger>
-                </div>
-            );
-        }
-    }
-}
-
-//END CP-49
 interface GameViewState {
     map: Graph<Agent, Relation>;
     sidebarState: SidebarState;
