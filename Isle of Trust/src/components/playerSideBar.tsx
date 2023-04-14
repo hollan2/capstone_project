@@ -186,6 +186,11 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                             ? "influence-menu spotlight"
                             : "influence-menu"
                     }
+                    style={
+                        this.props.stageCount !== 3
+                            ? { pointerEvents: "none" }
+                            : {}
+                    }
                 >
                     <div className="influence-title">
                         spend resources,

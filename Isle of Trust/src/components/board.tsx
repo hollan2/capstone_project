@@ -75,6 +75,8 @@ interface BoardProps {
     player: Agent;
     deselectCharacter: (value: boolean) => void;
     current: string;
+    //CP-49
+    stageCount: number;
 }
 
 export class Board extends React.Component<BoardProps> {
@@ -120,12 +122,18 @@ export class Board extends React.Component<BoardProps> {
     }
 
     deselectCharacter(value: boolean) {
-        this.props.deselectCharacter(value)
+        this.props.deselectCharacter(value);
     }
 
     render() {
         return (
-            <div className="board">
+            // CP-49
+            <div
+                className="board"
+                style={
+                    this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
+                }
+            >
                 <div
                     className="map"
                     ref={this.containerRef}
@@ -173,7 +181,7 @@ export class Board extends React.Component<BoardProps> {
 
                             {this.props.map.getVertices().map((v) => (
                                 <RK.Group
-                                    key={v.id} 
+                                    key={v.id}
                                     onClick={(
                                         event: KonvaEventObject<MouseEvent>
                                     ) => {
@@ -311,12 +319,11 @@ function AgentImage(props: AgentImageProps) {
     let selectedScale = 0.18;
     let hoverScale = 0.14;
 
-    // Make the user's player larger in size 
-    if (props.data.id == props.player.id){
+    // Make the user's player larger in size
+    if (props.data.id == props.player.id) {
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
-
     }
 
     let scale = props.selected ? selectedScale : defaultScale;

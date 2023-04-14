@@ -395,6 +395,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         player={this.state.sidebarState.player}
                         deselectCharacter={this.deselectCharacter}
                         current={currentMap}
+                        //CP-49
+                        stageCount={this.state.stageCount}
                     />
                     <PlayerSidebar
                         map={this.state.map}
@@ -432,6 +434,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         player={this.state.sidebarState.player}
                         deselectCharacter={this.deselectCharacter}
                         current={currentMap}
+                        //CP-49
+                        stageCount={this.state.stageCount}
                     />
                     <PlayerSidebar
                         map={this.state.map}
