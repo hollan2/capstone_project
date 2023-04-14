@@ -25,7 +25,7 @@
     align-items: flex-end;
     position: fixed;
     max-width: 500px;
-    margin-left: -20%;
+    margin-left: -10%;
     left: 50%;
     bottom: 50px;
     z-index: 6;
@@ -38,10 +38,38 @@
     padding: 10px;
 }
 
-.btn {
+.arrowbtn {
     position: absolute;
     bottom: 0;
     right: 6rem;
+}
+
+.hintbtn {
+    margin-top: 15px;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+}
+
+.hintbtn:hover {
+    animation: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
 }
 /* END CP-49 */
 
