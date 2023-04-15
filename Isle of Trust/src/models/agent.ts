@@ -177,9 +177,11 @@ export class Agent extends AttributeContainer {
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
         if (myChoice === Choice.Give && theirChoice === Choice.Give)
-            this.resources += 2;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat)
             this.resources += 1;
+        else if (myChoice === Choice.Give && theirChoice === Choice.Cheat)
+            this.resources -= 2;
+        else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat)
+            this.resources -= 1;
         else if (myChoice === Choice.Cheat && theirChoice === Choice.Give)
             this.resources += 3;
     }

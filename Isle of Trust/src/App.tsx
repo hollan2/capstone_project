@@ -383,6 +383,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     if(obj) {
                         v1Choice = obj.choice
                     } else {
+                        console.log("NO CHOICE SELECTED")
                          //if player didnt choose a promise randomly chooses choice
                          v1Choice = generateChoice(
                             v1Promise, 
@@ -407,7 +408,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     if(obj) {
                         v2Choice = obj.choice
                     } else {
-                         //if player didnt choose a promise randomly chooses choice
+                        console.log("NO CHOICE SELECTED")
+                         //if player didnt choose a choice randomly chooses choice
                          v2Choice = generateChoice(
                             v1Promise, 
                             v2Promise,
@@ -422,11 +424,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         v2Strat,
                         e1.history);
                 }
-            
 
+                console.log(v1.name, v1Choice, v1Promise);
+                console.log(v2.name ,v2Choice, v2Promise);
                 //rewards the agents resouces based on their resources
                 v1.rewardResources(v1Choice, v2Choice);
-                v2.rewardResources(v1Choice, v2Choice);
+                v2.rewardResources(v2Choice, v1Choice);
 
                 //a reward trust function will be need when trust implmented 
 
@@ -434,11 +437,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 e1.history.addTurn(new Turn(v1Choice, v1Promise));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise));
                 
-                console.log("PLAYERMATCH")
-                if(v1.id == this.player_id || v2.id == this.player_id) {
-                    console.log(v1.name, v1Choice, v1Promise);
-                    console.log(v2.name ,v2Choice, v2Promise);
-                }
+
             }
                 
         });

@@ -397,10 +397,17 @@ class InfluenceEntry extends React.Component<
         
         if(commitment == playerCommitment) 
             return 'honest'
-        else if(playerCommitment == 'reciprocate') {
-            if(playerCommitment == neighborCommitment)
+
+        //if both agents are reciprocate, then their commmitments are cooperate
+        else if(playerCommitment == 'reciprocate' && neighborCommitment == 'reciprocate' && commitment == 'cooperate')
+            return 'honest'
+
+        //else the player's commitment is the same as their neighbor
+        else if(playerCommitment == 'reciprocate'){
+            if(commitment == neighborCommitment)
                 return 'honest'
         }
+
         else
             return 'lie'
     }
@@ -485,10 +492,8 @@ class InfluenceEntry extends React.Component<
                                 id="cooperate" 
                                 onClick={() => {
                                     //determine if give or cheat then update choice
-                                    if(this.isTruth("cooperate", playerCommitment, aiCommitment) == 'honest')
+                                        console.log("Select cooperate")
                                         player.updateChoice(Choice.Give, agent);
-                                    else
-                                        player.updateChoice(Choice.Cheat, agent);
 
                                 }}
                                 > 
@@ -501,9 +506,7 @@ class InfluenceEntry extends React.Component<
                             <button 
                                 id="compete"
                                 onClick={() => {
-                                    if(this.isTruth("compete", playerCommitment, aiCommitment) == 'honest')
-                                        player.updateChoice(Choice.Give, agent);
-                                    else
+                                        console.log("Select compete")
                                         player.updateChoice(Choice.Cheat, agent);
                                 }}
                                 > 
