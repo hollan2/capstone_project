@@ -53,6 +53,9 @@ export interface userPromise {
     promiseTo: Agent;
 }
 
+export interface userChoice {
+}
+
 export class Agent extends AttributeContainer {
     public id: number;
     public coords: [number, number];
@@ -94,6 +97,7 @@ export class Agent extends AttributeContainer {
             Object.values(Hat)[
                 Math.floor(Math.random() * (Object.values(Hat).length / 2))
             ];
+
         this.face = Face[randface as keyof typeof Face];
         this.hat = Hat[randhat as keyof typeof Hat];
     }
@@ -111,6 +115,20 @@ export class Agent extends AttributeContainer {
     }
     */
 
+    updatePromise(userInput: Commitment, promiseTo: Agent) {
+
+        const newPromise: userPromise = {
+            promise: userInput,
+            promiseTo: promiseTo
+        };
+
+        const found = this.userPromise.some(e => e.promiseTo === promiseTo)
+
+        if(!found) {
+            this.userPromise.push(newPromise);
+        }
+
+    }
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
         if (myChoice === Choice.Give && theirChoice === Choice.Give)

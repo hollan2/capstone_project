@@ -256,6 +256,7 @@ const Default = function (v1Promise: Commitment, v2Promise: Commitment): Choice 
     return truthChoice;
 };
 
+
 const Grim = function (history: TurnLog): Choice {
     let temphist = history.actions;
     for (var i = 0; i < history.length(); i++) {

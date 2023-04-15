@@ -88,6 +88,7 @@ interface GameViewState {
     turnCount: number;
     selectCharacterDisplay: boolean;
     userPromise: number;
+    promiseRelation: any;
 }
 
 export interface StartInfo {
@@ -113,6 +114,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
         const turnCount = 0;
+        var promiseRelation;
 
         currentMap = props.mapImage;
 
@@ -184,7 +186,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             select: select,
             turnCount: turnCount,
             selectCharacterDisplay: false,
-            userPromise: -1
+            userPromise: -1,
+            promiseRelation: promiseRelation,
         };
 
         //Needed for setState function
@@ -246,6 +249,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         //these lines can be removed
         //this.drainInfluence(edges);
         //this.handleInfluenceChanges(vertices);
+        
         this.generateRound(edges);
         this.drainResources(vertices);
 
@@ -320,7 +324,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             v1Strat,
                             e2.history);
                     }
-
                     console.log("player has made a :" + v1Promise + ": with " + v2.name);
                    
                 }
@@ -330,12 +333,16 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     v1Promise = generateCommitment(
                         v1Strat,
                         e2.history);
+
+                    //stores AI promises for use in front end 
+                    v1.updatePromise(v1Promise, v2)
+                    console.log(v1.name + " has promised to :" + v1Promise + ": with " + v2.name )
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
                 if(v2.id == this.player_id){
                     //gets player inputted promises
-                    const obj = v1.userPromise.find(e => e.promiseTo === v2)
+                    const obj = v2.userPromise.find(e => e.promiseTo === v2)
                     if(obj) {
                         v2Promise = obj.promise
                     } else {
@@ -351,7 +358,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     v2Promise = generateCommitment(
                         v2Strat,
                         e1.history);
+
+                    //stores AI promises for use in front end
+                    v2.updatePromise(v2Promise, v1)
+                    console.log(v2.name + " has promised to :" + v2Promise + ": with " + v1.name )
                 }
+
                 //gets us the full array of promises between agents to pass back to generaterounds
                 Promise_relation.push([v1, v2, e1, v1Promise, v2Promise])
             }
@@ -371,8 +383,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                 //checks if agent1 is the player agent if so we get the player selected choice
                 if(v1.id == this.player_id){
-                    //code for player choice goes here
-                    //needs to be changed
                     v1Choice = generateChoice(
                         v1Promise, 
                         v2Promise,
@@ -416,8 +426,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 e1.history.addTurn(new Turn(v1Choice, v1Promise));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise));
                 
-                console.log("AGENT 1",v1Choice, v1Promise);
-                console.log("AGENT 2",v2Choice, v2Promise);
+                console.log("MATCH")
+                console.log(v1.name, v1Choice, v1Promise);
+                console.log(v2.name ,v2Choice, v2Promise);
             }
         });
 
@@ -426,16 +437,25 @@ class GameView extends React.Component<StartInfo, GameViewState> {
      
     //generates each round when player hits confirm choices
     generateRound(edges: [Agent, Agent, Relation][]) {
-        console.log("PROMISE ROUND START")
-        const promise_relation = this.generatePromiseRound(edges);
 
-        //still not 100% sure how to implement the ui changes + pausing between rounds between rounds
-        console.log("CHOICE ROUND START")
-        this.generateChoiceRound(promise_relation);
+        console.log("turncount " + this.state.turnCount)
+        if(this.state.turnCount%1 == 0){
+            //promise round
+            console.log("PROMISE ROUND START")
+            const promiseRelation = this.generatePromiseRound(edges);
+            this.setState((state) => {
+                return { promiseRelation: promiseRelation };
+            });
+            
+        } else {
+            //choice round
+            console.log("CHOICE ROUND START")
+            this.generateChoiceRound(this.state.promiseRelation);
 
+        }
 
         this.setState((state) => {
-            return { turnCount: this.state.turnCount + 1 };
+            return { turnCount: this.state.turnCount + .5};
         });
     }
     /* This function doesn't serve a purpose anymore, can be removed
@@ -496,6 +516,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
                         />
                         <SelectedSidebar
                             map={this.state.map}
@@ -526,6 +548,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
                         />
                 </div>
             );
