@@ -77,8 +77,8 @@ class Professor extends React.Component<ProfessorProps> {
                             ease: "ease-in-out",
                         }}
                         animationType="wave"
-                        interval={0.06} //controls the text speed
-                        duration={0.5} //controls the text speed
+                        interval={0.04} //controls the text speed
+                        duration={0.4} //controls the text speed
                         tag="p"
                         className="animated-paragraph"
                         includeWhiteSpaces
