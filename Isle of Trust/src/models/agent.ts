@@ -48,9 +48,14 @@ abstract class AttributeContainer {
 }
 
 //holds the user input of promises and who they are promising
-export interface userPromise {
+export interface promises {
     promise: Commitment;
     promiseTo: Agent;
+}
+
+export interface choices {
+    choice: Choice;
+    choiceTo: Agent;
 }
 
 export interface userChoice {
@@ -64,7 +69,8 @@ export class Agent extends AttributeContainer {
     public ideology: Ideology;
     public personality: Personality;
     public mood: number;
-    public userPromise: userPromise[] = [];
+    public promises: promises[] = [];
+    public choices: choices[] = [];
 
     public face: Face;
     public hat: Hat;
@@ -115,20 +121,59 @@ export class Agent extends AttributeContainer {
     }
     */
 
-    updatePromise(userInput: Commitment, promiseTo: Agent) {
+    //adds a promise to list of promises in agent
+    updatePromise(commitment: Commitment, promiseTo: Agent) {
 
-        const newPromise: userPromise = {
-            promise: userInput,
+        const newPromise: promises = {
+            promise: commitment,
             promiseTo: promiseTo
         };
 
-        const found = this.userPromise.some(e => e.promiseTo === promiseTo)
+        const found = this.promises.some(e => e.promiseTo === promiseTo)
 
         if(!found) {
-            this.userPromise.push(newPromise);
+            this.promises.push(newPromise);
         }
 
+        else {
+            const promise = this.getPromiseTo(promiseTo);
+            if(promise) {
+                promise.promise = commitment;
+            }
+        }
     }
+
+    //adds choice from player to list of choices 
+    //NOTE on a consecutive round if a player has not chosen a promise, the previous round promise is used
+    updateChoice(choice: Choice, choiceTo: Agent) {
+        
+        const newChoice: choices = {
+            choice: choice,
+            choiceTo: choiceTo,
+        };
+
+        const found = this.choices.some(e => e.choiceTo === choiceTo)
+
+        if(!found) {
+            this.choices.push(newChoice);
+        }
+
+        else {
+            const aChoice = this.getChoiceTo(choiceTo);
+            if(aChoice) {
+                aChoice.choice = choice
+            }
+        }
+    }
+
+    getPromiseTo(agent: Agent) {
+        return this.promises.find(e => e.promiseTo === agent)
+    }
+
+    getChoiceTo(agent: Agent) {
+        return this.choices.find(e => e.choiceTo === agent)
+    }
+
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
         if (myChoice === Choice.Give && theirChoice === Choice.Give)

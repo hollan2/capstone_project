@@ -115,13 +115,6 @@ export const generateCommitment = (
     return Commitment.Cooperate;   
 };
 
-export const playerCommitment = ( 
-    userPromise: number,
-    theirHistory: TurnLog
-): Commitment => {
-    return Commitment.Compete;
-}
-
 //Gets the opposite choice of the Commitment
 export const getLie = (
     v1Promise: Commitment, 

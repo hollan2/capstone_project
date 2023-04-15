@@ -18,7 +18,6 @@ import { Display } from "../App";
 import { SidebarState } from "./sideBarState";
 import { SidebarAgentImage } from "../App";
 import {
-    userPromise,
     Agent,
     AGENT_RADIUS,
     Relation,
@@ -35,6 +34,7 @@ import {
     choiceTally,
     Strategy,
     Commitment,
+    Choice
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -378,13 +378,10 @@ class InfluenceEntry extends React.Component<
         }
     }
 
-    //gets the promise of the neighbor
-    getPromiseToPlayer() {
-        const agent = this.props.agent;
-        const player = this.props.player;
-        agent.userPromise
-    
-        const promise = agent.userPromise.find(e => e.promiseTo === player)
+    //gets src promise to dest
+    getPromiseBetween(src: Agent, dest: Agent) {
+
+        const promise = src.promises.find(e => e.promiseTo === dest)
         const commitment = promise?.promise
         switch(commitment) {
             case 0:
@@ -394,24 +391,25 @@ class InfluenceEntry extends React.Component<
             case 2:
                 return "reciprocate"
         }
-
-        /*
-        if(promiseRelations) {
-        var promise = this.searchPromises(promiseRelations, agent);
-        }
-
-        console.log("promises to player");
-        console.log(promise);
-
-        return promise;
-        */
     }
 
+    isTruth(commitment: string, playerCommitment: string | undefined, neighborCommitment: string | undefined) {
+        
+        if(commitment == playerCommitment) 
+            return 'honest'
+        else if(playerCommitment == 'reciprocate') {
+            if(playerCommitment == neighborCommitment)
+                return 'honest'
+        }
+        else
+            return 'lie'
+    }
     render() {
         const player = this.props.player;
         const agent = this.props.agent;
 
-        const commitment = this.getPromiseToPlayer();
+        const aiCommitment = this.getPromiseBetween(agent, player)
+        const playerCommitment = this.getPromiseBetween(player, agent)
 
 
         const sMaybe = this.state.given === 1 ? "" : "s";
@@ -466,10 +464,8 @@ class InfluenceEntry extends React.Component<
         else {
             return (
                 <div className="container" ref={this.containerRef}>
-                    <div>{agent.name + ' promised to ' + commitment}</div>
+                    <div>{agent.name + ' promised to ' + aiCommitment}</div>
                     <div className="influence-entry">
-
-                        
                         <div className="influence-agent">
                             <RK.Stage
                                 ref={this.stageRef}
@@ -488,16 +484,34 @@ class InfluenceEntry extends React.Component<
                             <button 
                                 id="cooperate" 
                                 onClick={() => {
-                                    //choice function
+                                    //determine if give or cheat then update choice
+                                    if(this.isTruth("cooperate", playerCommitment, aiCommitment) == 'honest')
+                                        player.updateChoice(Choice.Give, agent);
+                                    else
+                                        player.updateChoice(Choice.Cheat, agent);
+
                                 }}
-                                > Cooperate
+                                > 
+                                <div className="action-container">
+                                    <div>Cooperate</div>
+                                    <div>{this.isTruth("cooperate", playerCommitment, aiCommitment)}</div>
+                                </div>
+    
                             </button>
                             <button 
                                 id="compete"
                                 onClick={() => {
-                                    //choice function
+                                    if(this.isTruth("compete", playerCommitment, aiCommitment) == 'honest')
+                                        player.updateChoice(Choice.Give, agent);
+                                    else
+                                        player.updateChoice(Choice.Cheat, agent);
                                 }}
-                                > Compete
+                                > 
+                                <div className="action-container">
+                                    <div>Compete</div>
+                                    <div>{this.isTruth("compete", playerCommitment, aiCommitment)}</div>
+                                </div>
+                                
                             </button>
                         </div>
                     </div>

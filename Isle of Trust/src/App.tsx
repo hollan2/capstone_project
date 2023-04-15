@@ -251,7 +251,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         //this.handleInfluenceChanges(vertices);
         
         this.generateRound(edges);
-        this.drainResources(vertices);
+        //this.drainResources(vertices);
 
         this.forceUpdate();
     }
@@ -315,7 +315,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 if(v1.id == this.player_id){
 
                     //gets player inputted promises
-                    const obj = v1.userPromise.find(e => e.promiseTo === v2)
+                    const obj = v1.promises.find(e => e.promiseTo === v2)
                     if(obj) {
                         v1Promise = obj.promise
                     } else {
@@ -324,8 +324,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             v1Strat,
                             e2.history);
                     }
-                    console.log("player has made a :" + v1Promise + ": with " + v2.name);
-                   
                 }
 
                 else{
@@ -336,13 +334,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                     //stores AI promises for use in front end 
                     v1.updatePromise(v1Promise, v2)
-                    console.log(v1.name + " has promised to :" + v1Promise + ": with " + v2.name )
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
                 if(v2.id == this.player_id){
                     //gets player inputted promises
-                    const obj = v2.userPromise.find(e => e.promiseTo === v2)
+                    const obj = v2.promises.find(e => e.promiseTo === v1)
                     if(obj) {
                         v2Promise = obj.promise
                     } else {
@@ -351,7 +348,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             v1Strat,
                             e2.history);
                     }
-                    console.log("player has made a :" + v1Promise + ": with " + v1.name);
                 }
                 else{
                     //generates the promise of the agent2
@@ -361,7 +357,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                     //stores AI promises for use in front end
                     v2.updatePromise(v2Promise, v1)
-                    console.log(v2.name + " has promised to :" + v2Promise + ": with " + v1.name )
                 }
 
                 //gets us the full array of promises between agents to pass back to generaterounds
@@ -383,11 +378,19 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                 //checks if agent1 is the player agent if so we get the player selected choice
                 if(v1.id == this.player_id){
-                    v1Choice = generateChoice(
-                        v1Promise, 
-                        v2Promise,
-                        v1Strat,
-                        e2.history);
+                    //gets player inputted choices
+                    const obj = v1.choices.find(e => e.choiceTo === v2)
+                    if(obj) {
+                        v1Choice = obj.choice
+                    } else {
+                         //if player didnt choose a promise randomly chooses choice
+                         v1Choice = generateChoice(
+                            v1Promise, 
+                            v2Promise,
+                            v1Strat,
+                            e2.history);
+                    }
+                    
                 }
                 else{
                     v1Choice = generateChoice(
@@ -399,13 +402,18 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                 //checks if agent2 is the player agent if so we get the player selected choice
                 if(v2.id == this.player_id){
-                    //code for player choice goes here
-                    //needs to be changed
-                    v2Choice = generateChoice(
-                        v2Promise, 
-                        v1Promise,
-                        v2Strat,
-                        e1.history);
+                    //gets player inputted choices
+                    const obj = v2.choices.find(e => e.choiceTo === v1)
+                    if(obj) {
+                        v2Choice = obj.choice
+                    } else {
+                         //if player didnt choose a promise randomly chooses choice
+                         v2Choice = generateChoice(
+                            v1Promise, 
+                            v2Promise,
+                            v1Strat,
+                            e2.history);
+                    }
                 }
                 else{
                     v2Choice = generateChoice(
@@ -426,10 +434,13 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 e1.history.addTurn(new Turn(v1Choice, v1Promise));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise));
                 
-                console.log("MATCH")
-                console.log(v1.name, v1Choice, v1Promise);
-                console.log(v2.name ,v2Choice, v2Promise);
+                console.log("PLAYERMATCH")
+                if(v1.id == this.player_id || v2.id == this.player_id) {
+                    console.log(v1.name, v1Choice, v1Promise);
+                    console.log(v2.name ,v2Choice, v2Promise);
+                }
             }
+                
         });
 
     }
