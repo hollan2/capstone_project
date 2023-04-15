@@ -99,8 +99,9 @@ export interface StartInfo {
 }
 
 export function TutorialDisplay() {
-    const state = {
-        name: 'Adam',
+    
+    const userState = {
+        name: 'User Player',
         hat: 'None',
         face: 'Glasses',
         ideologyColor: '9ec4ea',
@@ -110,15 +111,15 @@ export function TutorialDisplay() {
 
     //logs the values chosen for the player character 
     console.log("Game function for routing");
-    console.log(state);
+    console.log(userState);
     return (
         <TutorialView
-            name={state.name}
-            hat={state.hat}
-            face={state.face}
-            ideologyColor={state.ideologyColor}
-            startingPoints={state.startingPoints}
-            mapImage={state.mapImage}
+            name={userState.name}
+            hat={userState.hat}
+            face={userState.face}
+            ideologyColor={userState.ideologyColor}
+            startingPoints={userState.startingPoints}
+            mapImage={userState.mapImage}
         />
     );
 }
@@ -137,12 +138,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         currentMap = props.mapImage;
 
-        // TODO: put this in the JSON
-        //A random agent in the graph is selected to be the player
+       // Puts User Player in position 1 on map
         const player =
-            map.getVertices()[
-                Math.floor(Math.random() * map.getVertices().length)
-            ];
+            map.getVertices()[1];
         
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
@@ -182,8 +180,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             }
         }
 
-        // Arbitrarily, the first Agent in the graph starts out selected
-        let selected = map.getVertices()[0];
+        // Set selected to position 1 so user is first player selected on load in
+        let selected = map.getVertices()[1];
         let sidebarState = new SidebarState(map, player, selected);
 
         let select = (agent: Agent) => {
