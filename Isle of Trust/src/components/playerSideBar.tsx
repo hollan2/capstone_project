@@ -325,6 +325,7 @@ class InfluenceEntry extends React.Component<
             given: 0};
     }
 
+    //old code
     /*updateGiven(increment: number) {
         if (this.props.agent instanceof Agent) {
             const newGiven = this.props.allowResources(
@@ -335,48 +336,6 @@ class InfluenceEntry extends React.Component<
             this.props.spendingMap.data.set(this.props.agent, newGiven);
         }
     }*/
-
-    //adds user input promises to an array inside player
-    //TODO have ability to change choice selecting a promise
-    /*updatePromise(userInput: Commitment) {
-        let promiseTo = this.props.agent;
-        let player = this.props.player;
-
-        const newPromise: userPromise = {
-            promise: userInput,
-            promiseTo: promiseTo
-        };
-
-        const found = player.userPromise.some(e => e.promiseTo === promiseTo)
-
-        if(!found) {
-            player.userPromise.push(newPromise);
-        }
-        
-        console.log("player promises: ");
-        console.log(player.userPromise);
-
-    }*/
-
-    //loop through promise relations to find relation with current agent
-    searchPromises(arr: [][], toSearch: Agent) {
-        var match = 0 
-        for (let i = 0; i < arr.length; i++) {
-            match = 0;
-            for (let j = 0; j < arr[i].length; j++) {
-                if (arr[i][j] == toSearch) {
-                    match += 1
-                }
-                if(arr[i][j] == this.props.player) {
-                    match += 1
-                }
-                //determines the relation that is with the player
-                if(match == 2) {
-                    return arr[i];
-                }
-            }
-        }
-    }
 
     //gets src promise to dest
     getPromiseBetween(src: Agent, dest: Agent) {
@@ -397,17 +356,11 @@ class InfluenceEntry extends React.Component<
         
         if(commitment == playerCommitment) 
             return 'honest'
-
         //if both agents are reciprocate, then their commmitments are cooperate
         else if(playerCommitment == 'reciprocate' && neighborCommitment == 'reciprocate' && commitment == 'cooperate')
+           return 'honest'
+        else if(playerCommitment == 'reciprocate' && commitment == neighborCommitment)
             return 'honest'
-
-        //else the player's commitment is the same as their neighbor
-        else if(playerCommitment == 'reciprocate'){
-            if(commitment == neighborCommitment)
-                return 'honest'
-        }
-
         else
             return 'lie'
     }
