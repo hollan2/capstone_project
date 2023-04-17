@@ -291,6 +291,7 @@
     }
 }
 
+
 .history-container{
     border: 2px solid var(--dark-blue);
     grid-area: history;
@@ -347,5 +348,29 @@
 
 .popup-content
 {
-    padding:10px;
+    padding: 10px;
+}
+
+#cooperate {
+    background-color: #51E658;
+    height: 30px;
+}
+#cooperate:target {
+    background-color: #51E658;
+    height: 30px;
+    opacity: .25;
+}
+
+#reciprocate {
+    background-color: #E1E257;
+    height: 30px;
+}
+
+#compete {
+    background-color: #F36252;
+    height: 30px;
+}
+
+.action-container {
+    font-size: small;
 }
