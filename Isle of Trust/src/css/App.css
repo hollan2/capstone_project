@@ -36,10 +36,11 @@
     border-radius: 5px;
     background-color: var(--white);
     grid-area: selectedSidebar;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto .1fr 1fr;
     grid-template-areas:
         "selectedDisplay"
-        "stats";
+        "stats"
+        "history";
 }
 
 .agent-type {
@@ -290,6 +291,66 @@
     }
 }
 
+
+.history-container{
+    border: 2px solid var(--dark-blue);
+    grid-area: history;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--std-border-radius);
+    margin: 10px;
+}
+
+.history-title{
+    border-bottom: 2px solid var(--dark-blue);
+}
+
+.history-display{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.popup {
+    width: 500px;
+    height: 500px;
+    background-color:  var(--lighter-blue);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: scroll;
+    
+  }
+
+  .popup-container, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+
+}
+
+.overlay {
+    background: rgba(49,49,49,0.8);
+}
+
+.popup-close
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.popup-content
+{
+    padding: 10px;
+}
+
 #cooperate {
     background-color: #51E658;
     height: 30px;
@@ -308,7 +369,6 @@
 #compete {
     background-color: #F36252;
     height: 30px;
-
 }
 
 .action-container {

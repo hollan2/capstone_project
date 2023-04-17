@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDom from "react-dom"
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -17,6 +18,7 @@ import { Grid } from "../generators/map";
 import { PlayerSidebar } from "../components/playerSideBar";
 import { SidebarState } from "./sideBarState";
 import { Display } from "../App";
+import { SidebarAgentImage } from "../App";
 import {
     Agent,
     AGENT_RADIUS,
@@ -31,6 +33,7 @@ import {
     taglineFromStrategy,
     generateChoice,
     Turn,
+    TurnLog,
     choiceTally,
     Strategy,
 } from "../models/strategy";
@@ -114,6 +117,10 @@ export class SelectedSidebar extends React.Component<SelectedSidebarProps, unkno
                 <Stats
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
+                />
+                <History 
+                    sidebarState={this.props.sidebarState}
+                    map={this.props.map}    
                 />
             </div>
         );
@@ -241,4 +248,137 @@ class Stats extends React.Component<StatsProps, unknown> {
             </div>
         );
     }
+}
+
+interface HistoryProps{
+    sidebarState: SidebarState;
+    map: Graph<Agent, Relation>;
+}
+
+
+class History extends React.Component<HistoryProps> {
+    
+    private children: JSX.Element[] = [];
+
+    renderNeighbors = () => {
+        this.children = []
+        //Get the neighbors of the selected player from the graph
+        const neighbors = this.props.map.getEdges(
+            this.props.sidebarState.selected
+        )!;
+        //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
+        for (const entry of neighbors.entries()) {
+            this.children.push(
+            <HistoryNeighbors agent={entry[0]} relation={entry[1]}/>);
+            
+        };
+    };
+  
+ 
+    render() { 
+
+        this.renderNeighbors();
+
+        return (
+            <div className="history-container">
+                <div className="history-title">
+                    <h3>See history of neighbors:</h3> 
+                </div>
+
+                <div className="history-agent">
+                    {this.children}
+                </div>
+            </div>
+        );
+    }
+}
+
+interface HistoryNeighborsProps{
+    agent: Agent;
+    relation: Relation;
+}
+
+interface HistoryNeighborsState{
+    show: boolean;
+}
+
+class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNeighborsState> {
+    state = {
+        show: false
+    }
+
+    private stageRef = React.createRef<Konva.Stage>();
+    private agentImageScale: number = 0.1;
+    private canvasWidth = AGENT_IMAGE_WIDTH * this.agentImageScale;
+    private canvasHeight = AGENT_IMAGE_HEIGHT * this.agentImageScale;
+
+    //Whenever the view button is clicked or the close button of the pop up is clicked, the state will change, which will show
+    //or hide the popup
+    changeState = () => {
+        this.setState({ show: !this.state.show });
+      };
+
+    render() {
+        return (
+            <div className="history-display">
+                    <RK.Stage
+                        ref={this.stageRef}
+                        width={this.canvasWidth}
+                        height={this.canvasHeight}
+                    >
+                        <RK.Layer>
+                            <SidebarAgentImage
+                                canvasWidth={this.canvasWidth}
+                                data={this.props.agent}
+                            />
+                        </RK.Layer>
+                    </RK.Stage>
+                    <div className="history-view">
+                        <button onClick={this.changeState}>View</button>
+                        {this.state.show && (<HistoryPopUp history={this.props.relation.history} changeState={this.changeState}/>)}
+                    </div>
+            </div>
+        );
+    }
+}
+
+
+interface HistoryPopUpProps{
+    history: TurnLog;
+    changeState: (show: boolean) => void;
+}
+
+
+class HistoryPopUp extends React.Component<HistoryPopUpProps>
+{
+    //calls the passed in function to change the parent's state to hide the popup
+    handleCloseClick = () => {
+        this.props.changeState(false);
+      };
+    
+    private History: TurnLog = this.props.history;
+
+    render() {
+        return ReactDom.createPortal(
+            <div className="popup-container">
+                <div className="overlay"></div>
+                <div className="popup">
+                    <div className="popup-close">
+                        <button onClick={this.handleCloseClick}>X</button>
+                    </div>
+                    <div className="popup-content">
+                        <h1>History:</h1>
+                        <ul>
+                            {[...Array(100)].map((_, i) => (
+                            <li key={i}>Round: {100-i} | Promise: Unknown | Action: Unknown</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>,
+            //Used for React Portal Popup Modal
+          document.getElementById("portal")!
+        );
+      }
+    
 }
