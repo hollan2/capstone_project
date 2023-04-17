@@ -4,7 +4,6 @@ import "../css/App.css";
 import Konva from "konva";
 import useImage from "use-image";
 import * as util from "../utilities";
-import { useLocation } from "react-router-dom";
 import {
     AnimResources,
     AnimInfluence,
@@ -35,6 +34,8 @@ import {
     Turn,
     choiceTally,
     Strategy,
+    generateCommitment,
+    Commitment,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -86,6 +87,8 @@ interface GameViewState {
     select: (agent: Agent) => void;
     turnCount: number;
     selectCharacterDisplay: boolean;
+    userPromise: number;
+    promiseRelation: any;
 }
 
 export interface StartInfo {
@@ -126,6 +129,7 @@ export function TutorialDisplay() {
 
 class TutorialView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
+    public player_id: number = 0; 
     constructor(props: StartInfo) {
         super(props);
         // Here may be some kind of switch to generate map
@@ -135,6 +139,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
         const turnCount = 0;
+        var promiseRelation;
 
         currentMap = props.mapImage;
 
@@ -147,6 +152,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name
+
+            this.player_id = player.id;
 
             switch (props.ideologyColor) {
                 case "9ec4ea":
@@ -198,6 +205,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             select: select,
             turnCount: turnCount,
             selectCharacterDisplay: false,
+            userPromise: -1,
+            promiseRelation: promiseRelation,
         };
 
         //Needed for setState function
@@ -226,6 +235,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
+    //Should be removed but too many lines of code rely on this to do it yet
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String {
         const neighbors = map.getEdges(agent);
         let totalInfluence = 0;
@@ -259,10 +269,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         const vertices = this.state.map.getVertices();
         const edges = this.state.map.getAllEdges();
 
-        this.drainInfluence(edges);
-        this.handleInfluenceChanges(vertices);
+        //these lines can be removed
+        //this.drainInfluence(edges);
+        //this.handleInfluenceChanges(vertices);
+        
         this.generateRound(edges);
-        this.drainResources(vertices);
+        //this.drainResources(vertices);
 
         this.forceUpdate();
     }
@@ -273,6 +285,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         });
     }
 
+    /* THESE functions don't serve a purpose anymore, can be removed
     drainInfluence(edges: [Agent, Agent, Relation][]) {
         edges.forEach(([v1, v2, e]) => {
             const v2Agent = v2 as Agent;
@@ -308,89 +321,175 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 this.driftIdeology(v1);
         });
     }
-
-    generateRound(edges: [Agent, Agent, Relation][]) {
-        const turnsToSample: number = 10;
+    */
+   
+    //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
+    generatePromiseRound(edges: [Agent, Agent, Relation][]) {
+        var Promise_relation: [Agent, Agent, Relation, Commitment, Commitment][] = [];
         edges.forEach(([v1, v2, e1]) => {
             const e2 = this.state.map.getEdge(v2, v1);
             if (v1.id < v2.id && e2 instanceof Relation) {
                 const v1Strat = v1.ideology.toStrategy();
                 const v2Strat = v2.ideology.toStrategy();
-                const v1Choice = generateChoice(
-                    v1Strat,
-                    v1.mood,
-                    e2.history
-                );
-                const v2Choice = generateChoice(
-                    v2Strat,
-                    v2.mood,
-                    e1.history
-                );
+                var v1Promise;
+                var v2Promise;
 
-                let resourceChange = v1.resources;
-                let moodChange = v1.mood;
+                //checks if agent1 is the player agent if so we get the player selected promise
+                if(v1.id == this.player_id){
 
-                v1.rewardResources(v1Choice, v2Choice);
-                v2.rewardResources(v1Choice, v2Choice);
-                v1.updateMood(v1Choice, v2Choice);
-                v2.updateMood(v1Choice, v2Choice);
+                    //gets player inputted promises
+                    const obj = v1.promises.find(e => e.promiseTo === v2)
+                    if(obj) {
+                        v1Promise = obj.promise
+                    } else {
+                         //if player didnt choose a promise randomly chooses promises
+                        v1Promise = generateCommitment(
+                            v1Strat,
+                            e2.history);
+                    }
+                }
 
-                resourceChange = v1.resources - resourceChange;
-                moodChange = v1.mood - moodChange;
+                else{
+                    //generates the promise of the agent1
+                    v1Promise = generateCommitment(
+                        v1Strat,
+                        e2.history);
 
-                e1.history.addTurn(new Turn(v1Choice, v1Choice));
-                e2.history.addTurn(new Turn(v2Choice, v2Choice));
+                    //stores AI promises for use in front end 
+                    v1.updatePromise(v1Promise, v2)
+                }
 
-                let opinionChange = e1.opinion;
-                e1.updateOpinion(
-                    e2.influence,
-                    e2.history.getAvgChoice(turnsToSample),
-                    v1.personality.getVolatility()
-                );
-                e2.updateOpinion(
-                    e1.influence,
-                    e1.history.getAvgChoice(turnsToSample),
-                    v2.personality.getVolatility()
-                );
-                opinionChange = e1.opinion - opinionChange;
+                //checks if agent2 is the player agent if so we get the player selected choice
+                if(v2.id == this.player_id){
+                    //gets player inputted promises
+                    const obj = v2.promises.find(e => e.promiseTo === v1)
+                    if(obj) {
+                        v2Promise = obj.promise
+                    } else {
+                         //if player didnt choose a promise randomly chooses promises
+                        v2Promise = generateCommitment(
+                            v1Strat,
+                            e2.history);
+                    }
+                }
+                else{
+                    //generates the promise of the agent2
+                    v2Promise = generateCommitment(
+                        v2Strat,
+                        e1.history);
+
+                    //stores AI promises for use in front end
+                    v2.updatePromise(v2Promise, v1)
+                }
+
+                //gets us the full array of promises between agents to pass back to generaterounds
+                Promise_relation.push([v1, v2, e1, v1Promise, v2Promise])
             }
         });
-
-        this.setState((state) => {
-            return { turnCount: this.state.turnCount + 1 };
-        });
+        return(Promise_relation)
     }
 
-    driftIdeology(agent: Agent) {
-        // Drift factor represents by how many attribute points an agent will drift towards a new ideology.
-        // A factor of 4 = an agent will change its ideology by 4 points (dividing the 4 points appropriately
-        // among its generosity and forgiveness.)
-        // Drift factor has an intended range of 1-10. (Keep in mind that since the change is divided between
-        // generotisy and forgiveness, it still represents a max change of 5 in either.)
-        const driftFactor = 1 + agent.getInfluenceability() * 19;
+    //accepts in the edges array with the addtional commitment info. Then generates the agent's choices
+    generateChoiceRound(edges: [Agent, Agent, Relation, Commitment, Commitment][]){
+        edges.forEach(([v1, v2, e1, v1Promise, v2Promise]) => {
+            const e2 = this.state.map.getEdge(v2, v1);
+            if (v1.id < v2.id && e2 instanceof Relation) {
+                const v1Strat = v1.ideology.toStrategy();
+                const v2Strat = v2.ideology.toStrategy();
+                var v1Choice;
+                var v2Choice;
 
-        const ideologyAppeal: Map<Ideology, number> = new Map();
-        const neighbors = this.state.map.getEdges(agent)!;
-        let totalInfluence = 0;
-        
-        //calcautes the total influnce of all nehboors
-        neighbors.forEach((relation: Relation, neighbor: Agent) => {
-            const theirInfluence = this.state.map.getEdge(
-                neighbor,
-                agent
-            )!.influence;
-            ideologyAppeal.set(neighbor.ideology, theirInfluence);
-            totalInfluence += theirInfluence;
+                //checks if agent1 is the player agent if so we get the player selected choice
+                if(v1.id == this.player_id){
+                    //gets player inputted choices
+                    const obj = v1.choices.find(e => e.choiceTo === v2)
+                    if(obj) {
+                        v1Choice = obj.choice
+                    } else {
+                        console.log("NO CHOICE SELECTED")
+                         //if player didnt choose a promise randomly chooses choice
+                         v1Choice = generateChoice(
+                            v1Promise, 
+                            v2Promise,
+                            v1Strat,
+                            e2.history);
+                    }
+                    
+                }
+                else{
+                    v1Choice = generateChoice(
+                        v1Promise, 
+                        v2Promise,
+                        v1Strat,
+                        e2.history);
+                }
+
+                //checks if agent2 is the player agent if so we get the player selected choice
+                if(v2.id == this.player_id){
+                    //gets player inputted choices
+                    const obj = v2.choices.find(e => e.choiceTo === v1)
+                    if(obj) {
+                        v2Choice = obj.choice
+                    } else {
+                        console.log("NO CHOICE SELECTED")
+                         //if player didnt choose a choice randomly chooses choice
+                         v2Choice = generateChoice(
+                            v1Promise, 
+                            v2Promise,
+                            v1Strat,
+                            e2.history);
+                    }
+                }
+                else{
+                    v2Choice = generateChoice(
+                        v2Promise, 
+                        v1Promise,
+                        v2Strat,
+                        e1.history);
+                }
+
+                console.log(v1.name, v1Choice, v1Promise);
+                console.log(v2.name ,v2Choice, v2Promise);
+                //rewards the agents resouces based on their resources
+                v1.rewardResources(v1Choice, v2Choice);
+                v2.rewardResources(v2Choice, v1Choice);
+
+                //a reward trust function will be need when trust implmented 
+
+                //add to the history of each edge for each agent
+                e1.history.addTurn(new Turn(v1Choice, v1Promise));
+                e2.history.addTurn(new Turn(v2Choice, v2Promise));
+                
+
+            }
+                
         });
 
-        const drifts = new DriftContainer();
-        ideologyAppeal.forEach((theirInfluence, ideology) => {
-            const drift: number = Math.round(
-                driftFactor * (theirInfluence / totalInfluence)
-            );
-            drifts.data.set(ideology, drift);
+    }
+
+     
+    //generates each round when player hits confirm choices
+    generateRound(edges: [Agent, Agent, Relation][]) {
+
+        console.log("turncount " + this.state.turnCount)
+        if(this.state.turnCount%1 == 0){
+            //promise round
+            console.log("PROMISE ROUND START")
+            const promiseRelation = this.generatePromiseRound(edges);
+            this.setState((state) => {
+                return { promiseRelation: promiseRelation };
+            });
+            
+        } else {
+            //choice round
+            console.log("CHOICE ROUND START")
+            this.generateChoiceRound(this.state.promiseRelation);
+
+        }
+
+        this.setState((state) => {
+            return { turnCount: this.state.turnCount + .5};
         });
-        agent.driftIdeology(drifts);
     }
 
     deselectCharacter(value: boolean) {
@@ -417,6 +516,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
                         />
                         <SelectedSidebar
                             map={this.state.map}
@@ -447,6 +548,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
                         />
                 </div>
             );
