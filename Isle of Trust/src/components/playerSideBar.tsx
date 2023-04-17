@@ -33,6 +33,8 @@ import {
     Turn,
     choiceTally,
     Strategy,
+    Commitment,
+    Choice
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -86,6 +88,8 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    turnCount: number;
+    promiseRelation: any;
 }
 
 export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> {
@@ -99,9 +103,11 @@ export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> 
                     countTotalInfluence={this.props.countTotalInfluence}
                 />
                 <InfluenceMenu
-                    round={this.props.round}
+                    round={this.props.round}    
                     sidebarState={this.props.sidebarState}
                     map={this.props.map}
+                    turnCount={this.props.turnCount}
+                    promiseRelation={this.props.promiseRelation}
                 />
             </div>
         );
@@ -147,6 +153,8 @@ interface InfluenceMenuProps {
     round: () => void;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
+    turnCount: number;
+    promiseRelation: any;
 }
 
 class InfluenceMenu extends React.Component<InfluenceMenuProps> {
@@ -158,21 +166,46 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         )!;
 
         if (this.props.sidebarState.player instanceof Agent) {
-            return (
-                <div className="influence-menu">
-                    <div className="influence-title">
-                        spend resources,
-                        <br /> influence your neighbors:
+            if(this.props.turnCount % 1 == 0) {
+                return (
+                    <div className="influence-menu">
+                        <div className="influence-title">
+                            Promise Phase
+                            <br /> Declare your intent with neighbors:
+                        </div>
+                        <InfluenceOptions
+                            selected={this.props.sidebarState.selected}
+                            player={this.props.sidebarState.player as Agent}
+                            neighbors={neighbors}
+                            spendingMap={this.props.sidebarState.influenceChoices}
+                            turnCount={this.props.turnCount}
+                            promiseRelation={this.props.promiseRelation}
+                            
+                        />
+                        <button onClick={this.props.round}>Confirm Choices</button>
                     </div>
-                    <InfluenceOptions
-                        selected={this.props.sidebarState.selected}
-                        player={this.props.sidebarState.player as Agent}
-                        neighbors={neighbors}
-                        spendingMap={this.props.sidebarState.influenceChoices}
-                    />
-                    <button onClick={this.props.round}>Confirm Choices</button>
-                </div>
-            );
+                );
+            }
+            else {
+                return (
+                    <div className="influence-menu">
+                        <div className="influence-title">
+                            Action Phase
+                            <br /> Deliver on your promises! (Or Not):
+                        </div>
+                        <InfluenceOptions
+                            selected={this.props.sidebarState.selected}
+                            player={this.props.sidebarState.player as Agent}
+                            neighbors={neighbors}
+                            spendingMap={this.props.sidebarState.influenceChoices}
+                            turnCount={this.props.turnCount}
+                            promiseRelation={this.props.promiseRelation}
+                        />
+                        <button onClick={this.props.round}>Confirm Choices</button>
+                    </div>
+                );
+            }
+            
         }
     }
 }
@@ -182,6 +215,8 @@ interface InfluenceOptionsProps {
     player: Agent;
     neighbors: Map<Agent, Relation>;
     spendingMap: SpendingContainer;
+    turnCount: number;
+    promiseRelation: any;
 }
 
 class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
@@ -209,7 +244,10 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
                         allowResources={this.allowResources}
                         resourcesGiveable={this.props.player.resources}
                         agent={entry[0]}
+                        player={this.props.player}
                         spendingMap={this.props.spendingMap}
+                        turnCount={this.props.turnCount}
+                        promiseRelation={this.props.promiseRelation}
                     />
                 );
                 this.children.push(newChild);
@@ -261,7 +299,10 @@ interface InfluenceEntryProps {
     allowResources: (giving: number, increment: number) => number;
     resourcesGiveable: number;
     agent: Agent;
+    player: Agent;
     spendingMap: SpendingContainer;
+    turnCount: number;
+    promiseRelation: any;
 }
 
 interface InfluenceEntryState {
@@ -280,10 +321,12 @@ class InfluenceEntry extends React.Component<
 
     constructor(props: any) {
         super(props);
-        this.state = { given: 0 };
+        this.state = { 
+            given: 0};
     }
 
-    updateGiven(increment: number) {
+    //old code
+    /*updateGiven(increment: number) {
         if (this.props.agent instanceof Agent) {
             const newGiven = this.props.allowResources(
                 this.state.given,
@@ -292,47 +335,144 @@ class InfluenceEntry extends React.Component<
             this.setState({ given: newGiven });
             this.props.spendingMap.data.set(this.props.agent, newGiven);
         }
+    }*/
+
+    //gets src promise to dest
+    getPromiseBetween(src: Agent, dest: Agent) {
+
+        const promise = src.promises.find(e => e.promiseTo === dest)
+        const commitment = promise?.promise
+        switch(commitment) {
+            case 0:
+                return "compete"
+            case 1:
+                return "cooperate"
+            case 2:
+                return "reciprocate"
+        }
     }
 
+    isTruth(commitment: string, playerCommitment: string | undefined, neighborCommitment: string | undefined) {
+        
+        if(commitment == playerCommitment) 
+            return 'honest'
+        //if both agents are reciprocate, then their commmitments are cooperate
+        else if(playerCommitment == 'reciprocate' && neighborCommitment == 'reciprocate' && commitment == 'cooperate')
+           return 'honest'
+        else if(playerCommitment == 'reciprocate' && commitment == neighborCommitment)
+            return 'honest'
+        else
+            return 'lie'
+    }
     render() {
+        const player = this.props.player;
+        const agent = this.props.agent;
+
+        const aiCommitment = this.getPromiseBetween(agent, player)
+        const playerCommitment = this.getPromiseBetween(player, agent)
+
+
         const sMaybe = this.state.given === 1 ? "" : "s";
         const givenString = String(this.state.given) + " resource" + sMaybe;
-        return (
-            <div className="influence-entry" ref={this.containerRef}>
-                <div className="influence-agent">
-                    <RK.Stage
-                        ref={this.stageRef}
-                        width={this.canvasWidth}
-                        height={this.canvasHeight}
-                    >
-                        <RK.Layer>
-                            <SidebarAgentImage
-                                canvasWidth={this.canvasWidth}
-                                data={this.props.agent}
-                            />
-                        </RK.Layer>
-                    </RK.Stage>
+        if(this.props.turnCount % 1 == 0) {
+            //promise phase
+            return (
+                <div className="influence-entry" ref={this.containerRef}>
+                    <div className="influence-agent">
+                        <RK.Stage
+                            ref={this.stageRef}
+                            width={this.canvasWidth}
+                            height={this.canvasHeight}
+                        >
+                            <RK.Layer>
+                                <SidebarAgentImage
+                                    canvasWidth={this.canvasWidth}
+                                    data={this.props.agent}
+                                />
+                            </RK.Layer>
+                        </RK.Stage>
+                    </div>
+                    <div className="sidebar-agent-info">
+                        <button 
+                            id="cooperate" 
+                            onClick={() => {
+                                player.updatePromise(Commitment.Cooperate, agent);
+                            }}
+                            > Cooperate
+                        </button>
+                        <button 
+                            id="reciprocate" 
+                            onClick={() => {
+                                player.updatePromise(Commitment.Reciprocate, agent);
+                                
+                            }}
+                            > Reciprocate
+                        </button>
+                        <button 
+                            id="compete" 
+                            onClick={() => {
+                                player.updatePromise(Commitment.Compete, agent);                            
+                            }}
+                            > Compete
+                        </button>
+                    </div>
                 </div>
-                <div className="sidebar-agent-info">
-                    <button
-                        className="more-resource"
-                        onClick={() => {
-                            this.updateGiven(1);
-                        }}
-                    >
-                        +
-                    </button>
-                    <button
-                        className="less-resource"
-                        onClick={() => {
-                            this.updateGiven(-1);
-                        }}
-                    >
-                        -
-                    </button>
-                    <div>{givenString}</div>
+            );
+        }    
+
+        //action phase 
+        else {
+            return (
+                <div className="container" ref={this.containerRef}>
+                    <div>{agent.name + ' promised to ' + aiCommitment}</div>
+                    <div className="influence-entry">
+                        <div className="influence-agent">
+                            <RK.Stage
+                                ref={this.stageRef}
+                                width={this.canvasWidth}
+                                height={this.canvasHeight}
+                            >
+                                <RK.Layer>
+                                    <SidebarAgentImage
+                                        canvasWidth={this.canvasWidth}
+                                        data={this.props.agent}
+                                    />
+                                </RK.Layer>
+                            </RK.Stage>
+                        </div>
+                        <div className="sidebar-agent-info">
+                            <button 
+                                id="cooperate" 
+                                onClick={() => {
+                                    //determine if give or cheat then update choice
+                                        console.log("Select cooperate")
+                                        player.updateChoice(Choice.Give, agent);
+
+                                }}
+                                > 
+                                <div className="action-container">
+                                    <div>Cooperate</div>
+                                    <div>{this.isTruth("cooperate", playerCommitment, aiCommitment)}</div>
+                                </div>
+    
+                            </button>
+                            <button 
+                                id="compete"
+                                onClick={() => {
+                                        console.log("Select compete")
+                                        player.updateChoice(Choice.Cheat, agent);
+                                }}
+                                > 
+                                <div className="action-container">
+                                    <div>Compete</div>
+                                    <div>{this.isTruth("compete", playerCommitment, aiCommitment)}</div>
+                                </div>
+                                
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }           
     }
 }

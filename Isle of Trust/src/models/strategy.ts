@@ -1,6 +1,8 @@
 // The strategy an agent uses is determined during gameplay based on their personality.
 // The associated taglines are used on the front-end to describe each strategy's philosophy.
 export enum Strategy {
+    // For testing
+    Default,
     // Pure altruism
     Dove,
     // Pure selfishness
@@ -19,6 +21,8 @@ export enum Strategy {
 
 export const taglineFromStrategy = (strat: Strategy): string => {
     switch (strat) {
+        case Strategy.Default:
+            return "I'm just here to try things out.";
         case Strategy.Dove:
             return "Everyone deserves to thrive!";
         case Strategy.Hawk:
@@ -43,16 +47,26 @@ export enum Choice {
     Give,
 }
 
+//NATON added a enum for promises
+export enum Commitment {
+    Compete,
+    Cooperate,
+    Reciprocate, 
+}
+
+//generates the action the agent will committ to
+//TODO changing the strategies to our new system
 export const generateChoice = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
     strat: Strategy,
-    mood: number,
+    //removed the mood since it wasn't factored into choice rn anyways
     theirHistory: TurnLog
 ): Choice => {
-    // TODO if mood is extreme, roll to choose an action outside of typical strategy
-
-    // this is just an example, but here,
-    // we would determine the default choice based on the passed-in strategy.
     switch (strat) {
+        case Strategy.Default:
+            return Default(v1Promise, v2Promise);
+        /*
         case Strategy.Dove:
             return Choice.Give;
         case Strategy.Hawk:
@@ -67,6 +81,7 @@ export const generateChoice = (
             return TDee(theirHistory);
         case Strategy.TitForTat:
             return CopyCat(theirHistory);
+        */
         default:
             console.log(`warn: unknown strategy ${strat}`);
     }
@@ -74,13 +89,85 @@ export const generateChoice = (
     return Choice.Give;
 };
 
-export class Turn {
-    public choice: Choice;
-    public commitment: Choice;
+//temp function to generate promises Naton
+//TODO impelment new strategies into the promise
+export const generateCommitment = (
+    strat: Strategy,
+    theirHistory: TurnLog
+): Commitment => {
+    switch (strat) {
+        case Strategy.Default:
+            {
+            //randomly chooses between Compete, Cooperate and Reciprocate
+            const randomNum = Math.random();
+            if (randomNum <= 0.3)
+                return Commitment.Compete;
+            if(randomNum > 0.3 && randomNum < 0.6) 
+                return Commitment.Reciprocate;
+            else
+                return Commitment.Cooperate
+            }
 
-    constructor(choice: Choice, commitment: Choice) {
+        default:
+            console.log(`warn: unknown strategy ${strat}`);
+    }
+    
+    return Commitment.Cooperate;   
+};
+
+//Gets the opposite choice of the Commitment
+export const getLie = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
+): Choice => {
+    switch (v1Promise){
+        case Commitment.Compete:
+            return Choice.Cheat;
+        case Commitment.Cooperate:
+            return Choice.Cheat;
+        case Commitment.Reciprocate:
+            if(v2Promise == Commitment.Compete)
+                return Choice.Give;
+            else
+                return Choice.Cheat;
+        default:
+            return Choice.Give;
+
+    }
+}
+
+//Get the Choice corsponding to the Commitment
+export const getTruth = (
+    v1Promise: Commitment, 
+    v2Promise: Commitment,
+): Choice => {
+    switch (v1Promise){
+        case Commitment.Compete:
+            return Choice.Cheat;
+        case Commitment.Cooperate:
+            return Choice.Give;
+        case Commitment.Reciprocate:
+            if(v2Promise == Commitment.Compete)
+                return Choice.Cheat;
+            else
+                return Choice.Give;
+        default:
+            return Choice.Give;
+    }
+}
+
+
+export class Turn {
+    //agent Action NATON
+    public choice: Choice;
+    //changed the unused commitment variable from type Choice to new type Commitment
+    //agent Promise NATON
+    public commitment: Commitment;
+
+    constructor(choice: Choice, commitment: Commitment) { 
         this.choice = choice;
         this.commitment = commitment;
+
     }
 }
 
@@ -151,6 +238,17 @@ export class TurnLog {
 const CopyCat = function (history: TurnLog): Choice {
     return history.lastAction();
 };
+
+//Default has a 10% chance of lying
+const Default = function (v1Promise: Commitment, v2Promise: Commitment): Choice {
+    const lieChoice = getLie(v1Promise, v2Promise);
+    const truthChoice = getTruth(v1Promise, v2Promise);
+
+    if (Math.random() <= 0.1)
+        return lieChoice
+    return truthChoice;
+};
+
 
 const Grim = function (history: TurnLog): Choice {
     let temphist = history.actions;
