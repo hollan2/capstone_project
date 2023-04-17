@@ -253,13 +253,11 @@ class Stats extends React.Component<StatsProps, unknown> {
 interface HistoryProps{
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
-
 }
 
 
 class History extends React.Component<HistoryProps> {
-
-
+    
     private children: JSX.Element[] = [];
 
     renderNeighbors = () => {
@@ -274,14 +272,11 @@ class History extends React.Component<HistoryProps> {
             <HistoryNeighbors agent={entry[0]} relation={entry[1]}/>);
             
         };
-     
-        
     };
   
  
-    render() {
-      
-        
+    render() { 
+
         this.renderNeighbors();
 
         return (
@@ -289,21 +284,12 @@ class History extends React.Component<HistoryProps> {
                 <div className="history-title">
                     <h3>See history of neighbors:</h3> 
                 </div>
-                
+
                 <div className="history-agent">
                     {this.children}
                 </div>
-                
-            
-    
-
             </div>
-            
-
-      
         );
-
-
     }
 }
 
@@ -315,6 +301,7 @@ interface HistoryNeighborsProps{
 interface HistoryNeighborsState{
     show: boolean;
 }
+
 class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNeighborsState> {
     state = {
         show: false
@@ -332,10 +319,7 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
       };
 
     render() {
-
-
         return (
-
             <div className="history-display">
                     <RK.Stage
                         ref={this.stageRef}
@@ -354,24 +338,19 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
                         {this.state.show && (<HistoryPopUp history={this.props.relation.history} changeState={this.changeState}/>)}
                     </div>
             </div>
-
         );
     }
-
-
 }
 
 
 interface HistoryPopUpProps{
     history: TurnLog;
     changeState: (show: boolean) => void;
- 
 }
 
 
 class HistoryPopUp extends React.Component<HistoryPopUpProps>
 {
-
     //calls the passed in function to change the parent's state to hide the popup
     handleCloseClick = () => {
         this.props.changeState(false);
@@ -379,10 +358,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
     
     private History: TurnLog = this.props.history;
 
-
-
     render() {
-        
         return ReactDom.createPortal(
             <div className="popup-container">
                 <div className="overlay"></div>

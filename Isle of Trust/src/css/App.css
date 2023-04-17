@@ -292,7 +292,6 @@
 }
 
 .history-container{
-  
     border: 2px solid var(--dark-blue);
     grid-area: history;
     padding: 15px;
@@ -300,10 +299,6 @@
     flex-direction: column;
     border-radius: var(--std-border-radius);
     margin: 10px;
-    
-
-    
-   
 }
 
 .history-title{
@@ -314,8 +309,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-
-
 }
 
 .popup {
@@ -354,7 +347,5 @@
 
 .popup-content
 {
-    
     padding:10px;
-    
 }
