@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "./css/App.css";
 import Konva from "konva";
@@ -510,6 +510,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
+            
             return (
                 <div className="game">
                         <Board
@@ -540,7 +541,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         />
                 </div>
             );
-        } else {
+        } 
+        else {
             return (
                 <div className="game">
                         <Board
@@ -566,7 +568,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             );
         }
 
-    }
+    } 
 }
 
 

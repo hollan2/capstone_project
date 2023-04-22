@@ -3,6 +3,7 @@ import ReactDom from "react-dom"
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
+import { useEffect } from "react";
 import useImage from "use-image";
 import * as util from "../utilities";
 import {
@@ -142,9 +143,11 @@ interface SelectedDisplayProps {
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
 
+     
     deselectCharacter(value: boolean) {
         this.props.deselectCharacter(false);
     }
+
     render() {
         let choices = new choiceTally();
         let name = "";

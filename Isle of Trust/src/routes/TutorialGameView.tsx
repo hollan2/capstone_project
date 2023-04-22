@@ -144,6 +144,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         currentMap = props.mapImage;
 
        // Puts User Player in position 1 on map
+        const position = 1;
         const player =
             map.getVertices()[1];
         
@@ -188,8 +189,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Set selected to position 1 so user is first player selected on load in
-        let selected = map.getVertices()[1];
-        let sidebarState = new SidebarState(map, player, selected);
+        let selected = map.getVertices()[position];
+        let sidebarState = new SidebarState(map, player, selected,position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;

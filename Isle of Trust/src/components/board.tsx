@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -87,6 +87,8 @@ export class Board extends React.Component<BoardProps> {
         this.resizeEvent = this.resizeEvent.bind(this);
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
+        this.select(this.props.player);
+        this.deselectCharacter(true); 
     }
 
     componentWillUnmount() {
@@ -124,6 +126,7 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
+
         return (
             <div className="board">
                 <div
