@@ -1,5 +1,4 @@
 import { Strategy, TurnLog, Choice, Commitment } from "./strategy";
-import { IdeoStratMap } from "./ideostratmap";
 import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
@@ -176,13 +175,13 @@ export class Agent extends AttributeContainer {
 
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
-        if (myChoice === Choice.Give && theirChoice === Choice.Give)
+        if (myChoice === Choice.Cooperate && theirChoice === Choice.Cooperate)
             this.resources += 1;
-        else if (myChoice === Choice.Give && theirChoice === Choice.Cheat)
+        else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
             this.resources -= 2;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat)
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Give)
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources += 3;
     }
 
@@ -382,10 +381,8 @@ export class Ideology extends AttributeContainer {
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return Strategy.Default
-        //return IdeoStratMap[Math.floor(this.forgiveness / 4)][
-        //    Math.floor(this.generosity / 4)
-        //];
+        return Strategy.Teacher
+
     }
 }
 

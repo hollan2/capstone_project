@@ -446,7 +446,7 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                         console.log("Select cooperate")
-                                        player.updateChoice(Choice.Give, agent);
+                                        player.updateChoice(Choice.Cooperate, agent);
 
                                 }}
                                 > 
@@ -460,7 +460,7 @@ class InfluenceEntry extends React.Component<
                                 id="compete"
                                 onClick={() => {
                                         console.log("Select compete")
-                                        player.updateChoice(Choice.Cheat, agent);
+                                        player.updateChoice(Choice.Compete, agent);
                                 }}
                                 > 
                                 <div className="action-container">

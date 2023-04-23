@@ -346,7 +346,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                          //if player didnt choose a promise randomly chooses promises
                         v2Promise = generateCommitment(
                             v1Strat,
-                            e2.history);
+                            e1.history);
                     }
                 }
                 else{
@@ -414,7 +414,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             v1Promise, 
                             v2Promise,
                             v1Strat,
-                            e2.history);
+                            e1.history);
                     }
                 }
                 else{
@@ -721,26 +721,8 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
         face = props.data.face;
         hat = props.data.hat;
         switch (props.data.ideology.toStrategy()) {
-            case Strategy.Dove:
+            case Strategy.Default:
                 ideology = { red: 158, green: 196, blue: 234 };
-                break;
-            case Strategy.Hawk:
-                ideology = { red: 223, green: 126, blue: 104 };
-                break;
-            case Strategy.Grim:
-                ideology = { red: 248, green: 179, blue: 101 };
-                break;
-            case Strategy.AntiGrim:
-                ideology = { red: 255, green: 218, blue: 92 };
-                break;
-            case Strategy.TweedleDum:
-                ideology = { red: 181, green: 216, blue: 166 };
-                break;
-            case Strategy.TweedleDee:
-                ideology = { red: 161, green: 196, blue: 202 };
-                break;
-            case Strategy.TitForTat:
-                ideology = { red: 180, green: 166, blue: 216 };
                 break;
         }
     }
