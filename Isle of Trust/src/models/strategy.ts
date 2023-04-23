@@ -163,10 +163,13 @@ export class Turn {
     //changed the unused commitment variable from type Choice to new type Commitment
     //agent Promise NATON
     public commitment: Commitment;
+    //Determines if the turn is an honest or lie move
+    public truth: String;
 
-    constructor(choice: Choice, commitment: Commitment) { 
+    constructor(choice: Choice, commitment: Commitment, truth: String) { 
         this.choice = choice;
         this.commitment = commitment;
+        this.truth = truth;
 
     }
 }
@@ -184,9 +187,9 @@ export class choiceTally {
         let history = turnLog.actions;
         for (let i = 0; i < history.length; ++i) {
             let action = history[i];
-            if (action.choice === Choice.Give) {
+            if (action.choice == Choice.Give) {
                 this.gave += 1;
-            } else {
+            if (action.truth == "Lied")
                 this.cheated += 1;
             }
         }

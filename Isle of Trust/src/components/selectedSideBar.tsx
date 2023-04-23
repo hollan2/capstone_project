@@ -232,13 +232,8 @@ class Stats extends React.Component<StatsProps, unknown> {
             <div className="stats-container">
                 <div className="stats">
                     <p>
-                        They've spent {theySpent} resources trying to influence
-                        you, while you've spent {youSpent} resources trying to
-                        influence them.
-                    </p>
-                    <p>
-                        They've given to you {theirChoices.gave} times, while
-                        you've given to them {yourChoices.gave} times.
+                        They've cooperated with you {theirChoices.gave} times, while
+                        you've cooperated with them {yourChoices.gave} times.
                     </p>
                     <p>
                         They've cheated you {theirChoices.cheated} times, while

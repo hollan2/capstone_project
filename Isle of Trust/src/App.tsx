@@ -36,6 +36,7 @@ import {
     Strategy,
     generateCommitment,
     Commitment,
+    getTruth
 } from "./models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -434,8 +435,17 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //a reward trust function will be need when trust implmented 
 
                 //add to the history of each edge for each agent
-                e1.history.addTurn(new Turn(v1Choice, v1Promise));
-                e2.history.addTurn(new Turn(v2Choice, v2Promise));
+                //Checks if the choice each v1 v2 makes is a truth or lie
+                let v1Truth = (v1Choice == getTruth(v1Promise, v2Promise)) ? "Honest" : "Lied";
+                let v2Truth = (v2Choice == getTruth(v2Promise, v1Promise)) ? "Honest" : "Lied";
+                e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
+                e2.history.addTurn(new Turn(v2Choice, v2Promise, v2Truth));
+                let turn = e1.history.actions
+               
+                turn.forEach((e) =>{
+                    console.log(e.truth);
+                });
+                
                 
 
             }
@@ -630,6 +640,10 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
         let agentPoints: number = 0;
         let agentStrat: string = "No strategy";
         let agentGoal: string = "Avenge me...";
+        let neighbors: Map<Agent,Relation> = this.props.map.getEdges(this.props.agent)!;
+        let firstNeighbor : [Agent, Relation] = neighbors.entries().next().value;
+        let relation = firstNeighbor[1];
+        let round: number = relation.history.length();
         if (this.props.agent instanceof Agent) {
             const agent = this.props.agent as Agent;
             let strat = agent.ideology.toStrategy();
@@ -662,10 +676,10 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 <div className="stats">
                     <p className="end">{agentPoints} resources</p>
                     <p className="end">
-                        Gave {this.props.agentChoices.gave} times
+                        Cooperated {this.props.agentChoices.gave} times / {round} rounds
                     </p>
                     <p className="end">
-                        Cheated {this.props.agentChoices.cheated} times
+                        Cheated {this.props.agentChoices.cheated} times / {round} rounds
                     </p>
                     <div className="end">regionally {totalInfluence}</div>
                 </div>
