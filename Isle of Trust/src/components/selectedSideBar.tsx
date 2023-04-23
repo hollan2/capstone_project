@@ -36,6 +36,8 @@ import {
     TurnLog,
     choiceTally,
     Strategy,
+    Choice,
+    Commitment
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -282,7 +284,7 @@ class History extends React.Component<HistoryProps> {
         return (
             <div className="history-container">
                 <div className="history-title">
-                    <h3>See history of neighbors:</h3> 
+                    <h3>See history with neighbors:</h3> 
                 </div>
 
                 <div className="history-agent">
@@ -369,8 +371,8 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                     <div className="popup-content">
                         <h1>History:</h1>
                         <ul>
-                            {[...Array(100)].map((_, i) => (
-                            <li key={i}>Round: {100-i} | Promise: Unknown | Action: Unknown</li>
+                            {this.History.actions.map((turn, i) => (
+                            <li key={i}>Round: {this.History.actions.length-i} | Promise: {Commitment[turn.commitment]} | Action: {Choice[turn.choice]}</li>
                             ))}
                         </ul>
                     </div>
