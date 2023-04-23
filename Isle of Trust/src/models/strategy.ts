@@ -8,7 +8,6 @@ import { compileFunction } from "vm";
 export enum Strategy {
     // For testing
     Default,
-
     //Always suspicious of others
     Suspicious,
     //suspicious but can learn

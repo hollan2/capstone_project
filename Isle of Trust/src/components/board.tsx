@@ -362,24 +362,13 @@ function AgentImage(props: AgentImageProps) {
     };
 
     switch (props.data.ideology.toStrategy()) {
-        case Strategy.Teacher:
+        case Strategy.Default:
             ideology = { red: 158, green: 196, blue: 234 };
             break;
-        case Strategy.Suspicious:
-            ideology = { red: 223, green: 126, blue: 104 };
-            break;
-        case Strategy.Student:
-            ideology = { red: 248, green: 179, blue: 101 };
-            break;
-        case Strategy.Reciprocators:
-            ideology = { red: 255, green: 218, blue: 92 };
-            break;
-        case Strategy.Random:
-            ideology = { red: 181, green: 216, blue: 166 };
-            break;
-        case Strategy.Default:
-            ideology = { red: 161, green: 196, blue: 202 };
-            break;
+        default: { 
+            ideology = { red: 158, green: 196, blue: 234 };
+            break; 
+        }
     }
 
     return (

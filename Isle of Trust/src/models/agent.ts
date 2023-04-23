@@ -340,6 +340,8 @@ export class Ideology extends AttributeContainer {
     // how likely they are to NOT hold a grudge.
     private forgiveness: number;
 
+    private role: Strategy;
+
     constructor(generosity: number, forgiveness: number) {
         super();
         if (
@@ -352,37 +354,19 @@ export class Ideology extends AttributeContainer {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
+    
         }
-    }
 
-    getGenerosity(): number {
-        return this.generosity;
-    }
-
-    setGenerosity(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.generosity = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    getForgiveness(): number {
-        return this.forgiveness;
-    }
-
-    setForgiveness(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.forgiveness = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
+        this.role = Math.floor(Math.random() * 6) 
     }
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return Strategy.Teacher
+        return this.role;
+    }
 
+    setStrategy(newRole: Strategy) {
+        this.role = newRole;
     }
 }
 
