@@ -361,6 +361,9 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
     private History: TurnLog = this.props.history;
 
     render() {
+        const list = this.History.actions.map((turn, i) => (
+            <li key={i}>Round: {i+1} | Promise: {Commitment[turn.commitment]} | Action: {Choice[turn.choice]}</li>
+            )).reverse();
         return ReactDom.createPortal(
             <div className="popup-container">
                 <div className="overlay"></div>
@@ -371,9 +374,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                     <div className="popup-content">
                         <h1>History:</h1>
                         <ul>
-                            {this.History.actions.map((turn, i) => (
-                            <li key={i}>Round: {this.History.actions.length-i} | Promise: {Commitment[turn.commitment]} | Action: {Choice[turn.choice]}</li>
-                            ))}
+                                {list}
                         </ul>
                     </div>
                 </div>
