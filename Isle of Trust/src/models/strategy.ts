@@ -187,11 +187,11 @@ export class choiceTally {
         let history = turnLog.actions;
         for (let i = 0; i < history.length; ++i) {
             let action = history[i];
-            if (action.choice == Choice.Give) {
+            if (action.choice == Choice.Give) 
                 this.gave += 1;
-            if (action.truth == "Lied")
+            if (action.truth === "Lied")
                 this.cheated += 1;
-            }
+
         }
     }
 }

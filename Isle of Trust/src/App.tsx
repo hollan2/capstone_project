@@ -434,17 +434,14 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
                 //a reward trust function will be need when trust implmented 
 
-                //add to the history of each edge for each agent
                 //Checks if the choice each v1 v2 makes is a truth or lie
                 let v1Truth = (v1Choice == getTruth(v1Promise, v2Promise)) ? "Honest" : "Lied";
                 let v2Truth = (v2Choice == getTruth(v2Promise, v1Promise)) ? "Honest" : "Lied";
+
+                //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise, v2Truth));
-                let turn = e1.history.actions
                
-                turn.forEach((e) =>{
-                    console.log(e.truth);
-                });
                 
                 
 
