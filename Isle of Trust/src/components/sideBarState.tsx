@@ -22,7 +22,7 @@ export class SidebarState {
     ) {
         this.player = player;
         this.selected = selected;
-        this.position = Math.floor(position);
+        this.position = position;
         this.playerToSelected = map.getEdge(player, selected)!;
         this.selectedToPlayer = map.getEdge(selected, player)!;
         this.influenceChoices = new SpendingContainer();

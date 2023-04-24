@@ -87,7 +87,7 @@ export class Board extends React.Component<BoardProps> {
         this.resizeEvent = this.resizeEvent.bind(this);
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
-        this.select(this.props.player);
+        this.select(this.props.selected);
         this.deselectCharacter(true); 
     }
 
