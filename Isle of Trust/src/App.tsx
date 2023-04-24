@@ -96,7 +96,6 @@ export interface StartInfo {
     name: string;
     hat: string;
     face: string;
-    ideologyColor: string;
     startingPoints: string;
     mapImage: string;
 }
@@ -135,37 +134,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             console.log(player.id);
             this.player_id = player.id;
             console.log(this.player_id);
-
-            switch (props.ideologyColor) {
-                case "9ec4ea":
-                    //Dove
-                    player.ideology = new Ideology(19, 19);
-                    break;
-                case "df7e68":
-                    //Hawk
-                    player.ideology = new Ideology(0, 0);
-                    break;
-                case "f8b365":
-                    //Grim
-                    player.ideology = new Ideology(19, 0);
-                    break;
-                case "ffda5c":
-                    //AntiGrim
-                    player.ideology = new Ideology(0, 19);
-                    break;
-                case "b4a6d8":
-                    //TitforTat
-                    player.ideology = new Ideology(14, 19);
-                    break;
-                case "b5d8a6":
-                    //Dum
-                    player.ideology = new Ideology(0, 5);
-                    break;
-                case "a1c4ca":
-                    //Dee
-                    player.ideology = new Ideology(19, 5);
-                    break;
-            }
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
