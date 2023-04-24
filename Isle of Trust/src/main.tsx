@@ -317,7 +317,7 @@ class Start extends React.Component<StartProps, StartState> {
         super(props);
         //the starting values on the select menu
         this.state = {
-            selectedName: "Name",
+            selectedName: "",
             selectedHat: "",
             selectedFace: "",
             selectedIdeology: "",
@@ -593,6 +593,7 @@ class NameSelector extends React.Component<NameSelectorProps, {}> {
                     name="names"
                     id="name-select"
                     type="text" 
+                    placeholder="Enter name"
                     value={this.props.selectedName}
                     onChange={(e) => {this.props.handleSelectedName(e.target.value);
                     }}
