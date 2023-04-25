@@ -12,14 +12,17 @@ export class SidebarState {
     playerToSelected: Relation | undefined;
     selectedToPlayer: Relation | undefined;
     influenceChoices: SpendingContainer;
+    position: number;
 
     constructor(
         map: Graph<Agent, Relation>,
         player: Agent,
-        selected: Agent
+        selected: Agent,
+        position: number
     ) {
         this.player = player;
         this.selected = selected;
+        this.position = position;
         this.playerToSelected = map.getEdge(player, selected)!;
         this.selectedToPlayer = map.getEdge(selected, player)!;
         this.influenceChoices = new SpendingContainer();

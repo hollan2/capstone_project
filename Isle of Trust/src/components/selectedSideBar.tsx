@@ -3,6 +3,7 @@ import ReactDom from "react-dom"
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
+import { useEffect } from "react";
 import useImage from "use-image";
 import * as util from "../utilities";
 import {
@@ -141,12 +142,16 @@ interface SelectedDisplayProps {
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
+
+     
     deselectCharacter(value: boolean) {
         this.props.deselectCharacter(false);
     }
+
     render() {
         let choices = new choiceTally();
         let name = "";
+        const userPosition = this.props.sidebarState.position;
         if (this.props.sidebarState.selected instanceof Agent) {
             const them = this.props.sidebarState.selected as Agent;
             choices = this.props.tallyChoicesNeighbors(this.props.map, them);
@@ -162,6 +167,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                         className="deselect"
                         onClick={() => {
                             this.deselectCharacter(false);
+                            this.props.sidebarState.selected = this.props.map.getVertices()[userPosition];
                         }}>
                         &#9746;
                     </div> 
