@@ -21,6 +21,7 @@
     grid-area: sidebar;
     display: grid;
     gap: 5px;
+    width: 350px;
 }
 
 .playerSidebar {
