@@ -34,7 +34,7 @@ import {
     choiceTally,
     Strategy,
     Commitment,
-    Choice
+    Choice,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -89,10 +89,14 @@ interface PlayerSidebarProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
     turnCount: number;
+    stageCount: number;
     promiseRelation: any;
 }
 
-export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> {
+export class PlayerSidebar extends React.Component<
+    PlayerSidebarProps,
+    unknown
+> {
     render() {
         return (
             <div className="sidebar playerSidebar">
@@ -101,13 +105,15 @@ export class PlayerSidebar extends React.Component<PlayerSidebarProps, unknown> 
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
+                    stageCount={this.props.stageCount}
                 />
                 <InfluenceMenu
-                    round={this.props.round}    
+                    round={this.props.round}
                     sidebarState={this.props.sidebarState}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
                     promiseRelation={this.props.promiseRelation}
+                    stageCount={this.props.stageCount}
                 />
             </div>
         );
@@ -122,6 +128,7 @@ interface PlayerDisplayProps {
         agent: Agent
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    stageCount: number;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -134,9 +141,15 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             name = you.name;
         }
         return (
-            <div className="player-display">
+            <div
+                className={
+                    this.props.stageCount === 1
+                        ? "player-display spotlight"
+                        : "player-display"
+                }
+            >
                 <div className="agent-type">
-                    Player: <span className="agent-name">{name}</span>                 
+                    Player: <span className="agent-name">{name}</span>
                 </div>
                 <Display
                     map={this.props.map}
@@ -154,6 +167,7 @@ interface InfluenceMenuProps {
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     turnCount: number;
+    stageCount: number;
     promiseRelation: any;
 }
 
@@ -166,9 +180,20 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         )!;
 
         if (this.props.sidebarState.player instanceof Agent) {
-            if(this.props.turnCount % 1 == 0) {
+            if (this.props.turnCount % 1 == 0) {
                 return (
-                    <div className="influence-menu">
+                    <div
+                        className={
+                            this.props.stageCount === 2
+                                ? "influence-menu spotlight"
+                                : "influence-menu"
+                        }
+                        // style={
+                        //     this.props.stageCount !== 3
+                        //         ? { pointerEvents: "none" }
+                        //         : {}
+                        // }
+                    >
                         <div className="influence-title">
                             Promise Phase
                             <br /> Declare your intent with neighbors:
@@ -177,16 +202,18 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                             selected={this.props.sidebarState.selected}
                             player={this.props.sidebarState.player as Agent}
                             neighbors={neighbors}
-                            spendingMap={this.props.sidebarState.influenceChoices}
+                            spendingMap={
+                                this.props.sidebarState.influenceChoices
+                            }
                             turnCount={this.props.turnCount}
                             promiseRelation={this.props.promiseRelation}
-                            
                         />
-                        <button onClick={this.props.round}>Confirm Choices</button>
+                        <button onClick={this.props.round}>
+                            Confirm Choices
+                        </button>
                     </div>
                 );
-            }
-            else {
+            } else {
                 return (
                     <div className="influence-menu">
                         <div className="influence-title">
@@ -197,15 +224,18 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                             selected={this.props.sidebarState.selected}
                             player={this.props.sidebarState.player as Agent}
                             neighbors={neighbors}
-                            spendingMap={this.props.sidebarState.influenceChoices}
+                            spendingMap={
+                                this.props.sidebarState.influenceChoices
+                            }
                             turnCount={this.props.turnCount}
                             promiseRelation={this.props.promiseRelation}
                         />
-                        <button onClick={this.props.round}>Confirm Choices</button>
+                        <button onClick={this.props.round}>
+                            Confirm Choices
+                        </button>
                     </div>
                 );
             }
-            
         }
     }
 }
@@ -321,8 +351,9 @@ class InfluenceEntry extends React.Component<
 
     constructor(props: any) {
         super(props);
-        this.state = { 
-            given: 0};
+        this.state = {
+            given: 0,
+        };
     }
 
     //old code
@@ -339,42 +370,48 @@ class InfluenceEntry extends React.Component<
 
     //gets src promise to dest
     getPromiseBetween(src: Agent, dest: Agent) {
-
-        const promise = src.promises.find(e => e.promiseTo === dest)
-        const commitment = promise?.promise
-        switch(commitment) {
+        const promise = src.promises.find((e) => e.promiseTo === dest);
+        const commitment = promise?.promise;
+        switch (commitment) {
             case 0:
-                return "compete"
+                return "compete";
             case 1:
-                return "cooperate"
+                return "cooperate";
             case 2:
-                return "reciprocate"
+                return "reciprocate";
         }
     }
 
-    isTruth(commitment: string, playerCommitment: string | undefined, neighborCommitment: string | undefined) {
-        
-        if(commitment == playerCommitment) 
-            return 'honest'
+    isTruth(
+        commitment: string,
+        playerCommitment: string | undefined,
+        neighborCommitment: string | undefined
+    ) {
+        if (commitment == playerCommitment) return "honest";
         //if both agents are reciprocate, then their commmitments are cooperate
-        else if(playerCommitment == 'reciprocate' && neighborCommitment == 'reciprocate' && commitment == 'cooperate')
-           return 'honest'
-        else if(playerCommitment == 'reciprocate' && commitment == neighborCommitment)
-            return 'honest'
-        else
-            return 'lie'
+        else if (
+            playerCommitment == "reciprocate" &&
+            neighborCommitment == "reciprocate" &&
+            commitment == "cooperate"
+        )
+            return "honest";
+        else if (
+            playerCommitment == "reciprocate" &&
+            commitment == neighborCommitment
+        )
+            return "honest";
+        else return "lie";
     }
     render() {
         const player = this.props.player;
         const agent = this.props.agent;
 
-        const aiCommitment = this.getPromiseBetween(agent, player)
-        const playerCommitment = this.getPromiseBetween(player, agent)
-
+        const aiCommitment = this.getPromiseBetween(agent, player);
+        const playerCommitment = this.getPromiseBetween(player, agent);
 
         const sMaybe = this.state.given === 1 ? "" : "s";
         const givenString = String(this.state.given) + " resource" + sMaybe;
-        if(this.props.turnCount % 1 == 0) {
+        if (this.props.turnCount % 1 == 0) {
             //promise phase
             return (
                 <div className="influence-entry" ref={this.containerRef}>
@@ -393,38 +430,49 @@ class InfluenceEntry extends React.Component<
                         </RK.Stage>
                     </div>
                     <div className="sidebar-agent-info">
-                        <button 
-                            id="cooperate" 
+                        <button
+                            id="cooperate"
                             onClick={() => {
-                                player.updatePromise(Commitment.Cooperate, agent);
+                                player.updatePromise(
+                                    Commitment.Cooperate,
+                                    agent
+                                );
                             }}
-                            > Cooperate
+                        >
+                            {" "}
+                            Cooperate
                         </button>
-                        <button 
-                            id="reciprocate" 
+                        <button
+                            id="reciprocate"
                             onClick={() => {
-                                player.updatePromise(Commitment.Reciprocate, agent);
-                                
+                                player.updatePromise(
+                                    Commitment.Reciprocate,
+                                    agent
+                                );
                             }}
-                            > Reciprocate
+                        >
+                            {" "}
+                            Reciprocate
                         </button>
-                        <button 
-                            id="compete" 
+                        <button
+                            id="compete"
                             onClick={() => {
-                                player.updatePromise(Commitment.Compete, agent);                            
+                                player.updatePromise(Commitment.Compete, agent);
                             }}
-                            > Compete
+                        >
+                            {" "}
+                            Compete
                         </button>
                     </div>
                 </div>
             );
-        }    
+        }
 
-        //action phase 
+        //action phase
         else {
             return (
                 <div className="container" ref={this.containerRef}>
-                    <div>{agent.name + ' promised to ' + aiCommitment}</div>
+                    <div>{agent.name + " promised to " + aiCommitment}</div>
                     <div className="influence-entry">
                         <div className="influence-agent">
                             <RK.Stage
@@ -441,38 +489,47 @@ class InfluenceEntry extends React.Component<
                             </RK.Stage>
                         </div>
                         <div className="sidebar-agent-info">
-                            <button 
-                                id="cooperate" 
+                            <button
+                                id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
-                                        console.log("Select cooperate")
-                                        player.updateChoice(Choice.Give, agent);
-
+                                    console.log("Select cooperate");
+                                    player.updateChoice(Choice.Give, agent);
                                 }}
-                                > 
+                            >
                                 <div className="action-container">
                                     <div>Cooperate</div>
-                                    <div>{this.isTruth("cooperate", playerCommitment, aiCommitment)}</div>
+                                    <div>
+                                        {this.isTruth(
+                                            "cooperate",
+                                            playerCommitment,
+                                            aiCommitment
+                                        )}
+                                    </div>
                                 </div>
-    
                             </button>
-                            <button 
+                            <button
                                 id="compete"
                                 onClick={() => {
-                                        console.log("Select compete")
-                                        player.updateChoice(Choice.Cheat, agent);
+                                    console.log("Select compete");
+                                    player.updateChoice(Choice.Cheat, agent);
                                 }}
-                                > 
+                            >
                                 <div className="action-container">
                                     <div>Compete</div>
-                                    <div>{this.isTruth("compete", playerCommitment, aiCommitment)}</div>
+                                    <div>
+                                        {this.isTruth(
+                                            "compete",
+                                            playerCommitment,
+                                            aiCommitment
+                                        )}
+                                    </div>
                                 </div>
-                                
                             </button>
                         </div>
                     </div>
                 </div>
             );
-        }           
+        }
     }
 }
