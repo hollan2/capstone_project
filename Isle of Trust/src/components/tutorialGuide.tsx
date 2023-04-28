@@ -95,7 +95,7 @@ class Professor extends React.Component<ProfessorProps> {
                     </button>
                 </div>
                 <img
-                    src="public/images/professor.png"
+                    src="/images/professor.png"
                     alt="professor pawn"
                     width="96"
                     height="184"
