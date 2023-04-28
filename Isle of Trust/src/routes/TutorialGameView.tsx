@@ -3,6 +3,10 @@ import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
 import { TutorialGuide } from "../components/tutorialGuide";
+import { TutorialBoard } from "../components/tutorialBoard";
+import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
+import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
+import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
 import {
@@ -15,10 +19,7 @@ import {
 
 import { Face, Hat, GeneratePawn } from "../generators/pawn";
 import { Grid } from "../generators/map";
-import { PlayerSidebar } from "../components/playerSideBar";
-import { SelectedSidebar } from "../components/selectedSideBar";
 import { SidebarState } from "../components/sideBarState";
-import { Board } from "../components/board";
 import {
     Agent,
     AGENT_RADIUS,
@@ -103,6 +104,7 @@ export interface StartInfo {
 }
 
 export function TutorialDisplay() {
+    const location = useLocation();
     const userState = {
         name: "User Player",
         hat: "None",
@@ -110,6 +112,7 @@ export function TutorialDisplay() {
         ideologyColor: "9ec4ea",
         startingPoints: "Easy",
         mapImage: "Small",
+        level: parseInt(location.pathname.replace(/^\D+/g, "")),
     };
 
     //logs the values chosen for the player character
@@ -499,7 +502,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                    <Board
+                    <TutorialBoard
                         map={this.state.map}
                         turnCount={this.state.turnCount}
                         selected={this.state.sidebarState.selected}
@@ -509,7 +512,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         current={currentMap}
                         stageCount={this.state.stageCount}
                     />
-                    <PlayerSidebar
+                    <TutorialPlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
                         sidebarState={this.state.sidebarState}
@@ -519,7 +522,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         promiseRelation={this.state.promiseRelation}
                         stageCount={this.state.stageCount}
                     />
-                    <SelectedSidebar
+                    <TutorialSelectedSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
                         sidebarState={this.state.sidebarState}
@@ -537,7 +540,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         } else {
             return (
                 <div className="game">
-                    <Board
+                    <TutorialBoard
                         map={this.state.map}
                         turnCount={this.state.turnCount}
                         selected={this.state.sidebarState.selected}
@@ -547,7 +550,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         current={currentMap}
                         stageCount={this.state.stageCount}
                     />
-                    <PlayerSidebar
+                    <TutorialPlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
                         sidebarState={this.state.sidebarState}

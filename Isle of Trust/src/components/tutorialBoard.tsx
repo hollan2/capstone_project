@@ -2,7 +2,6 @@ import React from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
-import useImage from "use-image";
 import * as util from "../utilities";
 import {
     AnimResources,
@@ -13,50 +12,17 @@ import {
 } from "../models/animation";
 
 import { Face, Hat, GeneratePawn } from "../generators/pawn";
-import { Grid } from "../generators/map";
-import { PlayerSidebar } from "../components/playerSideBar";
-import { SelectedSidebar } from "../components/selectedSideBar";
-import { SidebarState } from "../components/sideBarState";
-import {
-    Agent,
-    AGENT_RADIUS,
-    Relation,
-    Ideology,
-    Personality,
-    SpendingContainer,
-    DriftContainer,
-} from "../models/agent";
+import { Agent, AGENT_RADIUS, Relation } from "../models/agent";
 import { Graph } from "../models/graph";
-import {
-    taglineFromStrategy,
-    generateChoice,
-    Turn,
-    choiceTally,
-    Strategy,
-} from "../models/strategy";
-/*
-import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
-*/
+import { Strategy } from "../models/strategy";
 import { KonvaEventObject } from "konva/lib/Node";
-import { getActiveElement } from "@testing-library/user-event/dist/utils";
-import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
-import { timingSafeEqual } from "crypto";
-import { allowedNodeEnvironmentFlags } from "process";
-/*
-import { timeStamp } from "console";
-*/
 export const RESIZE_TIMEOUT = 500;
-
 export const SCENE_WIDTH = 800;
 export const SCENE_HEIGHT = 600;
 export const MAX_SIDEBAR_AGENT_WIDTH = 150;
 export const MAX_SIDEBAR_AGENT_HEIGHT = 225;
 const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
-const MOOD_IMAGE_SIDE_LENGTH = 511;
-
-const RESOURCE_LOST_PER_TURN = 3;
-const BASE_INFLUENCE_LOST_PER_TURN = 2;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
@@ -67,9 +33,10 @@ export const MAP_URL: { [key: string]: string } = {
     Small: "url(../Maps/mapSmall.png)",
 };
 
-interface BoardProps {
+interface TutorialBoardProps {
     map: Graph<Agent, Relation>;
     turnCount: number;
+    stageCount: number;
     selected: Agent;
     select: (agent: Agent) => void;
     player: Agent;
@@ -77,7 +44,7 @@ interface BoardProps {
     current: string;
 }
 
-export class Board extends React.Component<BoardProps> {
+export class TutorialBoard extends React.Component<TutorialBoardProps> {
     private containerRef = React.createRef<HTMLDivElement>();
     private stageRef = React.createRef<Konva.Stage>();
 
@@ -125,7 +92,12 @@ export class Board extends React.Component<BoardProps> {
 
     render() {
         return (
-            <div className="board">
+            <div
+                className="board"
+                style={
+                    this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
+                }
+            >
                 <div
                     className="map"
                     ref={this.containerRef}
@@ -177,10 +149,8 @@ export class Board extends React.Component<BoardProps> {
                                     onClick={(
                                         event: KonvaEventObject<MouseEvent>
                                     ) => {
-                                        {
-                                            this.select(v);
-                                            this.deselectCharacter(true);
-                                        }
+                                        this.select(v);
+                                        this.deselectCharacter(true);
                                     }}
                                 >
                                     <AgentImage
@@ -190,30 +160,6 @@ export class Board extends React.Component<BoardProps> {
                                         data={v}
                                         player={this.props.player}
                                     />
-
-                                    {/* Debug text: */}
-
-                                    {/* <RK.Text
-                                        text={
-                                            v instanceof Agent
-                                                ? v.resources.toString()
-                                                : v instanceof DeadAgent
-                                                ? v.deadCount.toString()
-                                                : v.id.toString()
-                                        }
-                                        x={v.coords[0] - AGENT_RADIUS / 2}
-                                        y={v.coords[1] - AGENT_RADIUS / 2}
-                                        width={AGENT_RADIUS * 3}
-                                        height={AGENT_RADIUS * 3}
-                                        offsetX={AGENT_RADIUS * 3}
-                                        offsetY={AGENT_RADIUS}
-                                        fontSize={AGENT_RADIUS}
-                                        fill={v.isAlive() ? "black" : "red"}
-                                        shadowOffsetX={1}
-                                        shadowOffsetY={1}
-                                        align="center"
-                                        verticalAlign="middle"
-                                    /> */}
                                 </RK.Group>
                             ))}
                         </RK.Layer>
@@ -312,7 +258,7 @@ function AgentImage(props: AgentImageProps) {
     let hoverScale = 0.14;
 
     // Make the user's player larger in size
-    if (props.data.id == props.player.id) {
+    if (props.data.id === props.player.id) {
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
