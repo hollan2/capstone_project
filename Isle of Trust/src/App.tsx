@@ -693,13 +693,13 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
         hat = props.data.hat;
         switch (props.data.ideology.toStrategy()) {
             case Strategy.Default:
-                ideology = { red: 203, green: 203, blue: 203 };
+                ideology = { red: 158, green: 196, blue: 234 };
                 break;
             case Strategy.Suspicious:
                 ideology = { red: 248, green: 179, blue: 101 };
                 break;
             case Strategy.Student:
-                ideology = { red: 158, green: 196, blue: 234 };
+                ideology = { red: 181, green: 216, blue: 166 };
                 break;
             case Strategy.Random:
                 ideology = { red: 255, green: 218, blue: 92 };
@@ -708,7 +708,7 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
                 ideology = { red: 180, green: 166, blue: 216 };
                 break;
             case Strategy.Teacher:
-                ideology = { red: 181, green: 216, blue: 166 };
+                ideology = { red: 161, green: 196, blue: 202 };;
                 break;
             default: {
                 ideology = { red: 203, green: 203, blue: 203 }; 

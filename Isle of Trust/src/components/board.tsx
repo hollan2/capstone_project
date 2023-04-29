@@ -189,6 +189,7 @@ export class Board extends React.Component<BoardProps> {
                                         selected={this.props.selected === v}
                                         data={v}
                                         player={this.props.player}
+                                        turnCount={this.props.turnCount}
                                     />
 
                                     {/* Debug text: */}
@@ -302,6 +303,7 @@ interface AgentImageProps {
     selected: boolean;
     data: Agent;
     player: Agent;
+    turnCount: number;
 }
 
 function AgentImage(props: AgentImageProps) {
@@ -323,7 +325,7 @@ function AgentImage(props: AgentImageProps) {
 
     let face = Face.Glasses;
     let hat = Hat.Cap;
-    let ideology = { red: 0, green: 150, blue: 200 };
+    let ideology = { red: 203, green: 203, blue: 203 };
     face = props.data.face;
     hat = props.data.hat;
 
@@ -361,28 +363,31 @@ function AgentImage(props: AgentImageProps) {
         });
     };
 
-    switch (props.data.ideology.toStrategy()) {
-        case Strategy.Default:
-                ideology = { red: 203, green: 203, blue: 203 };
-                break;
-            case Strategy.Suspicious:
-                ideology = { red: 248, green: 179, blue: 101 };
-                break;
-            case Strategy.Student:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
-            case Strategy.Random:
-                ideology = { red: 255, green: 218, blue: 92 };
-                break;
-            case Strategy.Reciprocators:
-                ideology = { red: 180, green: 166, blue: 216 };
-                break;
-            case Strategy.Teacher:
-                ideology = { red: 181, green: 216, blue: 166 };
-                break;
-            default: {
-                ideology = { red: 203, green: 203, blue: 203 }; 
-                break; 
+    // Show personality color if 5 turns have passed or if displaying the user player
+    if(props.turnCount >= 4 || props.data.id == props.player.id) {
+        switch (props.data.ideology.toStrategy()) {
+            case Strategy.Default:
+                    ideology = { red: 158, green: 196, blue: 234 };
+                    break;
+                case Strategy.Suspicious:
+                    ideology = { red: 248, green: 179, blue: 101 };
+                    break;
+                case Strategy.Student:
+                    ideology = { red: 181, green: 216, blue: 166 };
+                    break;
+                case Strategy.Random:
+                    ideology = { red: 255, green: 218, blue: 92 };
+                    break;
+                case Strategy.Reciprocators:
+                    ideology = { red: 180, green: 166, blue: 216 };
+                    break;
+                case Strategy.Teacher:
+                    ideology = { red: 161, green: 196, blue: 202 };
+                    break;
+                default: {
+                    ideology = { red: 203, green: 203, blue: 203 }; 
+                    break;
+                }
         }
     }
 
