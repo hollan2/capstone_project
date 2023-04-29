@@ -19,11 +19,13 @@ interface TutorialGuideProps {
     turnCount: number;
     stageCount: number;
     onClick: () => void;
+    level: number;
 }
 export function TutorialGuide({
     turnCount,
     stageCount,
     onClick,
+    level,
 }: TutorialGuideProps) {
     if (stageCount !== 3) {
         return (
@@ -31,10 +33,13 @@ export function TutorialGuide({
                 turnCount={turnCount}
                 stageCount={stageCount}
                 onClick={onClick}
+                level={level}
             />
         );
     } else {
-        return <Hint turnCount={turnCount} stageCount={stageCount} />;
+        return (
+            <Hint turnCount={turnCount} stageCount={stageCount} level={level} />
+        );
     }
 }
 
@@ -46,24 +51,30 @@ interface ProfessorProps {
     turnCount: number;
     stageCount: number;
     onClick: () => void;
+    level: number;
 }
-class Professor extends React.Component<ProfessorProps> {
-    getText(stage: number): string {
-        let text = "";
 
-        //TODO: This should be read from a .txt file, it's polluting the code.
-        if (stage === 0) {
-            text =
-                "Welcome to Isle of Trust! Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
-        } else if (stage === 1) {
-            text =
-                "This is the player panel. Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
-        } else if (stage === 2) {
-            text =
-                "This is the spend resources panel. Blah Blah Blah. Now it's your turn, try to spend some resources.";
-        }
-        return text;
+interface ProfessorState {
+    text: string[];
+}
+class Professor extends React.Component<ProfessorProps, ProfessorState> {
+    constructor(props: ProfessorProps) {
+        super(props);
+        this.state = {
+            text: [],
+        };
     }
+    componentDidMount(): void {
+        fetch(`../markdown/level${this.props.level}.md`)
+            .then((res) => res.text())
+            .then((res) => {
+                const response = res.split("~");
+                this.setState({
+                    text: response,
+                });
+            });
+    }
+
     render() {
         return (
             <div className="tutorialGuide">
@@ -85,7 +96,7 @@ class Professor extends React.Component<ProfessorProps> {
                         threshold={0.1}
                         rootMargin="20%"
                     >
-                        {this.getText(this.props.stageCount)}
+                        {this.state.text[this.props.stageCount]}
                     </AnimatedText>
                     <button
                         className="btn arrowbtn"
@@ -106,18 +117,39 @@ class Professor extends React.Component<ProfessorProps> {
 }
 
 //Renders the hint button and popover window that appears once the button is clicked.
-//TODO: Add a method that will decide what the popover text will say based on the stageCount.
 interface HintProps {
     turnCount: number;
     stageCount: number;
+    level: number;
 }
-class Hint extends React.Component<HintProps> {
+
+interface HintState {
+    text: string[];
+}
+class Hint extends React.Component<HintProps, HintState> {
+    constructor(props: HintProps) {
+        super(props);
+        this.state = {
+            text: [],
+        };
+    }
+
+    componentDidMount(): void {
+        fetch(`../markdown/hintLevel${this.props.level}.md`)
+            .then((res) => res.text())
+            .then((res) => {
+                const response = res.split("~");
+                this.setState({
+                    text: response,
+                });
+            });
+    }
     render() {
         const popover = (
             <Popover id="popover-basic">
                 <Popover.Header as="h3">Hint!</Popover.Header>
                 <Popover.Body>
-                    Something <strong>really</strong> helpful.
+                    {this.state.text[this.props.stageCount]}
                 </Popover.Body>
             </Popover>
         );

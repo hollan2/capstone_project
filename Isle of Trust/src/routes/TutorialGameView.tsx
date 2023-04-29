@@ -101,6 +101,7 @@ export interface StartInfo {
     ideologyColor: string;
     startingPoints: string;
     mapImage: string;
+    level: number;
 }
 
 export function TutorialDisplay() {
@@ -126,6 +127,7 @@ export function TutorialDisplay() {
             ideologyColor={userState.ideologyColor}
             startingPoints={userState.startingPoints}
             mapImage={userState.mapImage}
+            level={userState.level}
         />
     );
 }
@@ -534,6 +536,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         turnCount={this.state.turnCount}
                         stageCount={this.state.stageCount}
                         onClick={this.handleClick}
+                        level={this.props.level}
                     />
                 </div>
             );
@@ -564,6 +567,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         turnCount={this.state.turnCount}
                         stageCount={this.state.stageCount}
                         onClick={this.handleClick}
+                        level={this.props.level}
                     />
                 </div>
             );
