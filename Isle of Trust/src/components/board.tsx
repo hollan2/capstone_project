@@ -187,7 +187,7 @@ export class Board extends React.Component<BoardProps> {
                                         x={v.coords[0]}
                                         y={v.coords[1]}
                                         selected={this.props.selected === v}
-                                        data={v}
+                                        agent={v}
                                         player={this.props.player}
                                         turnCount={this.props.turnCount}
                                     />
@@ -301,7 +301,7 @@ interface AgentImageProps {
     x: number;
     y: number;
     selected: boolean;
-    data: Agent;
+    agent: Agent;
     player: Agent;
     turnCount: number;
 }
@@ -314,7 +314,7 @@ function AgentImage(props: AgentImageProps) {
     let hoverScale = 0.14;
 
     // Make the user's player larger in size 
-    if (props.data.id == props.player.id){
+    if (props.agent.id == props.player.id){
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
@@ -326,8 +326,8 @@ function AgentImage(props: AgentImageProps) {
     let face = Face.Glasses;
     let hat = Hat.Cap;
     let ideology = { red: 203, green: 203, blue: 203 };
-    face = props.data.face;
-    hat = props.data.hat;
+    face = props.agent.face;
+    hat = props.agent.hat;
 
     const handleHover = (
         event: KonvaEventObject<MouseEvent>,
@@ -364,8 +364,8 @@ function AgentImage(props: AgentImageProps) {
     };
 
     // Show personality color if 5 turns have passed or if displaying the user player
-    if(props.turnCount >= 4 || props.data.id == props.player.id) {
-        switch (props.data.ideology.toStrategy()) {
+    if(props.turnCount >= 4 || props.agent.id == props.player.id) {
+        switch (props.agent.ideology.toStrategy()) {
             case Strategy.Default:
                     ideology = { red: 158, green: 196, blue: 234 };
                     break;
@@ -383,6 +383,10 @@ function AgentImage(props: AgentImageProps) {
                     break;
                 case Strategy.Teacher:
                     ideology = { red: 161, green: 196, blue: 202 };
+                    break;
+                case Strategy.Player:
+                    //if an agent is player
+                    ideology = { red: 158, green: 196, blue: 234 };
                     break;
                 default: {
                     ideology = { red: 203, green: 203, blue: 203 }; 

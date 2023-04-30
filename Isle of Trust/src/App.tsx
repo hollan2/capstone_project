@@ -693,33 +693,35 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
     if (props.agent instanceof Agent) {
         face = props.agent.face;
         hat = props.agent.hat;
-        switch (props.agent.ideology.toStrategy()) {
-            case Strategy.Default:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
-            case Strategy.Suspicious:
-                ideology = { red: 248, green: 179, blue: 101 };
-                break;
-            case Strategy.Student:
-                ideology = { red: 181, green: 216, blue: 166 };
-                break;
-            case Strategy.Random:
-                ideology = { red: 255, green: 218, blue: 92 };
-                break;
-            case Strategy.Reciprocators:
-                ideology = { red: 180, green: 166, blue: 216 };
-                break;
-            case Strategy.Teacher:
-                ideology = { red: 161, green: 196, blue: 202 };;
-                break;
-            case Strategy.Player:
-                //if an agent is player
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
-
-            default: {
-                ideology = { red: 203, green: 203, blue: 203 }; 
-                break; 
+        // Show personality color if 5 turns have passed or if displaying the user player
+        if(props.turnCount >= 4 || props.agent.ideology.toStrategy() == Strategy.Player) {
+            switch (props.agent.ideology.toStrategy()) {
+                case Strategy.Default:
+                    ideology = { red: 158, green: 196, blue: 234 };
+                    break;
+                case Strategy.Suspicious:
+                    ideology = { red: 248, green: 179, blue: 101 };
+                    break;
+                case Strategy.Student:
+                    ideology = { red: 181, green: 216, blue: 166 };
+                    break;
+                case Strategy.Random:
+                    ideology = { red: 255, green: 218, blue: 92 };
+                    break;
+                case Strategy.Reciprocators:
+                    ideology = { red: 180, green: 166, blue: 216 };
+                    break;
+                case Strategy.Teacher:
+                    ideology = { red: 161, green: 196, blue: 202 };;
+                    break;
+                case Strategy.Player:
+                    //if an agent is player
+                    ideology = { red: 158, green: 196, blue: 234 };
+                    break;
+                default: {
+                    ideology = { red: 203, green: 203, blue: 203 }; 
+                    break; 
+                }
             }
         }
     }
