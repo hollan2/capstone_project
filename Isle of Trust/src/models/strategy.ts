@@ -37,6 +37,8 @@ export const taglineFromStrategy = (strat: Strategy): string => {
             return "I'll match what you promise.";
         case Strategy.Teacher:
             return "I am here to guide others.";
+        case Strategy.Player:
+            return "I'm just here to try things out.";
         default:
             return "";
     }

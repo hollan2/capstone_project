@@ -713,7 +713,8 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
                 ideology = { red: 161, green: 196, blue: 202 };;
                 break;
             case Strategy.Player:
-                //code here
+                //if an agent is player
+                ideology = { red: 158, green: 196, blue: 234 };
                 break;
 
             default: {
