@@ -101,6 +101,7 @@ interface SelectedSidebarProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
     deselectCharacter:(value: boolean) => void;
+    turnCount: number;
 }
 
 export class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
@@ -113,6 +114,7 @@ export class SelectedSidebar extends React.Component<SelectedSidebarProps, unkno
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
                     deselectCharacter={this.props.deselectCharacter}
+                    turnCount={this.props.turnCount}
                 />
                 <Stats
                     sidebarState={this.props.sidebarState}
@@ -120,7 +122,8 @@ export class SelectedSidebar extends React.Component<SelectedSidebarProps, unkno
                 />
                 <History 
                     sidebarState={this.props.sidebarState}
-                    map={this.props.map}    
+                    map={this.props.map} 
+                    turnCount={this.props.turnCount}
                 />
             </div>
         );
@@ -138,6 +141,7 @@ interface SelectedDisplayProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     deselectCharacter:(value: boolean) => void;
+    turnCount: number;
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
@@ -171,6 +175,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                     agent={this.props.sidebarState.selected}
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
+                    turnCount={this.props.turnCount}
                 />
                 <Judgement sidebarState={this.props.sidebarState} />
             </div>
@@ -253,6 +258,7 @@ class Stats extends React.Component<StatsProps, unknown> {
 interface HistoryProps{
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
+    turnCount: number;
 }
 
 
@@ -269,7 +275,11 @@ class History extends React.Component<HistoryProps> {
         //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
         for (const entry of neighbors.entries()) {
             this.children.push(
-            <HistoryNeighbors agent={entry[0]} relation={entry[1]}/>);
+            <HistoryNeighbors 
+            agent={entry[0]} 
+            relation={entry[1]}
+            turnCount={this.props.turnCount}
+            />);
             
         };
     };
@@ -296,6 +306,7 @@ class History extends React.Component<HistoryProps> {
 interface HistoryNeighborsProps{
     agent: Agent;
     relation: Relation;
+    turnCount: number;
 }
 
 interface HistoryNeighborsState{
@@ -329,7 +340,8 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.canvasWidth}
-                                data={this.props.agent}
+                                agent={this.props.agent}
+                                turnCount={this.props.turnCount}
                             />
                         </RK.Layer>
                     </RK.Stage>

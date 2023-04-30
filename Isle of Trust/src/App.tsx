@@ -507,6 +507,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
                             deselectCharacter={this.deselectCharacter}
+                            turnCount={this.state.turnCount}
                         />
                 </div>
             );
@@ -549,6 +550,7 @@ interface DisplayProps {
     agent: Agent;
     agentChoices: choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    turnCount: number;
 }
 
 export class Display extends React.Component<DisplayProps, DisplayState> {
@@ -612,7 +614,6 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 agent
             );
         }
-
         return (
             <section className="display" ref={this.containerRef}>
                 <div className="sidebar-agent">
@@ -620,7 +621,8 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.currentCanvasWidth}
-                                data={this.props.agent}
+                                agent={this.props.agent}
+                                turnCount={this.props.turnCount}
                             />
                         </RK.Layer>
                     </RK.Stage>
@@ -678,7 +680,8 @@ function Mood(props: MoodProps) {
 
 interface SidebarAgentImageType {
     canvasWidth: number;
-    data: Agent;
+    agent: Agent;
+    turnCount: number;
 }
 
 export function SidebarAgentImage(props: SidebarAgentImageType) {
@@ -688,10 +691,10 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
     let hat = Hat.Cap;
     let ideology = { red: 203, green: 203, blue: 203 };
 
-    if (props.data instanceof Agent) {
-        face = props.data.face;
-        hat = props.data.hat;
-        switch (props.data.ideology.toStrategy()) {
+    if (props.agent instanceof Agent) {
+        face = props.agent.face;
+        hat = props.agent.hat;
+        switch (props.agent.ideology.toStrategy()) {
             case Strategy.Default:
                 ideology = { red: 158, green: 196, blue: 234 };
                 break;
@@ -716,6 +719,9 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
             }
         }
     }
+
+    //to access turnCount: props.turnCount
+    //to access agent.id: props.agent.id
 
     return (
         <RK.Group scaleX={scale} scaleY={scale}>
