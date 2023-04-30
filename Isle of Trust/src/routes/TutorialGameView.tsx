@@ -526,6 +526,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
                             deselectCharacter={this.deselectCharacter}
+                            turnCount={this.state.turnCount}
                         />
                 </div>
             );

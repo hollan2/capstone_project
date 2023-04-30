@@ -135,8 +135,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             console.log(player.id);
             this.player_id = player.id;
             console.log(this.player_id);
-            player.ideology.setStrategy(Strategy.Default);
-
+            player.ideology.setStrategy(Strategy.Player);
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
@@ -713,6 +712,10 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
             case Strategy.Teacher:
                 ideology = { red: 161, green: 196, blue: 202 };;
                 break;
+            case Strategy.Player:
+                //code here
+                break;
+
             default: {
                 ideology = { red: 203, green: 203, blue: 203 }; 
                 break; 

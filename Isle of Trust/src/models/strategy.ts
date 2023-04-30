@@ -17,7 +17,9 @@ export enum Strategy {
     //Will match you
     Reciprocators,
     //Wants others to do cooperate
-    Teacher
+    Teacher,
+    //player
+    Player
 
 }
 
