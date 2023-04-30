@@ -353,7 +353,8 @@
 }
 
 #cooperate {
-    background-color: #51E658;
+    background-color: #19B100
+    ;
     height: 30px;
 }
 #cooperate:target {
@@ -363,12 +364,12 @@
 }
 
 #reciprocate {
-    background-color: #E1E257;
+    background-color: #C6C700;
     height: 30px;
 }
 
 #compete {
-    background-color: #F36252;
+    background-color: #D50000;
     height: 30px;
 }
 
