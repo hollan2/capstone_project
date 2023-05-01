@@ -148,10 +148,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         var promiseRelation;
 
         currentMap = props.mapImage;
-
-        // Puts User Player in position 1 on map
-        const player = map.getVertices()[1];
-
+        
+       // Puts User Player in position 1 on map
+        const position = 0;
+        const player =
+            map.getVertices()[position];
+        
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
@@ -193,8 +195,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Set selected to position 1 so user is first player selected on load in
-        let selected = map.getVertices()[1];
-        let sidebarState = new SidebarState(map, player, selected);
+        let selected = map.getVertices()[position+1];
+
+        let sidebarState = new SidebarState(map, player, selected,position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;

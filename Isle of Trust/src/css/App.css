@@ -274,7 +274,7 @@
 
 .board {
     grid-area: board;
-    align-self: center;
+    align-self: baseline;
 }
 
 .map {
@@ -425,7 +425,6 @@
 .action-container {
     font-size: small;
 }
-
 .spotlight {
     box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);
     border: 4px solid;
