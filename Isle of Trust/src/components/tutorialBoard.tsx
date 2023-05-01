@@ -98,6 +98,11 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                     this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
                 }
             >
+                <article id="tutorialHeader">
+                    <h1>
+                        Tutorial Level 1
+                    </h1>
+                </article>
                 <div
                     className="map"
                     ref={this.containerRef}
