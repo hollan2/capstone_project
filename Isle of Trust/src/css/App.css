@@ -103,12 +103,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.neighbor-promise {
+    margin-left: 45px;
+}
 
 .influence-entry {
     grid-area: influence-entry;
-    display: flex;
     align-items: center;
     gap: 5px;
+    display: grid;
+    grid-template-columns: 40px auto;
 }
 
 .sidebar-agent-info {
@@ -353,9 +357,9 @@
 }
 
 #cooperate {
-    background-color: #19B100
-    ;
+    background-color: #19B100;
     height: 30px;
+    flex-grow: 1;
 }
 #cooperate:target {
     background-color: #51E658;
@@ -371,6 +375,7 @@
 #compete {
     background-color: #D50000;
     height: 30px;
+    flex-grow: 1;
 }
 
 .action-container {

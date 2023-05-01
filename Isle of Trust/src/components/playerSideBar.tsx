@@ -423,8 +423,8 @@ class InfluenceEntry extends React.Component<
         //action phase 
         else {
             return (
-                <div className="container" ref={this.containerRef}>
-                    <div>{agent.name + ' promised to ' + aiCommitment}</div>
+                <div className="choices-container" ref={this.containerRef}>
+                    <div className="neighbor-promise">{agent.name + ' promised to ' + aiCommitment}</div>
                     <div className="influence-entry">
                         <div className="influence-agent">
                             <RK.Stage
