@@ -507,7 +507,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                        <Board
+                        <TutorialBoard
                             map={this.state.map}
                             turnCount={this.state.turnCount}
                             selected={this.state.sidebarState.selected}
@@ -515,8 +515,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                             player = {this.state.sidebarState.player}
                             deselectCharacter={this.deselectCharacter}
                             current = {currentMap}
+                            stageCount={this.state.stageCount}
                         />
-                        <PlayerSidebar
+                        <TutorialPlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
                             sidebarState={this.state.sidebarState}
@@ -524,8 +525,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                             countTotalInfluence={this.countTotalInfluence}
                             turnCount={this.state.turnCount}
                             promiseRelation={this.state.promiseRelation}
+                            stageCount={this.state.stageCount}
                         />
-                        <SelectedSidebar
+                        <TutorialSelectedSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
                             sidebarState={this.state.sidebarState}
