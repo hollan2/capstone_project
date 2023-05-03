@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "./css/App.css";
 import Konva from "konva";
@@ -96,7 +96,6 @@ export interface StartInfo {
     name: string;
     hat: string;
     face: string;
-    ideologyColor: string;
     startingPoints: string;
     mapImage: string;
 }
@@ -119,10 +118,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         currentMap = props.mapImage;
 
         // TODO: put this in the JSON
-        //A random agent in the graph is selected to be the player
+    
+        let position =Math.random() * map.getVertices().length-1; 
+        position = Math.floor(position);
         const player =
             map.getVertices()[
-                Math.floor(Math.random() * map.getVertices().length)
+                position
             ];
         
         //generates player with chosen face/hat/name/ideology
@@ -139,8 +140,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
-        let selected = map.getVertices()[0];
-        let sidebarState = new SidebarState(map, player, selected);
+        let selected = map.getVertices()[position+1];
+        let sidebarState = new SidebarState(map, player, selected,position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;
@@ -475,10 +476,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     deselectCharacter(value: boolean) {
         this.setState({selectCharacterDisplay: value});
     }
-
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
+            
             return (
                 <div className="game">
                         <Board
@@ -510,7 +511,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         />
                 </div>
             );
-        } else {
+        } 
+        else {
             return (
                 <div className="game">
                         <Board
@@ -536,7 +538,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             );
         }
 
-    }
+    } 
 }
 
 

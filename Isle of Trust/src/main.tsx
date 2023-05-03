@@ -153,49 +153,6 @@ export const Faces = [
     },
 ];
 
-export const Ideologies = [
-    {
-        name: "Select an Ideology",
-        value: "",
-        color: "",
-    },
-    {
-        name: "Dove",
-        value: "Dove",
-        color: "9ec4ea",
-    },
-    {
-        name: "Hawk",
-        value: "Hawk",
-        color: "df7e68",
-    },
-    {
-        name: "Grim",
-        value: "Grim",
-        color: "f8b365",
-    },
-    {
-        name: "AntiGrim",
-        value: "AntiGrim",
-        color: "ffda5c",
-    },
-    {
-        name: "TitForTat",
-        value: "TitForTat",
-        color: "b4a6d8",
-    },
-    {
-        name: "TweedleDum",
-        value: "TweedleDum",
-        color: "b5d8a6",
-    },
-    {
-        name: "TweedleDee",
-        value: "TweedleDee",
-        color: "a1c4ca",
-    },
-];
-
 class Main extends React.Component {
     render() {
         return (
@@ -444,12 +401,6 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
 
                         <fieldset>
                             <legend>Game Play:</legend>
-                            <IdeologySelector
-                                handleSelectedIdeology={
-                                    this.props.handleSelectedIdeology
-                                }
-                                selectedIdeology={this.props.selectedIdeology}
-                            />
                             <PointsSelector
                                 handleSelectedPoints={
                                     this.props.handleSelectedPoints
@@ -658,38 +609,6 @@ class FaceSelector extends React.Component<FaceSelectorProps, {}> {
                         return (
                             <option key={index} value={face.value}>
                                 {face.name}
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
-        );
-    }
-}
-interface IdeologySelectorProps {
-    selectedIdeology: string;
-    handleSelectedIdeology: (value: string) => void;
-}
-
-class IdeologySelector extends React.Component<IdeologySelectorProps, {}> {
-    render() {
-        return (
-            <div className="ideology-selector selector">
-                <label htmlFor="ideology-select">Your Ideology:</label>
-
-                <select
-                    required
-                    name="ideologies"
-                    id="ideology-select"
-                    value={this.props.selectedIdeology}
-                    onChange={(e) => {
-                        this.props.handleSelectedIdeology(e.target.value);
-                    }}
-                >
-                    {Ideologies.map((ideology, index) => {
-                        return (
-                            <option key={index} value={ideology.color}>
-                                {ideology.name}
                             </option>
                         );
                     })}

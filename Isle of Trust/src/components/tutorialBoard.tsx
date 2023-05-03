@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
-import useImage from "use-image";
 import * as util from "../utilities";
 import {
     AnimResources,
@@ -13,50 +12,17 @@ import {
 } from "../models/animation";
 
 import { Face, Hat, GeneratePawn } from "../generators/pawn";
-import { Grid } from "../generators/map";
-import { PlayerSidebar } from "../components/playerSideBar";
-import { SelectedSidebar } from "../components/selectedSideBar";
-import { SidebarState } from "../components/sideBarState";
-import {
-    Agent,
-    AGENT_RADIUS,
-    Relation,
-    Ideology,
-    Personality,
-    SpendingContainer,
-    DriftContainer,
-} from "../models/agent";
+import { Agent, AGENT_RADIUS, Relation } from "../models/agent";
 import { Graph } from "../models/graph";
-import {
-    taglineFromStrategy,
-    generateChoice,
-    Turn,
-    choiceTally,
-    Strategy,
-} from "../models/strategy";
-/*
-import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
-*/
+import { Strategy } from "../models/strategy";
 import { KonvaEventObject } from "konva/lib/Node";
-import { getActiveElement } from "@testing-library/user-event/dist/utils";
-import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
-import { timingSafeEqual } from "crypto";
-import { allowedNodeEnvironmentFlags } from "process";
-/*
-import { timeStamp } from "console";
-*/
 export const RESIZE_TIMEOUT = 500;
-
 export const SCENE_WIDTH = 800;
 export const SCENE_HEIGHT = 600;
 export const MAX_SIDEBAR_AGENT_WIDTH = 150;
 export const MAX_SIDEBAR_AGENT_HEIGHT = 225;
 const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
-const MOOD_IMAGE_SIDE_LENGTH = 511;
-
-const RESOURCE_LOST_PER_TURN = 3;
-const BASE_INFLUENCE_LOST_PER_TURN = 2;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
@@ -67,9 +33,10 @@ export const MAP_URL: { [key: string]: string } = {
     Small: "url(../Maps/mapSmall.png)",
 };
 
-interface BoardProps {
+interface TutorialBoardProps {
     map: Graph<Agent, Relation>;
     turnCount: number;
+    stageCount: number;
     selected: Agent;
     select: (agent: Agent) => void;
     player: Agent;
@@ -77,7 +44,7 @@ interface BoardProps {
     current: string;
 }
 
-export class Board extends React.Component<BoardProps> {
+export class TutorialBoard extends React.Component<TutorialBoardProps> {
     private containerRef = React.createRef<HTMLDivElement>();
     private stageRef = React.createRef<Konva.Stage>();
 
@@ -87,8 +54,6 @@ export class Board extends React.Component<BoardProps> {
         this.resizeEvent = this.resizeEvent.bind(this);
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
-        this.select(this.props.selected);
-        this.deselectCharacter(true); 
     }
 
     componentWillUnmount() {
@@ -126,9 +91,18 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
-
         return (
-            <div className="board">
+            <div
+                className="board"
+                style={
+                    this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
+                }
+            >
+                <article id="tutorialHeader">
+                    <h1>
+                        Tutorial Level 1
+                    </h1>
+                </article>
                 <div
                     className="map"
                     ref={this.containerRef}
@@ -180,44 +154,17 @@ export class Board extends React.Component<BoardProps> {
                                     onClick={(
                                         event: KonvaEventObject<MouseEvent>
                                     ) => {
-                                        {
-                                            this.select(v);
-                                            this.deselectCharacter(true);
-                                        }
+                                        this.select(v);
+                                        this.deselectCharacter(true);
                                     }}
                                 >
                                     <AgentImage
                                         x={v.coords[0]}
                                         y={v.coords[1]}
                                         selected={this.props.selected === v}
-                                        agent={v}
+                                        data={v}
                                         player={this.props.player}
-                                        turnCount={this.props.turnCount}
                                     />
-
-                                    {/* Debug text: */}
-
-                                    {/* <RK.Text
-                                        text={
-                                            v instanceof Agent
-                                                ? v.resources.toString()
-                                                : v instanceof DeadAgent
-                                                ? v.deadCount.toString()
-                                                : v.id.toString()
-                                        }
-                                        x={v.coords[0] - AGENT_RADIUS / 2}
-                                        y={v.coords[1] - AGENT_RADIUS / 2}
-                                        width={AGENT_RADIUS * 3}
-                                        height={AGENT_RADIUS * 3}
-                                        offsetX={AGENT_RADIUS * 3}
-                                        offsetY={AGENT_RADIUS}
-                                        fontSize={AGENT_RADIUS}
-                                        fill={v.isAlive() ? "black" : "red"}
-                                        shadowOffsetX={1}
-                                        shadowOffsetY={1}
-                                        align="center"
-                                        verticalAlign="middle"
-                                    /> */}
                                 </RK.Group>
                             ))}
                         </RK.Layer>
@@ -304,9 +251,8 @@ interface AgentImageProps {
     x: number;
     y: number;
     selected: boolean;
-    agent: Agent;
+    data: Agent;
     player: Agent;
-    turnCount: number;
 }
 
 function AgentImage(props: AgentImageProps) {
@@ -316,8 +262,8 @@ function AgentImage(props: AgentImageProps) {
     let selectedScale = 0.18;
     let hoverScale = 0.14;
 
-    // Make the user's player larger in size 
-    if (props.agent.id == props.player.id){
+    // Make the user's player larger in size
+    if (props.data.id === props.player.id) {
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
@@ -327,9 +273,9 @@ function AgentImage(props: AgentImageProps) {
 
     let face = Face.Glasses;
     let hat = Hat.Cap;
-    let ideology = { red: 203, green: 203, blue: 203 };
-    face = props.agent.face;
-    hat = props.agent.hat;
+    let ideology = { red: 0, green: 150, blue: 200 };
+    face = props.data.face;
+    hat = props.data.hat;
 
     const handleHover = (
         event: KonvaEventObject<MouseEvent>,
@@ -365,36 +311,28 @@ function AgentImage(props: AgentImageProps) {
         });
     };
 
-    // Show personality color if 5 turns have passed or if displaying the user player
-    if(props.turnCount >= 4 || props.agent.id == props.player.id) {
-        switch (props.agent.ideology.toStrategy()) {
-            case Strategy.Default:
-                    ideology = { red: 158, green: 196, blue: 234 };
-                    break;
-                case Strategy.Suspicious:
-                    ideology = { red: 248, green: 179, blue: 101 };
-                    break;
-                case Strategy.Student:
-                    ideology = { red: 181, green: 216, blue: 166 };
-                    break;
-                case Strategy.Random:
-                    ideology = { red: 255, green: 218, blue: 92 };
-                    break;
-                case Strategy.Reciprocators:
-                    ideology = { red: 180, green: 166, blue: 216 };
-                    break;
-                case Strategy.Teacher:
-                    ideology = { red: 161, green: 196, blue: 202 };
-                    break;
-                case Strategy.Player:
-                    //if an agent is player
-                    ideology = { red: 158, green: 196, blue: 234 };
-                    break;
-                default: {
-                    ideology = { red: 203, green: 203, blue: 203 }; 
-                    break;
-                }
-        }
+    switch (props.data.ideology.toStrategy()) {
+        case Strategy.Dove:
+            ideology = { red: 158, green: 196, blue: 234 };
+            break;
+        case Strategy.Hawk:
+            ideology = { red: 223, green: 126, blue: 104 };
+            break;
+        case Strategy.Grim:
+            ideology = { red: 248, green: 179, blue: 101 };
+            break;
+        case Strategy.AntiGrim:
+            ideology = { red: 255, green: 218, blue: 92 };
+            break;
+        case Strategy.TweedleDum:
+            ideology = { red: 181, green: 216, blue: 166 };
+            break;
+        case Strategy.TweedleDee:
+            ideology = { red: 161, green: 196, blue: 202 };
+            break;
+        case Strategy.TitForTat:
+            ideology = { red: 180, green: 166, blue: 216 };
+            break;
     }
 
     return (

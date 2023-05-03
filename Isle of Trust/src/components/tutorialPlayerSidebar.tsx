@@ -2,51 +2,12 @@ import React from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
-import useImage from "use-image";
-import * as util from "../utilities";
-import {
-    AnimResources,
-    AnimInfluence,
-    AnimChoice,
-    AnimMood,
-    AnimChangeIdeology,
-} from "../models/animation";
-
-import { Face, Hat, GeneratePawn } from "../generators/pawn";
-import { Grid } from "../generators/map";
 import { Display } from "../App";
 import { SidebarState } from "./sideBarState";
 import { SidebarAgentImage } from "../App";
-import {
-    Agent,
-    AGENT_RADIUS,
-    Relation,
-    Ideology,
-    Personality,
-    SpendingContainer,
-    DriftContainer,
-} from "../models/agent";
+import { Agent, Relation, SpendingContainer } from "../models/agent";
 import { Graph } from "../models/graph";
-import {
-    taglineFromStrategy,
-    generateChoice,
-    Turn,
-    choiceTally,
-    Strategy,
-    Commitment,
-    Choice,
-} from "../models/strategy";
-/*
-import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
-*/
-import { KonvaEventObject } from "konva/lib/Node";
-import { getActiveElement } from "@testing-library/user-event/dist/utils";
-import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
-import { timingSafeEqual } from "crypto";
-import { allowedNodeEnvironmentFlags } from "process";
-/*
-import { timeStamp } from "console";
-*/
+import { choiceTally, Commitment, Choice } from "../models/strategy";
 export const RESIZE_TIMEOUT = 500;
 
 export const SCENE_WIDTH = 800;
@@ -55,10 +16,6 @@ export const MAX_SIDEBAR_AGENT_WIDTH = 150;
 export const MAX_SIDEBAR_AGENT_HEIGHT = 225;
 const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
-const MOOD_IMAGE_SIDE_LENGTH = 511;
-
-const RESOURCE_LOST_PER_TURN = 3;
-const BASE_INFLUENCE_LOST_PER_TURN = 2;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
@@ -69,17 +26,7 @@ export const MAP_URL: { [key: string]: string } = {
     Small: "url(../Maps/mapSmall.png)",
 };
 
-//export let MAP_INDEX = 0;
-let currentMap = "Pronged";
-
-const DIFFICULTY_VALUES: { [key: string]: number } = {
-    easy: 19,
-    medium: 15,
-    hard: 10,
-    extreme: 5,
-};
-
-interface PlayerSidebarProps {
+interface TutorialPlayerSidebarProps {
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -89,11 +36,12 @@ interface PlayerSidebarProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
     turnCount: number;
+    stageCount: number;
     promiseRelation: any;
 }
 
-export class PlayerSidebar extends React.Component<
-    PlayerSidebarProps,
+export class TutorialPlayerSidebar extends React.Component<
+    TutorialPlayerSidebarProps,
     unknown
 > {
     render() {
@@ -104,7 +52,7 @@ export class PlayerSidebar extends React.Component<
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
-                    turnCount={this.props.turnCount}
+                    stageCount={this.props.stageCount}
                 />
                 <InfluenceMenu
                     round={this.props.round}
@@ -112,6 +60,7 @@ export class PlayerSidebar extends React.Component<
                     map={this.props.map}
                     turnCount={this.props.turnCount}
                     promiseRelation={this.props.promiseRelation}
+                    stageCount={this.props.stageCount}
                 />
             </div>
         );
@@ -126,7 +75,7 @@ interface PlayerDisplayProps {
         agent: Agent
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
-    turnCount: number;
+    stageCount: number;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -139,7 +88,13 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             name = you.name;
         }
         return (
-            <div className={"player-display"}>
+            <div
+                className={
+                    this.props.stageCount === 1
+                        ? "player-display spotlight"
+                        : "player-display"
+                }
+            >
                 <div className="agent-type">
                     Player: <span className="agent-name">{name}</span>
                 </div>
@@ -148,7 +103,6 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     agent={this.props.sidebarState.player}
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
-                    turnCount={this.props.turnCount}
                 />
             </div>
         );
@@ -160,6 +114,7 @@ interface InfluenceMenuProps {
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     turnCount: number;
+    stageCount: number;
     promiseRelation: any;
 }
 
@@ -172,9 +127,20 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         )!;
 
         if (this.props.sidebarState.player instanceof Agent) {
-            if (this.props.turnCount % 1 == 0) {
+            if (this.props.turnCount % 1 === 0) {
                 return (
-                    <div className={"influence-menu"}>
+                    <div
+                        className={
+                            this.props.stageCount === 2
+                                ? "influence-menu spotlight"
+                                : "influence-menu"
+                        }
+                        style={
+                            this.props.stageCount !== 3
+                                ? { pointerEvents: "none" }
+                                : {}
+                        }
+                    >
                         <div className="influence-title">
                             Promise Phase
                             <br /> Declare your intent with neighbors:
@@ -337,18 +303,6 @@ class InfluenceEntry extends React.Component<
         };
     }
 
-    //old code
-    /*updateGiven(increment: number) {
-        if (this.props.agent instanceof Agent) {
-            const newGiven = this.props.allowResources(
-                this.state.given,
-                increment
-            );
-            this.setState({ given: newGiven });
-            this.props.spendingMap.data.set(this.props.agent, newGiven);
-        }
-    }*/
-
     //gets src promise to dest
     getPromiseBetween(src: Agent, dest: Agent) {
         const promise = src.promises.find((e) => e.promiseTo === dest);
@@ -368,17 +322,17 @@ class InfluenceEntry extends React.Component<
         playerCommitment: string | undefined,
         neighborCommitment: string | undefined
     ) {
-        if (commitment == playerCommitment) return "honest";
+        if (commitment === playerCommitment) return "honest";
         //if both agents are reciprocate, then their commmitments are cooperate
         else if (
-            playerCommitment == "reciprocate" &&
-            neighborCommitment == "reciprocate" &&
-            commitment == "cooperate"
+            playerCommitment === "reciprocate" &&
+            neighborCommitment === "reciprocate" &&
+            commitment === "cooperate"
         )
             return "honest";
         else if (
-            playerCommitment == "reciprocate" &&
-            commitment == neighborCommitment
+            playerCommitment === "reciprocate" &&
+            commitment === neighborCommitment
         )
             return "honest";
         else return "lie";
@@ -390,9 +344,9 @@ class InfluenceEntry extends React.Component<
         const aiCommitment = this.getPromiseBetween(agent, player);
         const playerCommitment = this.getPromiseBetween(player, agent);
 
-        const sMaybe = this.state.given === 1 ? "" : "s";
-        const givenString = String(this.state.given) + " resource" + sMaybe;
-        if (this.props.turnCount % 1 == 0) {
+        // const sMaybe = this.state.given === 1 ? "" : "s";
+        // const givenString = String(this.state.given) + " resource" + sMaybe;
+        if (this.props.turnCount % 1 === 0) {
             //promise phase
             return (
                 <div className="influence-entry" ref={this.containerRef}>
@@ -405,8 +359,7 @@ class InfluenceEntry extends React.Component<
                             <RK.Layer>
                                 <SidebarAgentImage
                                     canvasWidth={this.canvasWidth}
-                                    agent={this.props.agent}
-                                    turnCount={this.props.turnCount}
+                                    data={this.props.agent}
                                 />
                             </RK.Layer>
                         </RK.Stage>
@@ -465,8 +418,7 @@ class InfluenceEntry extends React.Component<
                                 <RK.Layer>
                                     <SidebarAgentImage
                                         canvasWidth={this.canvasWidth}
-                                        agent={this.props.agent}
-                                        turnCount={this.props.turnCount}
+                                        data={this.props.agent}
                                     />
                                 </RK.Layer>
                             </RK.Stage>
@@ -476,8 +428,8 @@ class InfluenceEntry extends React.Component<
                                 id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
-                                        console.log("Select cooperate")
-                                        player.updateChoice(Choice.Cooperate, agent);
+                                    console.log("Select cooperate");
+                                    player.updateChoice(Choice.Give, agent);
                                 }}
                             >
                                 <div className="action-container">
@@ -494,8 +446,8 @@ class InfluenceEntry extends React.Component<
                             <button
                                 id="compete"
                                 onClick={() => {
-                                        console.log("Select compete")
-                                        player.updateChoice(Choice.Compete, agent);
+                                    console.log("Select compete");
+                                    player.updateChoice(Choice.Cheat, agent);
                                 }}
                             >
                                 <div className="action-container">
