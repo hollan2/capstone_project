@@ -136,6 +136,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             console.log(player.id);
             this.player_id = player.id;
             console.log(this.player_id);
+            player.ideology.setStrategy(Strategy.Player);
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
@@ -316,7 +317,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                          //if player didnt choose a promise randomly chooses promises
                         v2Promise = generateCommitment(
                             v1Strat,
-                            e2.history);
+                            e1.history);
                     }
                 }
                 else{
@@ -384,7 +385,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             v1Promise, 
                             v2Promise,
                             v1Strat,
-                            e2.history);
+                            e1.history);
                     }
                 }
                 else{
@@ -506,6 +507,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
                             deselectCharacter={this.deselectCharacter}
+                            turnCount={this.state.turnCount}
                         />
                 </div>
             );
@@ -549,6 +551,7 @@ interface DisplayProps {
     agent: Agent;
     agentChoices: choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
+    turnCount: number;
 }
 
 export class Display extends React.Component<DisplayProps, DisplayState> {
@@ -612,7 +615,6 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 agent
             );
         }
-
         return (
             <section className="display" ref={this.containerRef}>
                 <div className="sidebar-agent">
@@ -620,7 +622,8 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.currentCanvasWidth}
-                                data={this.props.agent}
+                                agent={this.props.agent}
+                                turnCount={this.props.turnCount}
                             />
                         </RK.Layer>
                     </RK.Stage>
@@ -678,7 +681,8 @@ function Mood(props: MoodProps) {
 
 interface SidebarAgentImageType {
     canvasWidth: number;
-    data: Agent;
+    agent: Agent;
+    turnCount: number;
 }
 
 export function SidebarAgentImage(props: SidebarAgentImageType) {
@@ -686,35 +690,46 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
 
     let face = Face.Glasses;
     let hat = Hat.Cap;
-    let ideology = { red: 0, green: 150, blue: 200 };
+    let ideology = { red: 203, green: 203, blue: 203 };
 
-    if (props.data instanceof Agent) {
-        face = props.data.face;
-        hat = props.data.hat;
-        switch (props.data.ideology.toStrategy()) {
-            case Strategy.Dove:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
-            case Strategy.Hawk:
-                ideology = { red: 223, green: 126, blue: 104 };
-                break;
-            case Strategy.Grim:
-                ideology = { red: 248, green: 179, blue: 101 };
-                break;
-            case Strategy.AntiGrim:
-                ideology = { red: 255, green: 218, blue: 92 };
-                break;
-            case Strategy.TweedleDum:
-                ideology = { red: 181, green: 216, blue: 166 };
-                break;
-            case Strategy.TweedleDee:
-                ideology = { red: 161, green: 196, blue: 202 };
-                break;
-            case Strategy.TitForTat:
-                ideology = { red: 180, green: 166, blue: 216 };
-                break;
+    if (props.agent instanceof Agent) {
+        face = props.agent.face;
+        hat = props.agent.hat;
+        // Show personality color if 5 turns have passed or if displaying the user player
+        if(props.turnCount >= 4 || props.agent.ideology.toStrategy() == Strategy.Player) {
+            switch (props.agent.ideology.toStrategy()) {
+                case Strategy.Default:
+                    ideology = { red: 158, green: 196, blue: 234 };
+                    break;
+                case Strategy.Suspicious:
+                    ideology = { red: 248, green: 179, blue: 101 };
+                    break;
+                case Strategy.Student:
+                    ideology = { red: 181, green: 216, blue: 166 };
+                    break;
+                case Strategy.Random:
+                    ideology = { red: 255, green: 218, blue: 92 };
+                    break;
+                case Strategy.Reciprocators:
+                    ideology = { red: 180, green: 166, blue: 216 };
+                    break;
+                case Strategy.Teacher:
+                    ideology = { red: 161, green: 196, blue: 202 };;
+                    break;
+                case Strategy.Player:
+                    //if an agent is player
+                    ideology = { red: 158, green: 196, blue: 234 };
+                    break;
+                default: {
+                    ideology = { red: 203, green: 203, blue: 203 }; 
+                    break; 
+                }
+            }
         }
     }
+
+    //to access turnCount: props.turnCount
+    //to access agent.id: props.agent.id
 
     return (
         <RK.Group scaleX={scale} scaleY={scale}>

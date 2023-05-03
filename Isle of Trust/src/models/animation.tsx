@@ -69,11 +69,11 @@ export function AnimChoice(props: AnimChoiceProps) {
             setTimeout(() => {
                 arcNode.current.to({
                     fill:
-                        props.history?.lastAction() === Choice.Give
+                        props.history?.lastAction() === Choice.Cooperate
                             ? clr.grn
                             : clr.red,
                     stroke:
-                        props.history?.lastAction() === Choice.Give
+                        props.history?.lastAction() === Choice.Cooperate
                             ? clr.dgrn
                             : clr.dred,
                     duration: 0.2,

@@ -507,40 +507,33 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                    <TutorialBoard
-                        map={this.state.map}
-                        turnCount={this.state.turnCount}
-                        selected={this.state.sidebarState.selected}
-                        select={this.state.select.bind(this)}
-                        player={this.state.sidebarState.player}
-                        deselectCharacter={this.deselectCharacter}
-                        current={currentMap}
-                        stageCount={this.state.stageCount}
-                    />
-                    <TutorialPlayerSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        turnCount={this.state.turnCount}
-                        promiseRelation={this.state.promiseRelation}
-                        stageCount={this.state.stageCount}
-                    />
-                    <TutorialSelectedSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        deselectCharacter={this.deselectCharacter}
-                    />
-                    <TutorialGuide
-                        turnCount={this.state.turnCount}
-                        stageCount={this.state.stageCount}
-                        onClick={this.handleClick}
-                        level={this.props.level}
-                    />
+                        <Board
+                            map={this.state.map}
+                            turnCount={this.state.turnCount}
+                            selected={this.state.sidebarState.selected}
+                            select={this.state.select.bind(this)}
+                            player = {this.state.sidebarState.player}
+                            deselectCharacter={this.deselectCharacter}
+                            current = {currentMap}
+                        />
+                        <PlayerSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
+                        />
+                        <SelectedSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                            deselectCharacter={this.deselectCharacter}
+                            turnCount={this.state.turnCount}
+                        />
                 </div>
             );
         } else {
