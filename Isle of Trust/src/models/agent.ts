@@ -1,5 +1,4 @@
-import { Strategy, TurnLog, Choice } from "./strategy";
-import { IdeoStratMap } from "./ideostratmap";
+import { Strategy, TurnLog, Choice, Commitment } from "./strategy";
 import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
@@ -47,6 +46,20 @@ abstract class AttributeContainer {
     }
 }
 
+//holds the user input of promises and who they are promising
+export interface promises {
+    promise: Commitment;
+    promiseTo: Agent;
+}
+
+export interface choices {
+    choice: Choice;
+    choiceTo: Agent;
+}
+
+export interface userChoice {
+}
+
 export class Agent extends AttributeContainer {
     public id: number;
     public coords: [number, number];
@@ -55,6 +68,8 @@ export class Agent extends AttributeContainer {
     public ideology: Ideology;
     public personality: Personality;
     public mood: number;
+    public promises: promises[] = [];
+    public choices: choices[] = [];
 
     public face: Face;
     public hat: Hat;
@@ -66,7 +81,7 @@ export class Agent extends AttributeContainer {
         resources: number,
         mood: number,
         id: number,
-        coords: [number, number]
+        coords: [number, number],     
     ) {
         super();
         this.name = name;
@@ -87,10 +102,13 @@ export class Agent extends AttributeContainer {
             Object.values(Hat)[
                 Math.floor(Math.random() * (Object.values(Hat).length / 2))
             ];
+
         this.face = Face[randface as keyof typeof Face];
         this.hat = Hat[randhat as keyof typeof Hat];
     }
+    
 
+    /* These functions don't serve a purpose anymore, can be removed
     // update the personality in response to how the agent was treated in the previous round.
     updatePersonality() {}
 
@@ -100,16 +118,74 @@ export class Agent extends AttributeContainer {
     adoptIdeology(i: Ideology) {
         this.ideology = new Ideology(i.getGenerosity(), i.getForgiveness());
     }
+    */
 
+    //adds a promise to list of promises in agent
+    updatePromise(commitment: Commitment, promiseTo: Agent) {
+
+        const newPromise: promises = {
+            promise: commitment,
+            promiseTo: promiseTo
+        };
+
+        const found = this.promises.some(e => e.promiseTo === promiseTo)
+
+        if(!found) {
+            this.promises.push(newPromise);
+        }
+
+        else {
+            const promise = this.getPromiseTo(promiseTo);
+            if(promise) {
+                promise.promise = commitment;
+            }
+        }
+    }
+
+    //adds choice from player to list of choices 
+    //NOTE on a consecutive round if a player has not chosen a promise, the previous round promise is used
+    updateChoice(choice: Choice, choiceTo: Agent) {
+        
+        const newChoice: choices = {
+            choice: choice,
+            choiceTo: choiceTo,
+        };
+
+        const found = this.choices.some(e => e.choiceTo === choiceTo)
+
+        if(!found) {
+            this.choices.push(newChoice);
+        }
+
+        else {
+            const aChoice = this.getChoiceTo(choiceTo);
+            if(aChoice) {
+                aChoice.choice = choice
+            }
+        }
+    }
+
+    getPromiseTo(agent: Agent) {
+        return this.promises.find(e => e.promiseTo === agent)
+    }
+
+    getChoiceTo(agent: Agent) {
+        return this.choices.find(e => e.choiceTo === agent)
+    }
+
+    //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
-        if (myChoice === Choice.Give && theirChoice === Choice.Give)
-            this.resources += 2;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat)
+        if (myChoice === Choice.Cooperate && theirChoice === Choice.Cooperate)
             this.resources += 1;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Give)
+        else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
+            this.resources -= 2;
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
+            this.resources -= 1;
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources += 3;
     }
 
+    /*This function doesn't serve a purpose anymore, can be removed
     updateMood(myChoice: Choice, theirChoice: Choice) {
         // consider that the average volatilityPct will be 0.50
         const volatilityPct = this.getAttributeAsPercentage(
@@ -138,6 +214,7 @@ export class Agent extends AttributeContainer {
             );
         }
     }
+    */
 
     getMoodDescription(): string {
         if (this.mood > 15) {
@@ -153,6 +230,7 @@ export class Agent extends AttributeContainer {
         }
     }
 
+    /*These functions dont serve a purpose anymore, can be removed
     // Currently, the more volatile a neighbor is, the more resources an agent (you) will spend on them.
     // Reasoning: a more volatile agent is more likely to change to your ideology,
     // so it's best to focus your energies on them.
@@ -191,6 +269,7 @@ export class Agent extends AttributeContainer {
 
         return spendingMap;
     }
+    
 
     // the more volatile the neighbor,
     // and the unhappier they are,
@@ -202,12 +281,14 @@ export class Agent extends AttributeContainer {
         const moodPct = this.getAttributeAsPercentage(this.mood);
         return (volatilityPct + (1 - moodPct)) / 2;
     }
+   
 
     acceptInfluenceDispersal(giver: Agent, dispersal: number) {
         giver.resources -= dispersal;
         this.resources += dispersal;
     }
 
+    
     driftIdeology(driftMap: DriftContainer) {
         let totalGenerosityChange = 0;
         let totalForgivenessChange = 0;
@@ -240,12 +321,14 @@ export class Agent extends AttributeContainer {
             );
         }
     }
+    */
 
     spendResources(cost: number) {
         this.resources -= cost;
     }
 
-    updateInfluence() {}
+    //This function doesn't serve a purpose anymore, can be removed
+    //updateInfluence() {}
 }
 
 // The internal ideological state of an agent which effectively determines the
@@ -256,6 +339,8 @@ export class Ideology extends AttributeContainer {
 
     // how likely they are to NOT hold a grudge.
     private forgiveness: number;
+
+    private role: Strategy;
 
     constructor(generosity: number, forgiveness: number) {
         super();
@@ -269,38 +354,19 @@ export class Ideology extends AttributeContainer {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
+    
         }
-    }
 
-    getGenerosity(): number {
-        return this.generosity;
-    }
-
-    setGenerosity(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.generosity = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    getForgiveness(): number {
-        return this.forgiveness;
-    }
-
-    setForgiveness(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.forgiveness = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
+        this.role = Math.floor(Math.random() * 6) 
     }
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return IdeoStratMap[Math.floor(this.forgiveness / 4)][
-            Math.floor(this.generosity / 4)
-        ];
+        return this.role;
+    }
+
+    setStrategy(newRole: Strategy) {
+        this.role = newRole;
     }
 }
 
@@ -419,6 +485,7 @@ export class Relation extends AttributeContainer {
         }
     }
 
+    /*This function doesn't serve a purpose anymore, can be removed
     addInfluenceBasedOn(dispersal: number, theirVolatility: number) {
         this.resourcesSpent += dispersal;
         this.influence = this.incrementAttributeBy(
@@ -426,6 +493,7 @@ export class Relation extends AttributeContainer {
             this.influence
         );
     }
+    */
 }
 
 // Use this to keep track of which neighbors an Agent is planning on influencing.

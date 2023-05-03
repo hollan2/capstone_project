@@ -16,6 +16,7 @@ import * as RK from "react-konva";
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import Konva from "konva";
 import { RESIZE_TIMEOUT } from "./App";
+import { TutorialDisplay } from "./routes/TutorialGameView";
 
 const PAWN_SCALE = 0.8;
 const PAWN_WIDTH = 400 * PAWN_SCALE;
@@ -152,49 +153,6 @@ export const Faces = [
     },
 ];
 
-export const Ideologies = [
-    {
-        name: "Select an Ideology",
-        value: "",
-        color: "",
-    },
-    {
-        name: "Dove",
-        value: "Dove",
-        color: "9ec4ea",
-    },
-    {
-        name: "Hawk",
-        value: "Hawk",
-        color: "df7e68",
-    },
-    {
-        name: "Grim",
-        value: "Grim",
-        color: "f8b365",
-    },
-    {
-        name: "AntiGrim",
-        value: "AntiGrim",
-        color: "ffda5c",
-    },
-    {
-        name: "TitForTat",
-        value: "TitForTat",
-        color: "b4a6d8",
-    },
-    {
-        name: "TweedleDum",
-        value: "TweedleDum",
-        color: "b5d8a6",
-    },
-    {
-        name: "TweedleDee",
-        value: "TweedleDee",
-        color: "a1c4ca",
-    },
-];
-
 class Main extends React.Component {
     render() {
         return (
@@ -207,6 +165,7 @@ class Main extends React.Component {
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
                         <Route path="tutorial" element={<Tutorial />} />
+                        <Route path="level1" element={<TutorialDisplay/>}/>
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -315,7 +274,7 @@ class Start extends React.Component<StartProps, StartState> {
         super(props);
         //the starting values on the select menu
         this.state = {
-            selectedName: "Name",
+            selectedName: "",
             selectedHat: "",
             selectedFace: "",
             selectedIdeology: "",
@@ -442,12 +401,6 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
 
                         <fieldset>
                             <legend>Game Play:</legend>
-                            <IdeologySelector
-                                handleSelectedIdeology={
-                                    this.props.handleSelectedIdeology
-                                }
-                                selectedIdeology={this.props.selectedIdeology}
-                            />
                             <PointsSelector
                                 handleSelectedPoints={
                                     this.props.handleSelectedPoints
@@ -591,6 +544,7 @@ class NameSelector extends React.Component<NameSelectorProps, {}> {
                     name="names"
                     id="name-select"
                     type="text" 
+                    placeholder="Enter name"
                     value={this.props.selectedName}
                     onChange={(e) => {this.props.handleSelectedName(e.target.value);
                     }}
@@ -655,38 +609,6 @@ class FaceSelector extends React.Component<FaceSelectorProps, {}> {
                         return (
                             <option key={index} value={face.value}>
                                 {face.name}
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
-        );
-    }
-}
-interface IdeologySelectorProps {
-    selectedIdeology: string;
-    handleSelectedIdeology: (value: string) => void;
-}
-
-class IdeologySelector extends React.Component<IdeologySelectorProps, {}> {
-    render() {
-        return (
-            <div className="ideology-selector selector">
-                <label htmlFor="ideology-select">Your Ideology:</label>
-
-                <select
-                    required
-                    name="ideologies"
-                    id="ideology-select"
-                    value={this.props.selectedIdeology}
-                    onChange={(e) => {
-                        this.props.handleSelectedIdeology(e.target.value);
-                    }}
-                >
-                    {Ideologies.map((ideology, index) => {
-                        return (
-                            <option key={index} value={ideology.color}>
-                                {ideology.name}
                             </option>
                         );
                     })}

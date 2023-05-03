@@ -6,7 +6,6 @@ export interface StartInfo {
     name: string;
     hat: string;
     face: string;
-    ideologyColor: string;
     startingPoints: string;
     mapImage: string;
 }
@@ -23,7 +22,6 @@ export default function Game() {
             name={state.name}
             hat={state.hat}
             face={state.face}
-            ideologyColor={state.ideologyColor}
             startingPoints={state.startingPoints}
             mapImage={state.mapImage}
         />
