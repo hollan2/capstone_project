@@ -162,7 +162,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                                         x={v.coords[0]}
                                         y={v.coords[1]}
                                         selected={this.props.selected === v}
-                                        data={v}
+                                        agent={v}
                                         player={this.props.player}
                                     />
                                 </RK.Group>
@@ -251,7 +251,7 @@ interface AgentImageProps {
     x: number;
     y: number;
     selected: boolean;
-    data: Agent;
+    agent: Agent;
     player: Agent;
 }
 
@@ -263,7 +263,7 @@ function AgentImage(props: AgentImageProps) {
     let hoverScale = 0.14;
 
     // Make the user's player larger in size
-    if (props.data.id === props.player.id) {
+    if (props.agent.id === props.player.id) {
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
@@ -274,8 +274,8 @@ function AgentImage(props: AgentImageProps) {
     let face = Face.Glasses;
     let hat = Hat.Cap;
     let ideology = { red: 0, green: 150, blue: 200 };
-    face = props.data.face;
-    hat = props.data.hat;
+    face = props.agent.face;
+    hat = props.agent.hat;
 
     const handleHover = (
         event: KonvaEventObject<MouseEvent>,
@@ -311,28 +311,33 @@ function AgentImage(props: AgentImageProps) {
         });
     };
 
-    switch (props.data.ideology.toStrategy()) {
-        case Strategy.Dove:
-            ideology = { red: 158, green: 196, blue: 234 };
-            break;
-        case Strategy.Hawk:
-            ideology = { red: 223, green: 126, blue: 104 };
-            break;
-        case Strategy.Grim:
+    switch (props.agent.ideology.toStrategy()) {
+        case Strategy.Default:
+                ideology = { red: 158, green: 196, blue: 234 };
+                break;
+        case Strategy.Suspicious:
             ideology = { red: 248, green: 179, blue: 101 };
             break;
-        case Strategy.AntiGrim:
-            ideology = { red: 255, green: 218, blue: 92 };
-            break;
-        case Strategy.TweedleDum:
+        case Strategy.Student:
             ideology = { red: 181, green: 216, blue: 166 };
             break;
-        case Strategy.TweedleDee:
-            ideology = { red: 161, green: 196, blue: 202 };
+        case Strategy.Random:
+            ideology = { red: 255, green: 218, blue: 92 };
             break;
-        case Strategy.TitForTat:
+        case Strategy.Reciprocators:
             ideology = { red: 180, green: 166, blue: 216 };
             break;
+        case Strategy.Teacher:
+            ideology = { red: 161, green: 196, blue: 202 };
+            break;
+        case Strategy.Player:
+            //if an agent is player
+            ideology = { red: 158, green: 196, blue: 234 };
+            break;
+        default: {
+            ideology = { red: 203, green: 203, blue: 203 }; 
+            break;
+        }
     }
 
     return (

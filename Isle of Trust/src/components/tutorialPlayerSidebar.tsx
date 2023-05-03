@@ -53,6 +53,7 @@ export class TutorialPlayerSidebar extends React.Component<
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
                     stageCount={this.props.stageCount}
+                    turnCount={this.props.turnCount}
                 />
                 <InfluenceMenu
                     round={this.props.round}
@@ -76,6 +77,7 @@ interface PlayerDisplayProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     stageCount: number;
+    turnCount: number;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -103,6 +105,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     agent={this.props.sidebarState.player}
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
+                    turnCount={this.props.turnCount}
                 />
             </div>
         );
@@ -359,7 +362,8 @@ class InfluenceEntry extends React.Component<
                             <RK.Layer>
                                 <SidebarAgentImage
                                     canvasWidth={this.canvasWidth}
-                                    data={this.props.agent}
+                                    agent={this.props.agent}
+                                    turnCount={this.props.turnCount}
                                 />
                             </RK.Layer>
                         </RK.Stage>
@@ -418,7 +422,8 @@ class InfluenceEntry extends React.Component<
                                 <RK.Layer>
                                     <SidebarAgentImage
                                         canvasWidth={this.canvasWidth}
-                                        data={this.props.agent}
+                                        agent={this.props.agent}
+                                        turnCount={this.props.turnCount}
                                     />
                                 </RK.Layer>
                             </RK.Stage>
@@ -429,7 +434,7 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(Choice.Give, agent);
+                                    player.updateChoice(Choice.Cooperate, agent);
                                 }}
                             >
                                 <div className="action-container">
@@ -447,7 +452,7 @@ class InfluenceEntry extends React.Component<
                                 id="compete"
                                 onClick={() => {
                                     console.log("Select compete");
-                                    player.updateChoice(Choice.Cheat, agent);
+                                    player.updateChoice(Choice.Compete, agent);
                                 }}
                             >
                                 <div className="action-container">
