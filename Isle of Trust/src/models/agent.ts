@@ -1,5 +1,4 @@
 import { Strategy, TurnLog, Choice, Commitment } from "./strategy";
-import { IdeoStratMap } from "./ideostratmap";
 import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
@@ -176,13 +175,13 @@ export class Agent extends AttributeContainer {
 
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
-        if (myChoice === Choice.Give && theirChoice === Choice.Give)
+        if (myChoice === Choice.Cooperate && theirChoice === Choice.Cooperate)
             this.resources += 1;
-        else if (myChoice === Choice.Give && theirChoice === Choice.Cheat)
+        else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
             this.resources -= 2;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat)
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
-        else if (myChoice === Choice.Cheat && theirChoice === Choice.Give)
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources += 3;
     }
 
@@ -341,6 +340,8 @@ export class Ideology extends AttributeContainer {
     // how likely they are to NOT hold a grudge.
     private forgiveness: number;
 
+    private role: Strategy;
+
     constructor(generosity: number, forgiveness: number) {
         super();
         if (
@@ -353,39 +354,19 @@ export class Ideology extends AttributeContainer {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
+    
         }
-    }
 
-    getGenerosity(): number {
-        return this.generosity;
-    }
-
-    setGenerosity(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.generosity = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    getForgiveness(): number {
-        return this.forgiveness;
-    }
-
-    setForgiveness(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.forgiveness = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
+        this.role = Math.floor(Math.random() * 6) 
     }
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
-        return Strategy.Default
-        //return IdeoStratMap[Math.floor(this.forgiveness / 4)][
-        //    Math.floor(this.generosity / 4)
-        //];
+        return this.role;
+    }
+
+    setStrategy(newRole: Strategy) {
+        this.role = newRole;
     }
 }
 
