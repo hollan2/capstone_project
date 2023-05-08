@@ -27,7 +27,21 @@ export function TutorialGuide({
     onClick,
     level,
 }: TutorialGuideProps) {
-    if (stageCount !== 3) {
+    function displayProfessor(): boolean {
+        //Tutorial Level 0
+        if (
+            level === 0 &&
+            stageCount !== 8 &&
+            stageCount !== 11 &&
+            stageCount < 18
+        ) {
+            return true;
+        }
+        //Tutorial Level 1
+
+        return false;
+    }
+    if (displayProfessor()) {
         return (
             <Professor
                 turnCount={turnCount}

@@ -165,7 +165,8 @@ class Main extends React.Component {
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
                         <Route path="tutorial" element={<Tutorial />} />
-                        <Route path="level1" element={<TutorialDisplay/>}/>
+                        <Route path="level0" element={<TutorialDisplay />} />
+                        <Route path="level1" element={<TutorialDisplay />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -351,7 +352,7 @@ class Start extends React.Component<StartProps, StartState> {
 
 interface PlayerSelectionProps {
     selectedName: string;
-    handleSelectedName: (value: string) => void;    
+    handleSelectedName: (value: string) => void;
     selectedHat: string;
     handleSelectedHat: (value: string) => void;
     selectedFace: string;
@@ -504,7 +505,6 @@ export function HexToRGBObject(hex: string): RGB {
     return aRgb;
 }
 
-
 const PawnImageGroup = ({
     face,
     hat,
@@ -543,12 +543,12 @@ class NameSelector extends React.Component<NameSelectorProps, {}> {
                     required
                     name="names"
                     id="name-select"
-                    type="text" 
+                    type="text"
                     placeholder="Enter name"
                     value={this.props.selectedName}
                     onChange={(e) => {this.props.handleSelectedName(e.target.value);
                     }}
-                    />
+                />
             </div>
         );
     }

@@ -38,7 +38,7 @@ import {
     Strategy,
     generateCommitment,
     Commitment,
-    getTruth
+    getTruth,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -149,12 +149,11 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         var promiseRelation;
 
         currentMap = props.mapImage;
-        
-       // Puts User Player in position 1 on map
+
+        // Puts User Player in position 1 on map
         const position = 0;
-        const player =
-            map.getVertices()[position];
-        
+        const player = map.getVertices()[position];
+
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
@@ -196,9 +195,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Set selected to position 1 so user is first player selected on load in
-        let selected = map.getVertices()[position+1];
+        let selected = map.getVertices()[position + 1];
 
-        let sidebarState = new SidebarState(map, player, selected,position);
+        let sidebarState = new SidebarState(map, player, selected, position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;
@@ -287,6 +286,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         //this.drainResources(vertices);
 
         this.forceUpdate();
+        this.updateStageCount();
     }
 
     drainResources(vertices: Agent[]) {
@@ -501,7 +501,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //This method keeps track of how many times the arrow button in <TutorialGuide /> has
     //been clicked. This is used to keep track of which stage in the tutorial story the user is at.
-    handleClick = () => {
+    updateStageCount = () => {
         this.setState({
             stageCount: this.state.stageCount + 1,
         });
@@ -512,35 +512,37 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                        <TutorialBoard
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            stageCount={this.state.stageCount}
-                        />
-                        <TutorialPlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                            stageCount={this.state.stageCount}
-                        />
-                        <TutorialSelectedSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            deselectCharacter={this.deselectCharacter}
-                            turnCount={this.state.turnCount}
-                        />
+                    <TutorialBoard
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                        stageCount={this.state.stageCount}
+                        level={this.props.level}
+                    />
+                    <TutorialPlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        turnCount={this.state.turnCount}
+                        promiseRelation={this.state.promiseRelation}
+                        stageCount={this.state.stageCount}
+                        level={this.props.level}
+                    />
+                    <TutorialSelectedSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        deselectCharacter={this.deselectCharacter}
+                        turnCount={this.state.turnCount}
+                    />
                 </div>
             );
         } else {
@@ -555,6 +557,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         deselectCharacter={this.deselectCharacter}
                         current={currentMap}
                         stageCount={this.state.stageCount}
+                        level={this.props.level}
                     />
                     <TutorialPlayerSidebar
                         map={this.state.map}
@@ -565,11 +568,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
                         stageCount={this.state.stageCount}
+                        level={this.props.level}
                     />
                     <TutorialGuide
                         turnCount={this.state.turnCount}
                         stageCount={this.state.stageCount}
-                        onClick={this.handleClick}
+                        onClick={this.updateStageCount}
                         level={this.props.level}
                     />
                 </div>
