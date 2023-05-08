@@ -111,7 +111,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1>Tutorial Level 1</h1>
+                    <h1>Tutorial Level {this.props.level}</h1>
                 </article>
                 <div
                     className="map"

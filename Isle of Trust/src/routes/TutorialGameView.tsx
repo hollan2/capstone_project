@@ -464,8 +464,14 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 //a reward trust function will be need when trust implmented
 
                 //Checks if the choice each v1 v2 makes is a truth or lie
-                let v1Truth = (v1Choice == getTruth(v1Promise, v2Promise)) ? "Honest" : "Lied";
-                let v2Truth = (v2Choice == getTruth(v2Promise, v1Promise)) ? "Honest" : "Lied";
+                let v1Truth =
+                    v1Choice == getTruth(v1Promise, v2Promise)
+                        ? "Honest"
+                        : "Lied";
+                let v2Truth =
+                    v2Choice == getTruth(v2Promise, v1Promise)
+                        ? "Honest"
+                        : "Lied";
 
                 //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
@@ -542,6 +548,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         deselectCharacter={this.deselectCharacter}
                         turnCount={this.state.turnCount}
+                    />
+                    <TutorialGuide
+                        turnCount={this.state.turnCount}
+                        stageCount={this.state.stageCount}
+                        onClick={this.updateStageCount}
+                        level={this.props.level}
                     />
                 </div>
             );
