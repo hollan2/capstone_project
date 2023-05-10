@@ -116,3 +116,55 @@ export class Grid extends Map {
         }
     }
 }
+
+
+
+// Used to create tutorial selected players per level.
+export class GridDefault extends Map {
+    startingResources: number;
+    level: number;
+    constructor(select: string, resource: number = 10, level:number) {
+        super(select);
+
+        this.startingResources = resource;
+        this.level = level;
+        this.generateVertices();
+        this.generateEdges();
+    }
+
+    generateVertices() {
+        let vID = 1;
+
+        // Generates agent vertices and inserts them to graph
+        if (this.jsonData) {
+            this.jsonData.points.forEach((point) => {
+                const v = genA.genDefaultAgent(
+                    vID,
+                    [point.x, point.y],
+                    this.startingResources,
+                    this.level
+                );
+                ++vID;
+                this.graph.insertVertex(v);
+            });
+        }
+    }
+
+    generateEdges() {
+        const all = this.graph.getVertices();
+        if (this.jsonData) {
+            this.jsonData.edges.forEach((edge) => {
+                this.graph.insertEdge(
+                    all[edge.v1],
+                    all[edge.v2],
+                    new Relation(10, 10)
+                );
+                this.graph.insertEdge(
+                    all[edge.v2],
+                    all[edge.v1],
+                    new Relation(10, 10)
+                );
+            });
+        }
+    }
+}

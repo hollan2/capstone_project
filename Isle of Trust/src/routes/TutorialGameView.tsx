@@ -18,7 +18,7 @@ import {
 } from "../models/animation";
 
 import { Face, Hat, GeneratePawn } from "../generators/pawn";
-import { Grid } from "../generators/map";
+import { Grid, GridDefault } from "../generators/map";
 import { SidebarState } from "../components/sideBarState";
 import {
     Agent,
@@ -140,9 +140,10 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         super(props);
         // Here may be some kind of switch to generate map
         // type based on props, for now it's just the grid
-        const map = new Grid(
+        const map = new GridDefault(
             props.mapImage,
-            DIFFICULTY_VALUES[props.startingPoints]
+            DIFFICULTY_VALUES[props.startingPoints],
+            this.props.level
         ).getGraph();
         const turnCount = 0;
         const stageCount = 0;
