@@ -39,7 +39,7 @@ export const genAgent = function (
     newMood: number,
     newCoord: [number, number],
     level: number
-) {};
+) { };
 
 const randomAttribute = function (): number {
     return randomIntRange(0, 20);
@@ -80,9 +80,11 @@ export const genDefaultAgent = function (
     resources: number = 10,
     level: number
 ): Agent {
+
+    const chart = [19,15,10,5,0];
     let result = new Agent(
         genName(vID),
-        new Ideology(randomAttribute(), randomAttribute()),
+        new Ideology(chart[level-1], chart[level-1]),
         new Personality(randomAttribute(), randomAttribute()),
         resources,
         10,

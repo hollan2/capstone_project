@@ -3,12 +3,29 @@ import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
 
-const defaultPawns = [{
-    defName: 'Kyle',
-    defFace: 2,
-    defHat: 3
-    
-}]
+const defaultPawns = [
+    {
+        defName: 'Rec',
+        defFace: 2,
+        defHat: 3
+    },
+    {
+        defName: 'Susi',
+        defFace: 5,
+        defHat: 1
+    },
+    {
+        defName: 'Domran',
+        defFace: 6,
+        defHat: 2
+    },
+
+    {
+        defName: 'Pessimo',
+        defFace: 3,
+        defHat: 0
+    }
+]
 
 
 // perhaps it would be better if attributes were their own classes that could
@@ -370,6 +387,7 @@ export class Ideology extends AttributeContainer {
 
     private role: Strategy;
 
+
     constructor(generosity: number, forgiveness: number) {
         super();
         if (
@@ -385,7 +403,11 @@ export class Ideology extends AttributeContainer {
 
         }
 
-        this.role = Math.floor(Math.random() * 6)
+        if (generosity == 19){ this.role = 4;}
+        else if (generosity == 15){ this.role = 1;}
+        else if (generosity == 10){ this.role = 3;}
+        else if (generosity == 5){ this.role = 1;}
+        else { this.role = Math.floor(Math.random() * 6);}
     }
 
     // get the strategy associated with this ideology
