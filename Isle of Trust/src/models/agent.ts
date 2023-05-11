@@ -120,7 +120,7 @@ export class Agent extends AttributeContainer {
         this.coords = coords;
         this.level = level;
         // Create player based off current level
-        if (level != null) {
+        if (level >= 1) {
             let defFace =
                 Object.values(Face)[
                 defaultPawns[this.level-1].defFace 
