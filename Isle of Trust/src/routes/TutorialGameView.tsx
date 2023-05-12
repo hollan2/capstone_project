@@ -6,6 +6,7 @@ import { TutorialGuide } from "../components/tutorialGuide";
 import { TutorialBoard } from "../components/tutorialBoard";
 import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
 import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
+import { EndOfLevel } from "../components/EndOfLevel";
 import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
@@ -534,9 +535,19 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         return null;
     };
 
+    //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
+    renderEndOfLevel = () => {
+        //Level 0
+        if (this.props.level === 0 && this.state.stageCount === 27) {
+            return <EndOfLevel level={this.props.level} />;
+        }
+        return null;
+    };
+
     render() {
         //if there is a selected player display right sidebar
-        let renderSelectedSidebar = this.renderSelectedSidebar();
+        let selectedSidebar = this.renderSelectedSidebar();
+        let endOfLevel = this.renderEndOfLevel();
         return (
             <div className="game">
                 <TutorialBoard
@@ -561,13 +572,14 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                     stageCount={this.state.stageCount}
                     level={this.props.level}
                 />
-                {renderSelectedSidebar}
+                {selectedSidebar}
                 <TutorialGuide
                     turnCount={this.state.turnCount}
                     stageCount={this.state.stageCount}
                     onClick={this.updateStageCount}
                     level={this.props.level}
                 />
+                {endOfLevel}
             </div>
         );
     }
