@@ -95,9 +95,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         //Tutorial Level 0
         if (
             this.props.level === 0 &&
-            this.props.stageCount !== 8 &&
-            this.props.stageCount !== 11 &&
-            this.props.stageCount < 18
+            this.props.stageCount !== 15 &&
+            this.props.stageCount < 21
         ) {
             return true;
         }
@@ -111,10 +110,14 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1>Tutorial Level {this.props.level}</h1>
+                    <h1 id="tutorialHeader">
+                        Tutorial Level {this.props.level}
+                    </h1>
                 </article>
                 <div
-                    className="map"
+                    className={
+                        this.props.stageCount === 14 ? "map spotlight" : "map"
+                    }
                     ref={this.containerRef}
                     style={{
                         backgroundImage: MAP_URL[this.props.current],

@@ -32,8 +32,9 @@ export function TutorialGuide({
         if (
             level === 0 &&
             stageCount !== 8 &&
-            stageCount !== 11 &&
-            stageCount < 18
+            stageCount !== 12 &&
+            stageCount !== 15 &&
+            stageCount < 21
         ) {
             return true;
         }

@@ -205,6 +205,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             sidebarState.selectedToPlayer = map.getEdge(agent, player)!;
             sidebarState.influenceChoices = new SpendingContainer();
             this.setState({ sidebarState: sidebarState });
+            this.updateStageCount();
         };
 
         this.state = {
@@ -515,6 +516,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     render() {
         //if there is a selected player display right sidebar
+        console.log("Stage count: " + this.state.stageCount);
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
@@ -548,6 +550,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         deselectCharacter={this.deselectCharacter}
                         turnCount={this.state.turnCount}
+                        stageCount={this.state.stageCount}
+                        level={this.props.level}
                     />
                     <TutorialGuide
                         turnCount={this.state.turnCount}

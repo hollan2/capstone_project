@@ -138,7 +138,29 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
     public spendingMap = new SpendingContainer();
     displaySpotlight(): boolean {
         //Tutorial Level 0
-        if (this.props.level === 0 && this.props.stageCount === 4) {
+        if (
+            (this.props.level === 0 &&
+                this.props.stageCount >= 4 &&
+                this.props.stageCount <= 7) ||
+            (this.props.level === 0 &&
+                this.props.stageCount >= 10 &&
+                this.props.stageCount <= 11)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    displayTextHighlight(): boolean {
+        //Tutorial Level 0
+        if (
+            (this.props.level === 0 &&
+                this.props.stageCount >= 5 &&
+                this.props.stageCount <= 6) ||
+            (this.props.level === 0 &&
+                this.props.stageCount >= 10 &&
+                this.props.stageCount <= 11)
+        ) {
             return true;
         }
         return false;
@@ -149,8 +171,8 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         if (
             this.props.level === 0 &&
             this.props.stageCount !== 8 &&
-            this.props.stageCount !== 11 &&
-            this.props.stageCount < 18
+            this.props.stageCount !== 12 &&
+            this.props.stageCount < 21
         ) {
             return true;
         }
@@ -178,7 +200,13 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                                 : {}
                         }
                     >
-                        <div className="influence-title">
+                        <div
+                            className={
+                                this.displayTextHighlight()
+                                    ? "influence-title highlightText"
+                                    : "influence-title"
+                            }
+                        >
                             Promise Phase
                             <br /> Declare your intent with neighbors:
                         </div>
@@ -211,7 +239,13 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                                 : {}
                         }
                     >
-                        <div className="influence-title">
+                        <div
+                            className={
+                                this.displayTextHighlight()
+                                    ? "influence-title highlightText"
+                                    : "influence-title"
+                            }
+                        >
                             Action Phase
                             <br /> Deliver on your promises! (Or Not):
                         </div>
@@ -479,7 +513,10 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(Choice.Cooperate, agent);
+                                    player.updateChoice(
+                                        Choice.Cooperate,
+                                        agent
+                                    );
                                 }}
                             >
                                 <div className="action-container">
