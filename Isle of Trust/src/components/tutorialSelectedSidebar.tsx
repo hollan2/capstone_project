@@ -223,7 +223,7 @@ interface HistoryProps {
 }
 
 class History extends React.Component<HistoryProps> {
-    private testRef = React.createRef<HTMLDivElement>();
+    private historyRef = React.createRef<HTMLDivElement>();
     private children: JSX.Element[] = [];
 
     renderNeighbors = () => {
@@ -245,7 +245,7 @@ class History extends React.Component<HistoryProps> {
     };
 
     scrollToElement = () => {
-        if (this.testRef.current) this.testRef.current.scrollIntoView();
+        if (this.historyRef.current) this.historyRef.current.scrollIntoView();
     };
 
     render() {
@@ -258,7 +258,7 @@ class History extends React.Component<HistoryProps> {
                         ? "history-container spotlight"
                         : "history-container"
                 }
-                ref={this.testRef}
+                ref={this.historyRef}
             >
                 <div className="history-title">
                     <h3>See history of neighbors:</h3>

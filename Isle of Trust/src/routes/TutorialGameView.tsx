@@ -514,86 +514,61 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         });
     };
 
-    render() {
-        //if there is a selected player display right sidebar
-        console.log("Stage count: " + this.state.stageCount);
+    //If there is a selected player - render the TutorialSelectedSidebar component
+    renderSelectedSidebar = () => {
         if (this.state.selectCharacterDisplay) {
             return (
-                <div className="game">
-                    <TutorialBoard
-                        map={this.state.map}
-                        turnCount={this.state.turnCount}
-                        selected={this.state.sidebarState.selected}
-                        select={this.state.select.bind(this)}
-                        player={this.state.sidebarState.player}
-                        deselectCharacter={this.deselectCharacter}
-                        current={currentMap}
-                        stageCount={this.state.stageCount}
-                        level={this.props.level}
-                    />
-                    <TutorialPlayerSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        turnCount={this.state.turnCount}
-                        promiseRelation={this.state.promiseRelation}
-                        stageCount={this.state.stageCount}
-                        level={this.props.level}
-                    />
-                    <TutorialSelectedSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        deselectCharacter={this.deselectCharacter}
-                        turnCount={this.state.turnCount}
-                        stageCount={this.state.stageCount}
-                        level={this.props.level}
-                    />
-                    <TutorialGuide
-                        turnCount={this.state.turnCount}
-                        stageCount={this.state.stageCount}
-                        onClick={this.updateStageCount}
-                        level={this.props.level}
-                    />
-                </div>
-            );
-        } else {
-            return (
-                <div className="game">
-                    <TutorialBoard
-                        map={this.state.map}
-                        turnCount={this.state.turnCount}
-                        selected={this.state.sidebarState.selected}
-                        select={this.state.select.bind(this)}
-                        player={this.state.sidebarState.player}
-                        deselectCharacter={this.deselectCharacter}
-                        current={currentMap}
-                        stageCount={this.state.stageCount}
-                        level={this.props.level}
-                    />
-                    <TutorialPlayerSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        turnCount={this.state.turnCount}
-                        promiseRelation={this.state.promiseRelation}
-                        stageCount={this.state.stageCount}
-                        level={this.props.level}
-                    />
-                    <TutorialGuide
-                        turnCount={this.state.turnCount}
-                        stageCount={this.state.stageCount}
-                        onClick={this.updateStageCount}
-                        level={this.props.level}
-                    />
-                </div>
+                <TutorialSelectedSidebar
+                    map={this.state.map}
+                    round={this.tempTurn.bind(this)}
+                    sidebarState={this.state.sidebarState}
+                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                    countTotalInfluence={this.countTotalInfluence}
+                    deselectCharacter={this.deselectCharacter}
+                    turnCount={this.state.turnCount}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
             );
         }
+        return null;
+    };
+
+    render() {
+        //if there is a selected player display right sidebar
+        let renderSelectedSidebar = this.renderSelectedSidebar();
+        return (
+            <div className="game">
+                <TutorialBoard
+                    map={this.state.map}
+                    turnCount={this.state.turnCount}
+                    selected={this.state.sidebarState.selected}
+                    select={this.state.select.bind(this)}
+                    player={this.state.sidebarState.player}
+                    deselectCharacter={this.deselectCharacter}
+                    current={currentMap}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
+                <TutorialPlayerSidebar
+                    map={this.state.map}
+                    round={this.tempTurn.bind(this)}
+                    sidebarState={this.state.sidebarState}
+                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                    countTotalInfluence={this.countTotalInfluence}
+                    turnCount={this.state.turnCount}
+                    promiseRelation={this.state.promiseRelation}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
+                {renderSelectedSidebar}
+                <TutorialGuide
+                    turnCount={this.state.turnCount}
+                    stageCount={this.state.stageCount}
+                    onClick={this.updateStageCount}
+                    level={this.props.level}
+                />
+            </div>
+        );
     }
 }
