@@ -234,43 +234,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
     }
 
-    /* THESE functions don't serve a purpose anymore, can be removed
-    drainInfluence(edges: [Agent, Agent, Relation][]) {
-        edges.forEach(([v1, v2, e]) => {
-            const v2Agent = v2 as Agent;
-            const maxInfluenceChange =
-                BASE_INFLUENCE_LOST_PER_TURN *
-                v2Agent.getInfluenceability();
-            e.influence = e.incrementAttributeBy(
-                -maxInfluenceChange,
-                e.influence
-            );
-        });
-    }
-
-    handleInfluenceChanges(vertices: Agent[]) {
-        vertices.forEach((v1) => {
-                const v1Relations = this.state.map.getEdges(v1)!;
-                let spendingMap = new SpendingContainer();
-                if (v1 === this.state.sidebarState.player) {
-                    spendingMap = this.state.sidebarState.influenceChoices;
-                } else {
-                    spendingMap = v1.autoDisperseInfluence(v1Relations);
-                }
-                spendingMap.data.forEach((allotment, v2) => {
-                    v2.resources += allotment;
-                    v1.resources -= allotment;
-                    this.state.map
-                        .getEdge(v1, v2)!
-                        .addInfluenceBasedOn(
-                            allotment,
-                            v2.personality.getVolatility()
-                        );
-                });
-                this.driftIdeology(v1);
-        });
-    }
-    */
    
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
@@ -412,10 +375,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise, v2Truth));
-               
-                
-                
-
+  
             }
                 
         });
@@ -446,43 +406,13 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             return { turnCount: this.state.turnCount + .5};
         });
     }
-    /* This function doesn't serve a purpose anymore, can be removed
-    driftIdeology(agent: Agent) {
-        // Drift factor represents by how many attribute points an agent will drift towards a new ideology.
-        // A factor of 4 = an agent will change its ideology by 4 points (dividing the 4 points appropriately
-        // among its generosity and forgiveness.)
-        // Drift factor has an intended range of 1-10. (Keep in mind that since the change is divided between
-        // generotisy and forgiveness, it still represents a max change of 5 in either.)
-        const driftFactor = 1 + agent.getInfluenceability() * 19;
 
-        const ideologyAppeal: Map<Ideology, number> = new Map();
-        const neighbors = this.state.map.getEdges(agent)!;
-        let totalInfluence = 0;
-        
-        //calcautes the total influnce of all nehboors
-        neighbors.forEach((relation: Relation, neighbor: Agent) => {
-            const theirInfluence = this.state.map.getEdge(
-                neighbor,
-                agent
-            )!.influence;
-            ideologyAppeal.set(neighbor.ideology, theirInfluence);
-            totalInfluence += theirInfluence;
-        });
-
-        const drifts = new DriftContainer();
-        ideologyAppeal.forEach((theirInfluence, ideology) => {
-            const drift: number = Math.round(
-                driftFactor * (theirInfluence / totalInfluence)
-            );
-            drifts.data.set(ideology, drift);
-        });
-        agent.driftIdeology(drifts);
-    }
-    */
    
     deselectCharacter(value: boolean) {
         this.setState({selectCharacterDisplay: value});
     }
+
+
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {

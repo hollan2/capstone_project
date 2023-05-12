@@ -150,7 +150,25 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
                 />
+
+            <div className="sidebar-agent-info">
+              <button
+                  id="test"
+                  onClick={() => {
+                    this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
+                        if(v1.ideology.toStrategy() == Strategy.Suspicious)
+                            v1.ideology.setStrategy(Strategy.Student)
+                        if(v2.ideology.toStrategy() == Strategy.Suspicious)
+                            v2.ideology.setStrategy(Strategy.Student)
+                        });
+                  }}
+              >
+                  {" "}
+                  test
+              </button>
+              </div>
             </div>
+
         );
     }
 }
@@ -170,7 +188,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         const neighbors = this.props.map.getEdges(
             this.props.sidebarState.player
         )!;
-
+        
         if (this.props.sidebarState.player instanceof Agent) {
             if (this.props.turnCount % 1 == 0) {
                 return (
