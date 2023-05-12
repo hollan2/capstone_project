@@ -16,6 +16,6 @@ Welcome to Isle of Trust! Let's go over some fundamental game mechanics.
 ~Stage 16 filler
 ~This is the selected player sidebar...
 ~You can see how many resources they have, how many times they've cooperated, and so on.
-~If you scroll down to the bottom you can view a log all moves made by that player.
+~If you scroll down to the bottom you can view a log of all the moves made by that player.
 ~Lastly if you get stuck and would like a quck summary of how the game works, you can find it here under "How to play"
 ~Congratulations on finishing Level 0! Play a few rounds to get used to the buttons.

@@ -85,6 +85,7 @@ interface PlayerDisplayProps {
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
+    //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
         //Tutorial Level 0
         if (this.props.level === 0 && this.props.stageCount === 3) {
@@ -136,6 +137,7 @@ interface InfluenceMenuProps {
 
 class InfluenceMenu extends React.Component<InfluenceMenuProps> {
     public spendingMap = new SpendingContainer();
+    //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
         //Tutorial Level 0
         if (
@@ -151,6 +153,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         return false;
     }
 
+    //Decides wheter or not to apply the highlightText CSS class based on level and stageCount
     displayTextHighlight(): boolean {
         //Tutorial Level 0
         if (
@@ -166,6 +169,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         return false;
     }
 
+    //Decides wheter or not to disable the InfluenceMenu based on level and stageCount
     disableScreen(): boolean {
         //Tutorial Level 0
         if (

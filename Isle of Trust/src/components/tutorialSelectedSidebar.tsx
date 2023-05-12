@@ -244,6 +244,7 @@ class History extends React.Component<HistoryProps> {
         }
     };
 
+    //Scrolls to the History panel on the screen. Used for Tutorial level 0.
     scrollToElement = () => {
         if (this.historyRef.current) this.historyRef.current.scrollIntoView();
     };

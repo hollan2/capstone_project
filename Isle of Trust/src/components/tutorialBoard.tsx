@@ -91,6 +91,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.props.deselectCharacter(value);
     }
 
+    //Decides wheter or not disable the board based on level and stageCount
     disableScreen(): boolean {
         //Tutorial Level 0
         if (
