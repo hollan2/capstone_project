@@ -279,9 +279,11 @@ class History extends React.Component<HistoryProps> {
         for (const entry of neighbors.entries()) {
             this.children.push(
             <HistoryNeighbors 
-            agent={entry[0]} 
-            relation={entry[1]}
-            turnCount={this.props.turnCount}
+                selected={this.props.sidebarState.selected}
+                neighbor={entry[0]} 
+                relation={entry[1]}
+                turnCount={this.props.turnCount}
+                map={this.props.map}
             />);
             
         };
@@ -307,9 +309,11 @@ class History extends React.Component<HistoryProps> {
 }
 
 interface HistoryNeighborsProps{
-    agent: Agent;
+    selected: Agent;
+    neighbor: Agent;
     relation: Relation;
     turnCount: number;
+    map: Graph<Agent, Relation>;
 }
 
 interface HistoryNeighborsState{
@@ -343,14 +347,14 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
                         <RK.Layer>
                             <SidebarAgentImage
                                 canvasWidth={this.canvasWidth}
-                                agent={this.props.agent}
+                                agent={this.props.neighbor}
                                 turnCount={this.props.turnCount}
                             />
                         </RK.Layer>
                     </RK.Stage>
                     <div className="history-view">
                         <button onClick={this.changeState}>View</button>
-                        {this.state.show && (<HistoryPopUp history={this.props.relation.history} changeState={this.changeState}/>)}
+                        {this.state.show && (<HistoryPopUp selected={this.props.selected} neighbor={this.props.neighbor} history={this.props.relation.history} changeState={this.changeState} turnCount={this.props.turnCount} map={this.props.map}/>)}
                     </div>
             </div>
         );
@@ -359,8 +363,12 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
 
 
 interface HistoryPopUpProps{
+    selected: Agent;
+    neighbor: Agent;
     history: TurnLog;
+    turnCount: number;
     changeState: (show: boolean) => void;
+    map: Graph<Agent, Relation>;
 }
 
 
@@ -373,10 +381,39 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
     
     private History: TurnLog = this.props.history;
 
+    private stageRef = React.createRef<Konva.Stage>();
+    private agentImageScale: number = .15;
+    private canvasWidth = AGENT_IMAGE_WIDTH * this.agentImageScale;
+    private canvasHeight = AGENT_IMAGE_HEIGHT * this.agentImageScale;
+    
+    private getComDotColor(commitment: Commitment): string {
+        switch (commitment) {
+          case Commitment.Compete:
+            return '#f36252';
+          case Commitment.Reciprocate:
+            return '#e1e257';
+          case Commitment.Cooperate:
+            return '#51e658';
+          default:
+            return '#51e658';
+        }
+    }
+    private getChoiceDotColor(choice: Choice): string {
+        switch (choice) {
+          case Choice.Compete:
+            return '#f36252';
+          case Choice.Cooperate:
+            return '#51e658';
+          default:
+            return '#51e658';
+        }
+    }
     render() {
+       /*
         const list = this.History.actions.map((turn, i) => (
-            <li key={i}>Round: {i+1} | Promise: {Commitment[turn.commitment]} | Action: {Choice[turn.choice]}</li>
-            )).reverse();
+            <li key={i}>Round: {i+1} | Promise: {Commitment[turn.commitment]} <span style={{backgroundColor: this.getComDotColor(turn.commitment)}} className="dot"></span> | Action: {Choice[turn.choice]} <span style={{backgroundColor: this.getChoiceDotColor(turn.choice)}}className="dot"></span></li>
+            )).reverse();*/
+        const neighborToSelected = this.props.map.getEdge(this.props.neighbor, this.props.selected)!.history.getList();
         return ReactDom.createPortal(
             <div className="popup-container">
                 <div className="overlay"></div>
@@ -384,11 +421,81 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                     <div className="popup-close">
                         <button onClick={this.handleCloseClick}>X</button>
                     </div>
+                    <div className="history-header">
+                        <div className="selected-agent">        
+                                <RK.Stage
+                                    ref={this.stageRef}
+                                    width={this.canvasWidth}
+                                    height={this.canvasHeight}
+                                >
+                                    <RK.Layer>
+                                        <SidebarAgentImage
+                                            canvasWidth={this.canvasWidth}
+                                            agent={this.props.selected}
+                                            turnCount={this.props.turnCount}
+                                        />
+                                    
+                                    </RK.Layer>
+                                </RK.Stage>
+                                <h5>{this.props.selected.name}</h5>
+                            </div>
+                            <div>
+                                <h1>History:</h1>
+                                <div className="arrow">
+                                    <h4>{'<' + '—'.repeat(4) + '>'}</h4>
+                                </div>
+                            </div>
+                            <div className="neighbor-agent">
+    
+                                <RK.Stage
+                                    ref={this.stageRef}
+                                    width={this.canvasWidth}
+                                    height={this.canvasHeight}
+                                >
+                                    <RK.Layer>
+                                        <SidebarAgentImage
+                                            canvasWidth={this.canvasWidth}
+                                            agent={this.props.neighbor}
+                                            turnCount={this.props.turnCount}
+                                        />
+                                    
+                                    </RK.Layer>
+                                    
+                                </RK.Stage>
+                                <h5>{this.props.neighbor.name}</h5>
+                            </div>
+                    </div>
                     <div className="popup-content">
-                        <h1>History:</h1>
-                        <ul>
-                                {list}
-                        </ul>
+                        <table className="history-table">
+                            <thead>
+                                <tr>
+                                <th>Promise {'->'}</th>
+                                <th>Action {'->'}</th>
+                                <th>Round</th>
+                                <th>{'<-'} Promise</th>
+                                <th>{'<-'} Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.History.actions.map((turn, i) => (
+                                    <tr key={i}>
+                                        <td>
+                                            <span style={{backgroundColor: this.getComDotColor(turn.commitment)}} className="dot"></span>
+                                        </td>
+                                        <td>
+                                            <span style={{backgroundColor: this.getChoiceDotColor(turn.choice)}} className="dot"></span>
+                                        </td>
+                                        <td>{i+1}</td>
+                                        <td>
+                                            <span style={{backgroundColor: this.getComDotColor(neighborToSelected[i].commitment)}} className="dot"></span>
+                                        </td>
+                                        <td>
+                                            <span style={{backgroundColor: this.getChoiceDotColor(neighborToSelected[i].choice)}} className="dot"></span>
+                                        </td>
+                                    </tr>
+                                )).reverse()}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>,
