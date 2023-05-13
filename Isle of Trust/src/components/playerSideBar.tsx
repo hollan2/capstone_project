@@ -44,6 +44,8 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
+import { Stream } from "stream";
+import { SelectedSidebar } from "./selectedSideBar";
 /*
 import { timeStamp } from "console";
 */
@@ -130,6 +132,18 @@ interface PlayerDisplayProps {
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
+    private library_count = 0;
+    private university_count = 0;
+    //changes everyone of matching strategy to a new strategy
+    private roleChange(oldRole: Strategy, newRole: Strategy, edges: [Agent, Agent, Relation][]){
+        this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == oldRole)
+                v1.ideology.setStrategy(newRole)
+            if(v2.ideology.toStrategy() == oldRole)
+                v2.ideology.setStrategy(newRole)
+            });
+    }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -153,20 +167,51 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
 
             <div className="sidebar-agent-info">
               <button
-                  id="test"
+                  id="library"
                   onClick={() => {
-                    this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
-                        if(v1.ideology.toStrategy() == Strategy.Suspicious)
-                            v1.ideology.setStrategy(Strategy.Student)
-                        if(v2.ideology.toStrategy() == Strategy.Suspicious)
-                            v2.ideology.setStrategy(Strategy.Student)
-                        });
+                    if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
+                        this.library_count += 1
+                        this.props.sidebarState.player.resources -= 1
+                        this.setState({})
+                    }
+
+                    else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
+                    {
+                        this.library_count += 1
+                        this.props.sidebarState.player.resources -= 1
+                        this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
+                        this.setState({})
+                    }
                   }}
               >
                   {" "}
-                  test
+                  Library {this.library_count}
               </button>
               </div>
+
+
+              <button
+                  id="university"
+                  onClick={() => {
+                    if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
+                        this.university_count += 1
+                        this.props.sidebarState.player.resources -= 1
+                        this.setState({})
+                    }
+
+                    else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
+                    {
+                        this.university_count += 1
+                        this.props.sidebarState.player.resources -= 1
+                        this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
+                        this.setState({})
+                    }
+                
+                  }}
+              >
+                  {" "}
+                  University {this.university_count}
+              </button>
             </div>
 
         );
