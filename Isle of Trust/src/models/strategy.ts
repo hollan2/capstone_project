@@ -221,7 +221,7 @@ export class choiceTally {
         let history = turnLog.actions;
         for (let i = 0; i < history.length; ++i) {
             let action = history[i];
-            if (action.choice === Choice.Cooperate) {
+            if (action.choice === Choice.Cooperate)
                 this.gave += 1;
             if (action.truth === "Lied")
                 this.cheated += 1;

@@ -259,6 +259,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
                         spendingMap={this.props.spendingMap}
                         turnCount={this.props.turnCount}
                         promiseRelation={this.props.promiseRelation}
+                        entryNumber={key}
                     />
                 );
                 this.children.push(newChild);
@@ -307,6 +308,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
 }
 
 interface InfluenceEntryProps {
+    entryNumber: Number;
     allowResources: (giving: number, increment: number) => number;
     resourcesGiveable: number;
     agent: Agent;
@@ -325,6 +327,7 @@ class InfluenceEntry extends React.Component<
     InfluenceEntryState
 > {
     private containerRef = React.createRef<HTMLDivElement>();
+    private containerRef2 = React.createRef<HTMLDivElement>();
     private stageRef = React.createRef<Konva.Stage>();
     private agentImageScale: number = 0.1;
     private canvasWidth = AGENT_IMAGE_WIDTH * this.agentImageScale;
@@ -383,15 +386,33 @@ class InfluenceEntry extends React.Component<
             return "honest";
         else return "lie";
     }
+
     render() {
         const player = this.props.player;
         const agent = this.props.agent;
-
         const aiCommitment = this.getPromiseBetween(agent, player);
         const playerCommitment = this.getPromiseBetween(player, agent);
+        //const sMaybe = this.state.given === 1 ? "" : "s";
+        //const givenString = String(this.state.given) + " resource" + sMaybe;
 
-        const sMaybe = this.state.given === 1 ? "" : "s";
-        const givenString = String(this.state.given) + " resource" + sMaybe;
+        //for changing color of phase buttons when clicking on them
+        const container2 = this.containerRef.current;
+        if(container2) {
+            const options: HTMLElement[] = Array.from(container2.querySelectorAll('.phase-buttons')) as HTMLElement[];
+            let i;
+            function unselectAll() {
+                for (i = 0; i < options.length; i++) {
+                    options[i].style.backgroundColor = "black";
+                }
+            }
+            options.forEach(option => {
+                option.addEventListener('click', function(){
+                unselectAll();
+                this.style.backgroundColor = "black";  
+                } );
+            });
+        }
+        
         if (this.props.turnCount % 1 == 0) {
             //promise phase
             return (
@@ -413,6 +434,7 @@ class InfluenceEntry extends React.Component<
                     </div>
                     <div className="sidebar-agent-info">
                         <button
+                            className="phase-buttons"
                             id="cooperate"
                             onClick={() => {
                                 player.updatePromise(
@@ -425,6 +447,7 @@ class InfluenceEntry extends React.Component<
                             Cooperate
                         </button>
                         <button
+                            className="phase-buttons"
                             id="reciprocate"
                             onClick={() => {
                                 player.updatePromise(
@@ -437,6 +460,7 @@ class InfluenceEntry extends React.Component<
                             Reciprocate
                         </button>
                         <button
+                            className="phase-buttons"
                             id="compete"
                             onClick={() => {
                                 player.updatePromise(Commitment.Compete, agent);
@@ -453,9 +477,9 @@ class InfluenceEntry extends React.Component<
         //action phase
         else {
             return (
-                <div className="container" ref={this.containerRef}>
+                <div className="action-phase">
                     <div>{agent.name + " promised to " + aiCommitment}</div>
-                    <div className="influence-entry">
+                    <div className="influence-entry"> 
                         <div className="influence-agent">
                             <RK.Stage
                                 ref={this.stageRef}
@@ -471,8 +495,9 @@ class InfluenceEntry extends React.Component<
                                 </RK.Layer>
                             </RK.Stage>
                         </div>
-                        <div className="sidebar-agent-info">
+                        <div className="sidebar-agent-info" ref={this.containerRef2}>
                             <button
+                                className="phase-buttons"
                                 id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
@@ -492,6 +517,7 @@ class InfluenceEntry extends React.Component<
                                 </div>
                             </button>
                             <button
+                                className="phase-buttons"
                                 id="compete"
                                 onClick={() => {
                                         console.log("Select compete")
