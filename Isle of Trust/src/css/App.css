@@ -76,6 +76,7 @@
     grid-area: sidebar;
     display: grid;
     gap: 5px;
+    width: 350px;
 }
 
 .playerSidebar {
@@ -157,12 +158,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.neighbor-promise {
+    margin-left: 45px;
+}
 
 .influence-entry {
     grid-area: influence-entry;
-    display: flex;
     align-items: center;
     gap: 5px;
+    display: grid;
+    grid-template-columns: 40px auto;
 }
 
 .sidebar-agent-info {
@@ -403,8 +408,9 @@
 }
 
 #cooperate {
-    background-color: #51e658;
+    background-color: #19B100;
     height: 30px;
+    flex-grow: 1;
 }
 #cooperate:target {
     background-color: #51e658;
@@ -413,13 +419,14 @@
 }
 
 #reciprocate {
-    background-color: #e1e257;
+    background-color: #C6C700;
     height: 30px;
 }
 
 #compete {
-    background-color: #f36252;
+    background-color: #D50000;
     height: 30px;
+    flex-grow: 1;
 }
 
 .action-container {
