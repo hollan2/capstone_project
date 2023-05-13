@@ -6,11 +6,11 @@ Stage 0 Hint Placeholder
 ~Stage 5 Hint Placeholder
 ~Stage 6 Hint Placeholder
 ~Stage 7 Hint Placeholder
-~Click on either "Cooperate", "Reciprocate", or "Compete" and then click on "Confirm choices"
+~Click on either Cooperate, Reciprocate, or Compete and then click on Confirm choices
 ~Stage 9 Hint Placeholded
 ~Stage 10 Hint Placeholder
 ~Stage 11 Hint Placeholder
-~Click on either "Cooperate" or "Compete" and then click on "Confirm choices"
+~Click on either Cooperate or Compete and then click on Confirm choices
 ~Stage 13 Hint Placeholder
 ~Stage 14 Hint Placeholder
 ~Click on a player on the map
