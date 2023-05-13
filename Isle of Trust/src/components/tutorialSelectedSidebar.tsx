@@ -229,7 +229,7 @@ class History extends React.Component<HistoryProps> {
         return (
             <div className="history-container">
                 <div className="history-title">
-                    <h3>See history of neighbors:</h3>
+                    <h3>See history with neighbors:</h3>
                 </div>
 
                 <div className="history-agent">{this.children}</div>
