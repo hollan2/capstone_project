@@ -378,7 +378,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
     handleCloseClick = () => {
         this.props.changeState(false);
       };
-    
+    //history of selected -> neighbor
     private History: TurnLog = this.props.history;
 
     private stageRef = React.createRef<Konva.Stage>();
@@ -409,10 +409,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
         }
     }
     render() {
-       /*
-        const list = this.History.actions.map((turn, i) => (
-            <li key={i}>Round: {i+1} | Promise: {Commitment[turn.commitment]} <span style={{backgroundColor: this.getComDotColor(turn.commitment)}} className="dot"></span> | Action: {Choice[turn.choice]} <span style={{backgroundColor: this.getChoiceDotColor(turn.choice)}}className="dot"></span></li>
-            )).reverse();*/
+        //history of the neighbor -> selected
         const neighborToSelected = this.props.map.getEdge(this.props.neighbor, this.props.selected)!.history.getList();
         return ReactDom.createPortal(
             <div className="popup-container">
