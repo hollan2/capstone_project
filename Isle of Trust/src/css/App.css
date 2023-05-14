@@ -408,26 +408,35 @@
 }
 
 #cooperate {
-    background-color: #19B100;
+    background-color: #3d7607;
     height: 30px;
     flex-grow: 1;
 }
 
 #reciprocate {
-    background-color: #C6C700;
+    background-color: #a47901;
     height: 30px;
 }
 
 #compete {
-    background-color: #D50000;
+    background-color: #8e0000;
     height: 30px;
     flex-grow: 1;
 }
 
-#cooperate.selected-buttons,
-#reciprocate.selected-buttons,
+#cooperate.selected-buttons {
+    background-color: #6dcc1b;
+
+}
+
+#reciprocate.selected-buttons {
+    background-color: #e4c202;
+
+}
+
 #compete.selected-buttons {
-    background-color: rgb(88, 88, 88);
+    background-color: #dd1313;
+
 }
 
 .action-container {
