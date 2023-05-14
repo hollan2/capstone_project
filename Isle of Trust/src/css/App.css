@@ -44,7 +44,7 @@
 
 .hintbtn {
     position: fixed;
-    right: 20%;
+    right: 22%;
     top: 70px;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
     transform: scale(1);
@@ -69,6 +69,20 @@
     100% {
         transform: scale(0.95);
         box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+.highlightText {
+    animation: fontEnlarger 2s infinite;
+}
+
+@keyframes fontEnlarger {
+    0% {
+        font-size: 1.1em;
+    }
+    100% {
+        font-size: 1.2em;
+        color: red;
     }
 }
 
@@ -280,7 +294,7 @@
 .map {
     aspect-ratio: 4 / 3;
     max-width: 100vmin;
-    max-height: 100vmin;
+    max-height: 90vmin;
     margin: auto;
 }
 

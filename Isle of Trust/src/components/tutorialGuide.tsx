@@ -27,7 +27,21 @@ export function TutorialGuide({
     onClick,
     level,
 }: TutorialGuideProps) {
-    if (stageCount !== 3) {
+    function displayProfessor(): boolean {
+        //Tutorial Level 0
+        if (
+            level === 0 &&
+            stageCount !== 8 &&
+            stageCount !== 12 &&
+            stageCount !== 15 &&
+            stageCount < 21
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+    if (displayProfessor()) {
         return (
             <Professor
                 turnCount={turnCount}
@@ -36,11 +50,12 @@ export function TutorialGuide({
                 level={level}
             />
         );
-    } else {
+    } else if (level === 0) {
         return (
             <Hint turnCount={turnCount} stageCount={stageCount} level={level} />
         );
     }
+    return null;
 }
 
 //Renders the professor image, the "next" button, the text box, and the animated text.

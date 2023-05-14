@@ -5,6 +5,11 @@ export const AGENT_RADIUS = 15;
 
 const defaultPawns = [
     {
+        defName: 'Tutor',
+        defFace: 4,
+        defHat: 4
+    },
+    {
         defName: 'Rec',
         defFace: 2,
         defHat: 3
@@ -120,19 +125,19 @@ export class Agent extends AttributeContainer {
         this.coords = coords;
         this.level = level;
         // Create player based off current level
-        if (level >= 1) {
+        if (level >= 0) {
             let defFace =
                 Object.values(Face)[
-                defaultPawns[this.level-1].defFace 
+                defaultPawns[this.level].defFace 
                 ];
             let defHat =
                 Object.values(Hat)[
-                defaultPawns[this.level-1].defHat
+                defaultPawns[this.level].defHat
                 ];
 
             this.face = Face[defFace as keyof typeof Face];
             this.hat = Hat[defHat as keyof typeof Hat];
-            this.name = defaultPawns[this.level-1].defName;
+            this.name = defaultPawns[this.level].defName;
         }
         // Create Random players
         else {
