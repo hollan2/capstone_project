@@ -412,11 +412,6 @@
     height: 30px;
     flex-grow: 1;
 }
-#cooperate:target {
-    background-color: #51e658;
-    height: 30px;
-    opacity: 0.25;
-}
 
 #reciprocate {
     background-color: #C6C700;
@@ -427,6 +422,12 @@
     background-color: #D50000;
     height: 30px;
     flex-grow: 1;
+}
+
+#cooperate.selected-buttons,
+#reciprocate.selected-buttons,
+#compete.selected-buttons {
+    background-color: rgb(88, 88, 88);
 }
 
 .action-container {
