@@ -434,7 +434,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            If I will you will
+                            Match
                         </button>
                         <button
                             id="compete"
