@@ -7,7 +7,7 @@ import { SidebarState } from "./sideBarState";
 import { SidebarAgentImage } from "../App";
 import { Agent, Relation, SpendingContainer } from "../models/agent";
 import { Graph } from "../models/graph";
-import { choiceTally, Commitment, Choice } from "../models/strategy";
+import { choiceTally, Commitment, Choice, Strategy } from "../models/strategy";
 export const RESIZE_TIMEOUT = 500;
 
 export const SCENE_WIDTH = 800;
@@ -81,6 +81,18 @@ interface PlayerDisplayProps {
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
+    private library_count = 0;
+    private university_count = 0;
+    //changes everyone of matching strategy to a new strategy
+    private roleChange(oldRole: Strategy, newRole: Strategy, edges: [Agent, Agent, Relation][]){
+        this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == oldRole)
+                v1.ideology.setStrategy(newRole)
+            if(v2.ideology.toStrategy() == oldRole)
+                v2.ideology.setStrategy(newRole)
+            });
+    }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -107,6 +119,57 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
                 />
+                        <div className="investmentSidebar">
+                <div className="influence-title">
+                    Invest in Public Services
+                </div>
+                <button
+                    id="library"
+                    className="investmentButton"
+                    onClick={() => {
+                        if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+
+                        else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+                    }}
+                >
+                    {" "}
+                    Library {this.library_count}
+                </button>
+
+                <button
+                    id="university"
+                    className="investmentButton"
+                    onClick={() => {
+                        if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+
+                        else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+                    
+                    }}
+                >
+                    {" "}
+                    University {this.university_count}
+                </button>
+              </div>
             </div>
         );
     }

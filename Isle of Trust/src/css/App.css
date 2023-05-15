@@ -78,6 +78,18 @@
     gap: 5px;
 }
 
+.investmentSidebar{
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.investmentButton{
+    height: 100%;
+    margin: 5px;
+    display: center;
+}
+
+
 .playerSidebar {
     grid-area: playerSidebar;
     grid-template-rows: auto 1fr;

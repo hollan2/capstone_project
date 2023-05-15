@@ -164,54 +164,57 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
                 />
+            <div className="investmentSidebar">
+                <div className="influence-title">
+                    Invest in Public Services
+                </div>
+                <button
+                    id="library"
+                    className="investmentButton"
+                    onClick={() => {
+                        if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
 
-            <div className="sidebar-agent-info">
-              <button
-                  id="library"
-                  onClick={() => {
-                    if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
-                        this.library_count += 1
-                        this.props.sidebarState.player.resources -= 1
-                        this.setState({})
-                    }
+                        else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+                    }}
+                >
+                    {" "}
+                    Library {this.library_count}
+                </button>
 
-                    else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
-                    {
-                        this.library_count += 1
-                        this.props.sidebarState.player.resources -= 1
-                        this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
-                        this.setState({})
-                    }
-                  }}
-              >
-                  {" "}
-                  Library {this.library_count}
-              </button>
+                <button
+                    id="university"
+                    className="investmentButton"
+                    onClick={() => {
+                        if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+
+                        else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
+                            this.setState({sidebarState: this.props.sidebarState})
+                        }
+                    
+                    }}
+                >
+                    {" "}
+                    University {this.university_count}
+                </button>
               </div>
-
-
-              <button
-                  id="university"
-                  onClick={() => {
-                    if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
-                        this.university_count += 1
-                        this.props.sidebarState.player.resources -= 1
-                        this.setState({})
-                    }
-
-                    else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
-                    {
-                        this.university_count += 1
-                        this.props.sidebarState.player.resources -= 1
-                        this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
-                        this.setState({})
-                    }
-                
-                  }}
-              >
-                  {" "}
-                  University {this.university_count}
-              </button>
             </div>
 
         );
