@@ -113,7 +113,7 @@ export function TutorialDisplay() {
         hat: "None",
         face: "Glasses",
         ideologyColor: "9ec4ea",
-        startingPoints: "Easy",
+        startingPoints: "easy",
         mapImage: "Small",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
     };
