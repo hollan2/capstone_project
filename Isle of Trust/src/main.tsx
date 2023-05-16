@@ -49,9 +49,29 @@ export const Maps = [
         location: "../Maps/mapSpokes.png",
     },
     {
-        name: "Small",
-        value: "Small",
-        location: "../Maps/mapSmall.png",
+        name: "Cruz",
+        value: "Cruz",
+        location: "../Maps/mapCruz.png",
+    },
+    {
+        name: "Symmetrical",
+        value: "Symmetrical",
+        location: "../Maps/mapSymmetrical.png",
+    },
+    {
+        name: "Dice",
+        value: "Dice",
+        location: "../Maps/mapDice.png",
+    },
+    {
+        name: "Magnifying",
+        value: "Magnifying",
+        location: "../Maps/mapMagnifying.png",
+    },
+    {
+        name: "Cloud",
+        value: "Cloud",
+        location: "../Maps/mapCloud.png",
     },
 ];
 
@@ -388,7 +408,9 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                         <fieldset>
                             <legend>Appearance:</legend>
                             <NameSelector
-                                handleSelectedName={this.props.handleSelectedName}
+                                handleSelectedName={
+                                    this.props.handleSelectedName
+                                }
                                 selectedName={this.props.selectedName}
                             />
                             <HatSelector
@@ -549,7 +571,8 @@ class NameSelector extends React.Component<NameSelectorProps, {}> {
                     type="text"
                     placeholder="Enter name"
                     value={this.props.selectedName}
-                    onChange={(e) => {this.props.handleSelectedName(e.target.value);
+                    onChange={(e) => {
+                        this.props.handleSelectedName(e.target.value);
                     }}
                 />
             </div>
