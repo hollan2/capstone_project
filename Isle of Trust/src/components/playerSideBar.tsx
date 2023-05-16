@@ -46,6 +46,7 @@ import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
 import { Stream } from "stream";
 import { SelectedSidebar } from "./selectedSideBar";
+import { Board } from "./board";
 /*
 import { timeStamp } from "console";
 */
@@ -135,7 +136,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     private library_count = 0;
     private university_count = 0;
     //changes everyone of matching strategy to a new strategy
-    private roleChange(oldRole: Strategy, newRole: Strategy, edges: [Agent, Agent, Relation][]){
+    private roleChange(oldRole: Strategy, newRole: Strategy){
         this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == oldRole)
                 v1.ideology.setStrategy(newRole)
@@ -172,17 +173,18 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     id="library"
                     className="investmentButton"
                     onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
                         if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.setState({sidebarState: this.props.sidebarState})
                         }
-
+                        //if the count is equal to 14, add to the count and change the personas
                         else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
                         {
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
+                            this.roleChange(Strategy.Suspicious, Strategy.Student)
                             this.setState({sidebarState: this.props.sidebarState})
                         }
                     }}
@@ -195,17 +197,19 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     id="university"
                     className="investmentButton"
                     onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
                         if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.setState({sidebarState: this.props.sidebarState})
                         }
 
+                        //if the count is equal to 14, add to the count and change the personas
                         else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
                         {
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
+                            this.roleChange(Strategy.Student, Strategy.Reciprocators)
                             this.setState({sidebarState: this.props.sidebarState})
                         }
                     
