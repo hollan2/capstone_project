@@ -23,7 +23,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 interface TutorialSelectedSidebarProps {
@@ -212,7 +212,11 @@ class History extends React.Component<HistoryProps> {
         //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
         for (const entry of neighbors.entries()) {
             this.children.push(
-                <HistoryNeighbors agent={entry[0]} relation={entry[1]} turnCount={this.props.turnCount}/>
+                <HistoryNeighbors
+                    agent={entry[0]}
+                    relation={entry[1]}
+                    turnCount={this.props.turnCount}
+                />
             );
         }
     };

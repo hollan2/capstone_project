@@ -30,7 +30,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
     Symmetrical: "url(../Maps/mapSymmetrical.png)",
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Dice: "url(../Maps/mapDice.png)",

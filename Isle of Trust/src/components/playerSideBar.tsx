@@ -66,7 +66,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -476,8 +476,11 @@ class InfluenceEntry extends React.Component<
                                 id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
-                                        console.log("Select cooperate")
-                                        player.updateChoice(Choice.Cooperate, agent);
+                                    console.log("Select cooperate");
+                                    player.updateChoice(
+                                        Choice.Cooperate,
+                                        agent
+                                    );
                                 }}
                             >
                                 <div className="action-container">
@@ -494,8 +497,8 @@ class InfluenceEntry extends React.Component<
                             <button
                                 id="compete"
                                 onClick={() => {
-                                        console.log("Select compete")
-                                        player.updateChoice(Choice.Compete, agent);
+                                    console.log("Select compete");
+                                    player.updateChoice(Choice.Compete, agent);
                                 }}
                             >
                                 <div className="action-container">

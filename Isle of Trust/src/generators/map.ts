@@ -6,7 +6,7 @@ import ChokeJson from "../data/mapChoke.json";
 import CrescentJson from "../data/mapCrescent.json";
 import RingJson from "../data/mapRing.json";
 import SpokesJson from "../data/mapSpokes.json";
-import SmallJson from "../data/mapSmall.json";
+import CruzJson from "../data/mapCruz.json";
 import SymmetricalJson from "../data/mapSymmetrical.json";
 import MagnifyingJson from "../data/mapMagnifying.json";
 import DiceJson from "../data/mapDice.json";
@@ -59,8 +59,8 @@ export class Map {
             case "Crescent":
                 json = CrescentJson;
                 break;
-            case "Small":
-                json = SmallJson;
+            case "Cruz":
+                json = CruzJson;
                 break;
             case "Symmetrical":
                 json = SymmetricalJson;

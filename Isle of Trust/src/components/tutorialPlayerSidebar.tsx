@@ -23,7 +23,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 interface TutorialPlayerSidebarProps {
@@ -434,7 +434,10 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(Choice.Cooperate, agent);
+                                    player.updateChoice(
+                                        Choice.Cooperate,
+                                        agent
+                                    );
                                 }}
                             >
                                 <div className="action-container">

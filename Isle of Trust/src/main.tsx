@@ -49,9 +49,9 @@ export const Maps = [
         location: "../Maps/mapSpokes.png",
     },
     {
-        name: "Small",
-        value: "Small",
-        location: "../Maps/mapSmall.png",
+        name: "Cruz",
+        value: "Cruz",
+        location: "../Maps/mapCruz.png",
     },
 ];
 
@@ -165,7 +165,7 @@ class Main extends React.Component {
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
                         <Route path="tutorial" element={<Tutorial />} />
-                        <Route path="level1" element={<TutorialDisplay/>}/>
+                        <Route path="level1" element={<TutorialDisplay />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -351,7 +351,7 @@ class Start extends React.Component<StartProps, StartState> {
 
 interface PlayerSelectionProps {
     selectedName: string;
-    handleSelectedName: (value: string) => void;    
+    handleSelectedName: (value: string) => void;
     selectedHat: string;
     handleSelectedHat: (value: string) => void;
     selectedFace: string;
@@ -384,7 +384,9 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                         <fieldset>
                             <legend>Appearance:</legend>
                             <NameSelector
-                                handleSelectedName={this.props.handleSelectedName}
+                                handleSelectedName={
+                                    this.props.handleSelectedName
+                                }
                                 selectedName={this.props.selectedName}
                             />
                             <HatSelector
@@ -504,7 +506,6 @@ export function HexToRGBObject(hex: string): RGB {
     return aRgb;
 }
 
-
 const PawnImageGroup = ({
     face,
     hat,
@@ -543,12 +544,13 @@ class NameSelector extends React.Component<NameSelectorProps, {}> {
                     required
                     name="names"
                     id="name-select"
-                    type="text" 
+                    type="text"
                     placeholder="Enter name"
                     value={this.props.selectedName}
-                    onChange={(e) => {this.props.handleSelectedName(e.target.value);
+                    onChange={(e) => {
+                        this.props.handleSelectedName(e.target.value);
                     }}
-                    />
+                />
             </div>
         );
     }
