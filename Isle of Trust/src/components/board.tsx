@@ -65,6 +65,10 @@ export const MAP_URL: { [key: string]: string } = {
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
     Cruz: "url(../Maps/mapCruz.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 interface BoardProps {

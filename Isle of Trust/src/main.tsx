@@ -53,6 +53,26 @@ export const Maps = [
         value: "Cruz",
         location: "../Maps/mapCruz.png",
     },
+    {
+        name: "Symmetrical",
+        value: "Symmetrical",
+        location: "../Maps/mapSymmetrical.png",
+    },
+    {
+        name: "Dice",
+        value: "Dice",
+        location: "../Maps/mapDice.png",
+    },
+    {
+        name: "Magnifying",
+        value: "Magnifying",
+        location: "../Maps/mapMagnifying.png",
+    },
+    {
+        name: "Cloud",
+        value: "Cloud",
+        location: "../Maps/mapCloud.png",
+    },
 ];
 
 export const Hats = [
