@@ -38,6 +38,7 @@ interface TutorialPlayerSidebarProps {
     turnCount: number;
     stageCount: number;
     promiseRelation: any;
+    level: number;
 }
 
 export class TutorialPlayerSidebar extends React.Component<
@@ -54,6 +55,7 @@ export class TutorialPlayerSidebar extends React.Component<
                     countTotalInfluence={this.props.countTotalInfluence}
                     stageCount={this.props.stageCount}
                     turnCount={this.props.turnCount}
+                    level={this.props.level}
                 />
                 <InfluenceMenu
                     round={this.props.round}
@@ -62,6 +64,7 @@ export class TutorialPlayerSidebar extends React.Component<
                     turnCount={this.props.turnCount}
                     promiseRelation={this.props.promiseRelation}
                     stageCount={this.props.stageCount}
+                    level={this.props.level}
                 />
             </div>
         );
@@ -78,9 +81,19 @@ interface PlayerDisplayProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     stageCount: number;
     turnCount: number;
+    level: number;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
+    //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
+    displaySpotlight(): boolean {
+        //Tutorial Level 0
+        if (this.props.level === 0 && this.props.stageCount === 3) {
+            return true;
+        }
+
+        return false;
+    }
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -92,7 +105,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         return (
             <div
                 className={
-                    this.props.stageCount === 1
+                    this.displaySpotlight()
                         ? "player-display spotlight"
                         : "player-display"
                 }
@@ -119,10 +132,57 @@ interface InfluenceMenuProps {
     turnCount: number;
     stageCount: number;
     promiseRelation: any;
+    level: number;
 }
 
 class InfluenceMenu extends React.Component<InfluenceMenuProps> {
     public spendingMap = new SpendingContainer();
+    //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
+    displaySpotlight(): boolean {
+        //Tutorial Level 0
+        if (
+            (this.props.level === 0 &&
+                this.props.stageCount >= 4 &&
+                this.props.stageCount <= 7) ||
+            (this.props.level === 0 &&
+                this.props.stageCount >= 10 &&
+                this.props.stageCount <= 11)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    //Decides wheter or not to apply the highlightText CSS class based on level and stageCount
+    displayTextHighlight(): boolean {
+        //Tutorial Level 0
+        if (
+            (this.props.level === 0 &&
+                this.props.stageCount >= 5 &&
+                this.props.stageCount <= 6) ||
+            (this.props.level === 0 &&
+                this.props.stageCount >= 10 &&
+                this.props.stageCount <= 11)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    //Decides wheter or not to disable the InfluenceMenu based on level and stageCount
+    disableScreen(): boolean {
+        //Tutorial Level 0
+        if (
+            this.props.level === 0 &&
+            this.props.stageCount !== 8 &&
+            this.props.stageCount !== 12 &&
+            this.props.stageCount < 21
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     render() {
         const neighbors = this.props.map.getEdges(
@@ -134,17 +194,23 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                 return (
                     <div
                         className={
-                            this.props.stageCount === 2
+                            this.displaySpotlight()
                                 ? "influence-menu spotlight"
                                 : "influence-menu"
                         }
                         style={
-                            this.props.stageCount !== 3
+                            this.disableScreen()
                                 ? { pointerEvents: "none" }
                                 : {}
                         }
                     >
-                        <div className="influence-title">
+                        <div
+                            className={
+                                this.displayTextHighlight()
+                                    ? "influence-title highlightText"
+                                    : "influence-title"
+                            }
+                        >
                             Promise Phase
                             <br /> Declare your intent with neighbors:
                         </div>
@@ -165,8 +231,25 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
                 );
             } else {
                 return (
-                    <div className="influence-menu">
-                        <div className="influence-title">
+                    <div
+                        className={
+                            this.displaySpotlight()
+                                ? "influence-menu spotlight"
+                                : "influence-menu"
+                        }
+                        style={
+                            this.disableScreen()
+                                ? { pointerEvents: "none" }
+                                : {}
+                        }
+                    >
+                        <div
+                            className={
+                                this.displayTextHighlight()
+                                    ? "influence-title highlightText"
+                                    : "influence-title"
+                            }
+                        >
                             Action Phase
                             <br /> Deliver on your promises! (Or Not):
                         </div>

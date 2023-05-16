@@ -46,6 +46,7 @@ interface TutorialBoardProps {
     player: Agent;
     deselectCharacter: (value: boolean) => void;
     current: string;
+    level: number;
 }
 
 export class TutorialBoard extends React.Component<TutorialBoardProps> {
@@ -94,19 +95,34 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.props.deselectCharacter(value);
     }
 
+    //Decides wheter or not disable the board based on level and stageCount
+    disableScreen(): boolean {
+        //Tutorial Level 0
+        if (
+            this.props.level === 0 &&
+            this.props.stageCount !== 15 &&
+            this.props.stageCount < 21
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         return (
             <div
                 className="board"
-                style={
-                    this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
-                }
+                style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1>Tutorial Level 1</h1>
+                    <h1 id="tutorialHeader">
+                        Tutorial Level {this.props.level}
+                    </h1>
                 </article>
                 <div
-                    className="map"
+                    className={
+                        this.props.stageCount === 14 ? "map spotlight" : "map"
+                    }
                     ref={this.containerRef}
                     style={{
                         backgroundImage: MAP_URL[this.props.current],

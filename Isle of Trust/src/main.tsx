@@ -165,7 +165,11 @@ class Main extends React.Component {
                         <Route path="game" element={<Game />} />
                         <Route path="test" element={<Test />} />
                         <Route path="tutorial" element={<Tutorial />} />
+                        <Route path="level0" element={<TutorialDisplay />} />
                         <Route path="level1" element={<TutorialDisplay />} />
+                        <Route path="level2" element={<TutorialDisplay />} />
+                        <Route path="level3" element={<TutorialDisplay />} />
+                        <Route path="level4" element={<TutorialDisplay />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
