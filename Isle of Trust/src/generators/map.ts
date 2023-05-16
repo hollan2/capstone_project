@@ -1,17 +1,17 @@
 import { Graph } from "../models/graph";
 import * as util from "../utilities";
-import {
-    Agent,
-    Ideology,
-    Personality,
-    Relation,
-} from "../models/agent";
+import { Agent, Ideology, Personality, Relation } from "../models/agent";
 import ProngedJson from "../data/mapPronged.json";
 import ChokeJson from "../data/mapChoke.json";
 import CrescentJson from "../data/mapCrescent.json";
 import RingJson from "../data/mapRing.json";
 import SpokesJson from "../data/mapSpokes.json";
 import SmallJson from "../data/mapSmall.json";
+import SymmetricalJson from "../data/mapSymmetrical.json";
+import MagnifyingJson from "../data/mapMagnifying.json";
+import DiceJson from "../data/mapDice.json";
+import CloudJson from "../data/mapCloud.json";
+
 import * as genA from "./agent";
 
 //import { MAP_INDEX } from "../App";
@@ -61,6 +61,18 @@ export class Map {
                 break;
             case "Small":
                 json = SmallJson;
+                break;
+            case "Symmetrical":
+                json = SymmetricalJson;
+                break;
+            case "Magnifying":
+                json = MagnifyingJson;
+                break;
+            case "Dice":
+                json = DiceJson;
+                break;
+            case "Cloud":
+                json = CloudJson;
                 break;
         }
         this.jsonData = JSON.parse(JSON.stringify(json));

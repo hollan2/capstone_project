@@ -31,6 +31,10 @@ export const MAP_URL: { [key: string]: string } = {
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
     Small: "url(../Maps/mapSmall.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 interface TutorialBoardProps {
@@ -99,9 +103,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 }
             >
                 <article id="tutorialHeader">
-                    <h1>
-                        Tutorial Level 1
-                    </h1>
+                    <h1>Tutorial Level 1</h1>
                 </article>
                 <div
                     className="map"
@@ -313,8 +315,8 @@ function AgentImage(props: AgentImageProps) {
 
     switch (props.agent.ideology.toStrategy()) {
         case Strategy.Default:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
+            ideology = { red: 158, green: 196, blue: 234 };
+            break;
         case Strategy.Suspicious:
             ideology = { red: 248, green: 179, blue: 101 };
             break;
@@ -335,7 +337,7 @@ function AgentImage(props: AgentImageProps) {
             ideology = { red: 158, green: 196, blue: 234 };
             break;
         default: {
-            ideology = { red: 203, green: 203, blue: 203 }; 
+            ideology = { red: 203, green: 203, blue: 203 };
             break;
         }
     }
