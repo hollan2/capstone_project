@@ -117,7 +117,7 @@ export function TutorialDisplay() {
         hat: "None",
         face: "Glasses",
         ideologyColor: "9ec4ea",
-        startingPoints: "Easy",
+        startingPoints: "easy",
         mapImage: "Cruz",
         // mapImage: "Symmetrical",
         // mapImage: "Magnifying",

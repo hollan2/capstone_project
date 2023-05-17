@@ -8,6 +8,8 @@ import { SidebarAgentImage } from "../App";
 import { Agent, Relation, SpendingContainer } from "../models/agent";
 import { Graph } from "../models/graph";
 import { choiceTally, Commitment, Choice } from "../models/strategy";
+import { History } from "./selectedSideBar"
+
 export const RESIZE_TIMEOUT = 500;
 
 export const SCENE_WIDTH = 800;
@@ -65,6 +67,11 @@ export class TutorialPlayerSidebar extends React.Component<
                     promiseRelation={this.props.promiseRelation}
                     stageCount={this.props.stageCount}
                     level={this.props.level}
+                />
+                <History
+                    selected={this.props.sidebarState.player}
+                    map={this.props.map}
+                    turnCount={this.props.turnCount}
                 />
             </div>
         );
@@ -462,7 +469,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Cooperate
+                            Together
                         </button>
                         <button
                             id="reciprocate"
@@ -474,7 +481,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Reciprocate
+                            Match
                         </button>
                         <button
                             id="compete"
@@ -483,7 +490,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Compete
+                            Solo
                         </button>
                     </div>
                 </div>
@@ -524,7 +531,7 @@ class InfluenceEntry extends React.Component<
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Cooperate</div>
+                                    <div>Together</div>
                                     <div>
                                         {this.isTruth(
                                             "cooperate",
@@ -542,7 +549,7 @@ class InfluenceEntry extends React.Component<
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Compete</div>
+                                    <div>Solo</div>
                                     <div>
                                         {this.isTruth(
                                             "compete",
