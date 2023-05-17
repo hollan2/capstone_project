@@ -642,7 +642,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                     </p>
                     <div className="end">regionally {totalInfluence}</div>
                 </div>
-                <Mood agent={this.props.agent} />
+                {/*<Mood agent={this.props.agent} />*/}
             </section>
         );
     }
