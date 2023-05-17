@@ -46,6 +46,7 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
+import { YearCounter } from "./components/yearCounter";
 /*
 import { timeStamp } from "console";
 */
@@ -495,6 +496,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
                     />
+                    <YearCounter
+                        round={this.tempTurn.bind(this)}
+                        turnCount={this.state.turnCount}
+                    />
                     <SelectedSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
@@ -526,6 +531,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
+                    />
+                    <YearCounter
+                        round={this.tempTurn.bind(this)}
+                        turnCount={this.state.turnCount}
                     />
                 </div>
             );
