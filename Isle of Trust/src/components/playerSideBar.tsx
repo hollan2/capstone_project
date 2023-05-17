@@ -66,7 +66,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -422,7 +422,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Cooperate
+                            Together
                         </button>
                         <button
                             id="reciprocate"
@@ -434,7 +434,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Reciprocate
+                            Match
                         </button>
                         <button
                             id="compete"
@@ -443,7 +443,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Compete
+                            Solo
                         </button>
                     </div>
                 </div>
@@ -476,12 +476,15 @@ class InfluenceEntry extends React.Component<
                                 id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
-                                        console.log("Select cooperate")
-                                        player.updateChoice(Choice.Cooperate, agent);
+                                    console.log("Select cooperate");
+                                    player.updateChoice(
+                                        Choice.Cooperate,
+                                        agent
+                                    );
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Cooperate</div>
+                                    <div>Together</div>
                                     <div>
                                         {this.isTruth(
                                             "cooperate",
@@ -494,12 +497,12 @@ class InfluenceEntry extends React.Component<
                             <button
                                 id="compete"
                                 onClick={() => {
-                                        console.log("Select compete")
-                                        player.updateChoice(Choice.Compete, agent);
+                                    console.log("Select compete");
+                                    player.updateChoice(Choice.Compete, agent);
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Compete</div>
+                                    <div>Solo</div>
                                     <div>
                                         {this.isTruth(
                                             "compete",

@@ -36,7 +36,7 @@ import {
     Strategy,
     generateCommitment,
     Commitment,
-    getTruth
+    getTruth,
 } from "./models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -68,7 +68,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -80,7 +80,6 @@ const DIFFICULTY_VALUES: { [key: string]: number } = {
     hard: 10,
     extreme: 5,
 };
-
 
 interface GameViewState {
     map: Graph<Agent, Relation>;
@@ -104,7 +103,7 @@ export interface StartInfo {
 class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
     //keeps track of the player's id for the round checks
-    public player_id: number = 0; 
+    public player_id: number = 0;
     constructor(props: StartInfo) {
         super(props);
         // Here may be some kind of switch to generate map
@@ -119,19 +118,16 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         currentMap = props.mapImage;
 
         // TODO: put this in the JSON
-    
-        let position =Math.random() * map.getVertices().length-1; 
+
+        let position = Math.random() * map.getVertices().length - 1;
         position = Math.floor(position);
-        const player =
-            map.getVertices()[
-                position
-            ];
-        
+        const player = map.getVertices()[position];
+
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
-            player.name = props.name
+            player.name = props.name;
 
             console.log("ID");
             console.log(player.id);
@@ -141,8 +137,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
-        let selected = map.getVertices()[position+1];
-        let sidebarState = new SidebarState(map, player, selected,position);
+        let selected = map.getVertices()[position + 1];
+        let sidebarState = new SidebarState(map, player, selected, position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;
@@ -221,7 +217,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         //these lines can be removed
         //this.drainInfluence(edges);
         //this.handleInfluenceChanges(vertices);
-        
+
         this.generateRound(edges);
         //this.drainResources(vertices);
 
@@ -271,10 +267,16 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
     }
     */
-   
+
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
-        var Promise_relation: [Agent, Agent, Relation, Commitment, Commitment][] = [];
+        var Promise_relation: [
+            Agent,
+            Agent,
+            Relation,
+            Commitment,
+            Commitment
+        ][] = [];
         edges.forEach(([v1, v2, e1]) => {
             const e2 = this.state.map.getEdge(v2, v1);
             if (v1.id < v2.id && e2 instanceof Relation) {
@@ -284,62 +286,52 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 var v2Promise;
 
                 //checks if agent1 is the player agent if so we get the player selected promise
-                if(v1.id == this.player_id){
-
+                if (v1.id == this.player_id) {
                     //gets player inputted promises
-                    const obj = v1.promises.find(e => e.promiseTo === v2)
-                    if(obj) {
-                        v1Promise = obj.promise
+                    const obj = v1.promises.find((e) => e.promiseTo === v2);
+                    if (obj) {
+                        v1Promise = obj.promise;
                     } else {
-                         //if player didnt choose a promise randomly chooses promises
-                        v1Promise = generateCommitment(
-                            v1Strat,
-                            e2.history);
+                        //if player didnt choose a promise randomly chooses promises
+                        v1Promise = generateCommitment(v1Strat, e2.history);
                     }
-                }
-
-                else{
+                } else {
                     //generates the promise of the agent1
-                    v1Promise = generateCommitment(
-                        v1Strat,
-                        e2.history);
+                    v1Promise = generateCommitment(v1Strat, e2.history);
 
-                    //stores AI promises for use in front end 
-                    v1.updatePromise(v1Promise, v2)
+                    //stores AI promises for use in front end
+                    v1.updatePromise(v1Promise, v2);
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
-                if(v2.id == this.player_id){
+                if (v2.id == this.player_id) {
                     //gets player inputted promises
-                    const obj = v2.promises.find(e => e.promiseTo === v1)
-                    if(obj) {
-                        v2Promise = obj.promise
+                    const obj = v2.promises.find((e) => e.promiseTo === v1);
+                    if (obj) {
+                        v2Promise = obj.promise;
                     } else {
-                         //if player didnt choose a promise randomly chooses promises
-                        v2Promise = generateCommitment(
-                            v1Strat,
-                            e1.history);
+                        //if player didnt choose a promise randomly chooses promises
+                        v2Promise = generateCommitment(v1Strat, e1.history);
                     }
-                }
-                else{
+                } else {
                     //generates the promise of the agent2
-                    v2Promise = generateCommitment(
-                        v2Strat,
-                        e1.history);
+                    v2Promise = generateCommitment(v2Strat, e1.history);
 
                     //stores AI promises for use in front end
-                    v2.updatePromise(v2Promise, v1)
+                    v2.updatePromise(v2Promise, v1);
                 }
 
                 //gets us the full array of promises between agents to pass back to generaterounds
-                Promise_relation.push([v1, v2, e1, v1Promise, v2Promise])
+                Promise_relation.push([v1, v2, e1, v1Promise, v2Promise]);
             }
         });
-        return(Promise_relation)
+        return Promise_relation;
     }
 
     //accepts in the edges array with the addtional commitment info. Then generates the agent's choices
-    generateChoiceRound(edges: [Agent, Agent, Relation, Commitment, Commitment][]){
+    generateChoiceRound(
+        edges: [Agent, Agent, Relation, Commitment, Commitment][]
+    ) {
         edges.forEach(([v1, v2, e1, v1Promise, v2Promise]) => {
             const e2 = this.state.map.getEdge(v2, v1);
             if (v1.id < v2.id && e2 instanceof Relation) {
@@ -349,101 +341,98 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 var v2Choice;
 
                 //checks if agent1 is the player agent if so we get the player selected choice
-                if(v1.id == this.player_id){
+                if (v1.id == this.player_id) {
                     //gets player inputted choices
-                    const obj = v1.choices.find(e => e.choiceTo === v2)
-                    if(obj) {
-                        v1Choice = obj.choice
+                    const obj = v1.choices.find((e) => e.choiceTo === v2);
+                    if (obj) {
+                        v1Choice = obj.choice;
                     } else {
-                        console.log("NO CHOICE SELECTED")
-                         //if player didnt choose a promise randomly chooses choice
-                         v1Choice = generateChoice(
-                            v1Promise, 
+                        console.log("NO CHOICE SELECTED");
+                        //if player didnt choose a promise randomly chooses choice
+                        v1Choice = generateChoice(
+                            v1Promise,
                             v2Promise,
                             v1Strat,
-                            e2.history);
+                            e2.history
+                        );
                     }
-                    
-                }
-                else{
+                } else {
                     v1Choice = generateChoice(
-                        v1Promise, 
+                        v1Promise,
                         v2Promise,
                         v1Strat,
-                        e2.history);
+                        e2.history
+                    );
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
-                if(v2.id == this.player_id){
+                if (v2.id == this.player_id) {
                     //gets player inputted choices
-                    const obj = v2.choices.find(e => e.choiceTo === v1)
-                    if(obj) {
-                        v2Choice = obj.choice
+                    const obj = v2.choices.find((e) => e.choiceTo === v1);
+                    if (obj) {
+                        v2Choice = obj.choice;
                     } else {
-                        console.log("NO CHOICE SELECTED")
-                         //if player didnt choose a choice randomly chooses choice
-                         v2Choice = generateChoice(
-                            v1Promise, 
+                        console.log("NO CHOICE SELECTED");
+                        //if player didnt choose a choice randomly chooses choice
+                        v2Choice = generateChoice(
+                            v1Promise,
                             v2Promise,
                             v1Strat,
-                            e1.history);
+                            e1.history
+                        );
                     }
-                }
-                else{
+                } else {
                     v2Choice = generateChoice(
-                        v2Promise, 
+                        v2Promise,
                         v1Promise,
                         v2Strat,
-                        e1.history);
+                        e1.history
+                    );
                 }
 
                 console.log(v1.name, v1Choice, v1Promise);
-                console.log(v2.name ,v2Choice, v2Promise);
+                console.log(v2.name, v2Choice, v2Promise);
                 //rewards the agents resouces based on their resources
                 v1.rewardResources(v1Choice, v2Choice);
                 v2.rewardResources(v2Choice, v1Choice);
 
-                //a reward trust function will be need when trust implmented 
+                //a reward trust function will be need when trust implmented
 
                 //Checks if the choice each v1 v2 makes is a truth or lie
-                let v1Truth = (v1Choice == getTruth(v1Promise, v2Promise)) ? "Honest" : "Lied";
-                let v2Truth = (v2Choice == getTruth(v2Promise, v1Promise)) ? "Honest" : "Lied";
+                let v1Truth =
+                    v1Choice == getTruth(v1Promise, v2Promise)
+                        ? "Honest"
+                        : "Lied";
+                let v2Truth =
+                    v2Choice == getTruth(v2Promise, v1Promise)
+                        ? "Honest"
+                        : "Lied";
 
                 //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
                 e2.history.addTurn(new Turn(v2Choice, v2Promise, v2Truth));
-               
-                
-                
-
             }
-                
         });
-
     }
 
-     
     //generates each round when player hits confirm choices
     generateRound(edges: [Agent, Agent, Relation][]) {
-
-        console.log("turncount " + this.state.turnCount)
-        if(this.state.turnCount%1 == 0){
+        console.log("turncount " + this.state.turnCount);
+        if (this.state.turnCount % 1 == 0) {
             //promise round
-            console.log("PROMISE ROUND START")
+            console.log("PROMISE ROUND START");
             const promiseRelation = this.generatePromiseRound(edges);
             this.setState((state) => {
                 return { promiseRelation: promiseRelation };
             });
-            
         } else {
             //choice round
-            console.log("CHOICE ROUND START")
+            console.log("CHOICE ROUND START");
             this.generateChoiceRound(this.state.promiseRelation);
-
         }
 
         this.setState((state) => {
-            return { turnCount: this.state.turnCount + .5};
+            return { turnCount: this.state.turnCount + 0.5 };
         });
     }
     /* This function doesn't serve a purpose anymore, can be removed
@@ -479,75 +468,70 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         agent.driftIdeology(drifts);
     }
     */
-   
+
     deselectCharacter(value: boolean) {
-        this.setState({selectCharacterDisplay: value});
+        this.setState({ selectCharacterDisplay: value });
     }
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
-            
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                        />
-                        <SelectedSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            deselectCharacter={this.deselectCharacter}
-                            turnCount={this.state.turnCount}
-                        />
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        turnCount={this.state.turnCount}
+                        promiseRelation={this.state.promiseRelation}
+                    />
+                    <SelectedSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        deselectCharacter={this.deselectCharacter}
+                        turnCount={this.state.turnCount}
+                    />
                 </div>
             );
-        } 
-        else {
+        } else {
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                        />
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        turnCount={this.state.turnCount}
+                        promiseRelation={this.state.promiseRelation}
+                    />
                 </div>
             );
         }
-
-    } 
+    }
 }
-
 
 interface DisplayState {
     scale: number;
@@ -611,8 +595,10 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
         let agentPoints: number = 0;
         let agentStrat: string = "No strategy";
         let agentGoal: string = "Avenge me...";
-        let neighbors: Map<Agent,Relation> = this.props.map.getEdges(this.props.agent)!;
-        let firstNeighbor : [Agent, Relation] = neighbors.entries().next().value;
+        let neighbors: Map<Agent, Relation> = this.props.map.getEdges(
+            this.props.agent
+        )!;
+        let firstNeighbor: [Agent, Relation] = neighbors.entries().next().value;
         let relation = firstNeighbor[1];
         let round: number = relation.history.length();
         if (this.props.agent instanceof Agent) {
@@ -647,10 +633,12 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 <div className="stats">
                     <p className="end">{agentPoints} resources</p>
                     <p className="end">
-                        Cooperated {this.props.agentChoices.gave} times / {round} rounds
+                        Cooperated {this.props.agentChoices.gave} times /{" "}
+                        {round} rounds
                     </p>
                     <p className="end">
-                        Cheated {this.props.agentChoices.cheated} times / {round} rounds
+                        Cheated {this.props.agentChoices.cheated} times /{" "}
+                        {round} rounds
                     </p>
                     <div className="end">regionally {totalInfluence}</div>
                 </div>
@@ -673,9 +661,7 @@ function Mood(props: MoodProps) {
     const agent = props.agent as Agent;
     moodDesc = agent.getMoodDescription();
     moodImgPath =
-        "images/mood-" +
-        moodDesc.split(" ").join("-").toLowerCase() +
-        ".png";
+        "images/mood-" + moodDesc.split(" ").join("-").toLowerCase() + ".png";
 
     return (
         <div className="mood">
@@ -707,7 +693,10 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
         face = props.agent.face;
         hat = props.agent.hat;
         // Show personality color if 5 turns have passed or if displaying the user player
-        if(props.turnCount >= 4 || props.agent.ideology.toStrategy() == Strategy.Player) {
+        if (
+            props.turnCount >= 4 ||
+            props.agent.ideology.toStrategy() == Strategy.Player
+        ) {
             switch (props.agent.ideology.toStrategy()) {
                 case Strategy.Default:
                     ideology = { red: 158, green: 196, blue: 234 };
@@ -725,15 +714,15 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
                     ideology = { red: 180, green: 166, blue: 216 };
                     break;
                 case Strategy.Teacher:
-                    ideology = { red: 161, green: 196, blue: 202 };;
+                    ideology = { red: 161, green: 196, blue: 202 };
                     break;
                 case Strategy.Player:
                     //if an agent is player
                     ideology = { red: 158, green: 196, blue: 234 };
                     break;
                 default: {
-                    ideology = { red: 203, green: 203, blue: 203 }; 
-                    break; 
+                    ideology = { red: 203, green: 203, blue: 203 };
+                    break;
                 }
             }
         }

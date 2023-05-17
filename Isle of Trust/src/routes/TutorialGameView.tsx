@@ -71,7 +71,11 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -114,7 +118,11 @@ export function TutorialDisplay() {
         face: "Glasses",
         ideologyColor: "9ec4ea",
         startingPoints: "easy",
-        mapImage: "Small",
+        mapImage: "Cruz",
+        // mapImage: "Symmetrical",
+        // mapImage: "Magnifying",
+        // mapImage: "Dice",
+        // mapImage: "Cloud",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
     };
 
