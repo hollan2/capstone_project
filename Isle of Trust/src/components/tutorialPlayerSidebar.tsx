@@ -462,7 +462,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Cooperate
+                            Together
                         </button>
                         <button
                             id="reciprocate"
@@ -474,7 +474,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Reciprocate
+                            Match
                         </button>
                         <button
                             id="compete"
@@ -483,7 +483,7 @@ class InfluenceEntry extends React.Component<
                             }}
                         >
                             {" "}
-                            Compete
+                            Solo
                         </button>
                     </div>
                 </div>
@@ -524,7 +524,7 @@ class InfluenceEntry extends React.Component<
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Cooperate</div>
+                                    <div>Together</div>
                                     <div>
                                         {this.isTruth(
                                             "cooperate",
@@ -542,7 +542,7 @@ class InfluenceEntry extends React.Component<
                                 }}
                             >
                                 <div className="action-container">
-                                    <div>Compete</div>
+                                    <div>Solo</div>
                                     <div>
                                         {this.isTruth(
                                             "compete",
