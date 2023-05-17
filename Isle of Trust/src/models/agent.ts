@@ -229,11 +229,13 @@ export class Agent extends AttributeContainer {
             this.resources += 1;
         else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
             this.resources -= 2;
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Cooperate)
+            this.resources += 3;
         else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
-        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
-            this.resources += 3;
     }
+
+
 
     /*This function doesn't serve a purpose anymore, can be removed
     updateMood(myChoice: Choice, theirChoice: Choice) {
