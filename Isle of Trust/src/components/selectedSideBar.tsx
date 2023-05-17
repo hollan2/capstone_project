@@ -108,6 +108,7 @@ interface SelectedSidebarProps {
 }
 
 export class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
+
     render() {
         return (
             <div className="sidebar selectedSidebar">
@@ -148,7 +149,6 @@ interface SelectedDisplayProps {
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
-
      
     deselectCharacter(value: boolean) {
         this.props.deselectCharacter(false);

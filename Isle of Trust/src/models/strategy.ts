@@ -100,8 +100,8 @@ export const generateCommitment = (
             else
                 return Commitment.Cooperate
             }
+        //alwats returns compete
         case Strategy.Suspicious:
-            //alwats returns compete
             return Commitment.Compete;
         case Strategy.Student:
             {

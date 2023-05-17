@@ -91,6 +91,8 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     turnCount: number;
     promiseRelation: any;
 }
@@ -103,6 +105,8 @@ export class PlayerSidebar extends React.Component<
         return (
             <div className="sidebar playerSidebar">
                 <PlayerDisplay
+                    libraryrolechange={this.props.libraryrolechange}
+                    universityrolechange={this.props.universityrolechange}
                     map={this.props.map}
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
@@ -122,6 +126,8 @@ export class PlayerSidebar extends React.Component<
 }
 
 interface PlayerDisplayProps {
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -136,14 +142,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     private library_count = 0;
     private university_count = 0;
     //changes everyone of matching strategy to a new strategy
-    private roleChange(oldRole: Strategy, newRole: Strategy){
-        this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
-            if(v1.ideology.toStrategy() == oldRole)
-                v1.ideology.setStrategy(newRole)
-            if(v2.ideology.toStrategy() == oldRole)
-                v2.ideology.setStrategy(newRole)
-            });
-    }
+
 
     render() {
         let choices = new choiceTally();
@@ -177,15 +176,15 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.setState({PlayerDisplay: this})
                         }
                         //if the count is equal to 14, add to the count and change the personas
                         else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
                         {
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Suspicious, Strategy.Student)
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.props.libraryrolechange()
+                            this.setState({PlayerDisplay: this})
                         }
                     }}
                 >
@@ -209,7 +208,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         {
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Student, Strategy.Reciprocators)
+                            this.props.universityrolechange()
                             this.setState({sidebarState: this.props.sidebarState})
                         }
                     

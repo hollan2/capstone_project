@@ -217,15 +217,32 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     tempTurn() {
         const vertices = this.state.map.getVertices();
         const edges = this.state.map.getAllEdges();
-
-        //these lines can be removed
-        //this.drainInfluence(edges);
-        //this.handleInfluenceChanges(vertices);
         
         this.generateRound(edges);
-        //this.drainResources(vertices);
 
         this.forceUpdate();
+    }
+
+    //changes all suspicious agents into students
+    libraryroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Suspicious)
+                v1.ideology.setStrategy(Strategy.Student)
+            if(v2.ideology.toStrategy() == Strategy.Suspicious)
+                v2.ideology.setStrategy(Strategy.Student)
+        });
+        this.setState({})
+    }
+
+    //changes all student agents in reciprocators
+    universityroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Student)
+                v1.ideology.setStrategy(Strategy.Reciprocators)
+            if(v2.ideology.toStrategy() == Strategy.Student)
+                v2.ideology.setStrategy(Strategy.Reciprocators)
+        });
+        this.setState({})       
     }
 
     drainResources(vertices: Agent[]) {
@@ -431,6 +448,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         <PlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
+                            libraryrolechange={this.libraryroleChange.bind(this)}
+                            universityrolechange={this.universityroleChange.bind(this)}
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
@@ -465,6 +484,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         <PlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
+                            libraryrolechange={this.libraryroleChange.bind(this)}
+                            universityrolechange={this.universityroleChange.bind(this)}
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
