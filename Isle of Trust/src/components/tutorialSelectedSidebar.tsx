@@ -201,8 +201,8 @@ class Stats extends React.Component<StatsProps, unknown> {
                         influence them.
                     </p>
                     <p>
-                        They've given to you {theirChoices.gave} times, while
-                        you've given to them {yourChoices.gave} times.
+                        They've given to you {theirChoices.together} times, while
+                        you've given to them {yourChoices.together} times.
                     </p>
                     <p>
                         They've cheated you {theirChoices.cheated} times, while
