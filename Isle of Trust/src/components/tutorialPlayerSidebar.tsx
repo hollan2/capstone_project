@@ -35,6 +35,8 @@ interface TutorialPlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     turnCount: number;
     stageCount: number;
     promiseRelation: any;
@@ -48,6 +50,8 @@ export class TutorialPlayerSidebar extends React.Component<
         return (
             <div className="sidebar playerSidebar">
                 <PlayerDisplay
+                    libraryrolechange={this.props.libraryrolechange}
+                    universityrolechange={this.props.universityrolechange}
                     map={this.props.map}
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
@@ -69,6 +73,8 @@ export class TutorialPlayerSidebar extends React.Component<
 }
 
 interface PlayerDisplayProps {
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -127,18 +133,19 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     id="library"
                     className="investmentButton"
                     onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
                         if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.setState({PlayerDisplay: this})
                         }
-
+                        //if the count is equal to 14, add to the count and change the personas
                         else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
                         {
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Suspicious, Strategy.Student, this.props.map.getAllEdges())
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.props.libraryrolechange()
+                            this.setState({PlayerDisplay: this})
                         }
                     }}
                 >
@@ -150,17 +157,19 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     id="university"
                     className="investmentButton"
                     onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
                         if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.setState({sidebarState: this.props.sidebarState})
                         }
 
+                        //if the count is equal to 14, add to the count and change the personas
                         else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
                         {
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.roleChange(Strategy.Student, Strategy.Reciprocators, this.props.map.getAllEdges())
+                            this.props.universityrolechange()
                             this.setState({sidebarState: this.props.sidebarState})
                         }
                     
