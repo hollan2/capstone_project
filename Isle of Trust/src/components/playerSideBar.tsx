@@ -36,6 +36,7 @@ import {
     Commitment,
     Choice,
 } from "../models/strategy";
+import { History } from "./selectedSideBar"
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
 */
@@ -112,6 +113,11 @@ export class PlayerSidebar extends React.Component<
                     map={this.props.map}
                     turnCount={this.props.turnCount}
                     promiseRelation={this.props.promiseRelation}
+                />
+                <History
+                    selected={this.props.sidebarState.player}
+                    map={this.props.map}
+                    turnCount={this.props.turnCount}
                 />
             </div>
         );

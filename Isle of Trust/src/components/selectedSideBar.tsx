@@ -127,7 +127,7 @@ export class SelectedSidebar extends React.Component<
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                 />
                 <History
-                    sidebarState={this.props.sidebarState}
+                    selected={this.props.sidebarState.selected}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
                 />
@@ -263,25 +263,25 @@ class Stats extends React.Component<StatsProps, unknown> {
 }
 
 interface HistoryProps {
-    sidebarState: SidebarState;
+    selected: Agent;
     map: Graph<Agent, Relation>;
     turnCount: number;
 }
 
-class History extends React.Component<HistoryProps> {
+export class History extends React.Component<HistoryProps> {
     private children: JSX.Element[] = [];
 
     renderNeighbors = () => {
         this.children = [];
         //Get the neighbors of the selected player from the graph
         const neighbors = this.props.map.getEdges(
-            this.props.sidebarState.selected
+            this.props.selected
         )!;
         //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
         for (const entry of neighbors.entries()) {
             this.children.push(
             <HistoryNeighbors 
-                selected={this.props.sidebarState.selected}
+                selected={this.props.selected}
                 neighbor={entry[0]} 
                 relation={entry[1]}
                 turnCount={this.props.turnCount}
