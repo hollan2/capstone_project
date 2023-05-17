@@ -111,6 +111,8 @@ export interface StartInfo {
 }
 
 export function TutorialDisplay() {
+
+   
     const location = useLocation();
     const userState = {
         name: "User Player",
@@ -118,17 +120,21 @@ export function TutorialDisplay() {
         face: "Glasses",
         ideologyColor: "9ec4ea",
         startingPoints: "Easy",
-        mapImage: "Cruz",
-        // mapImage: "Symmetrical",
-        // mapImage: "Magnifying",
-        // mapImage: "Dice",
-        // mapImage: "Cloud",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
+        mapImage: " "
     };
+    function determineMap(){
+        if (userState.level == 0){ userState.mapImage = "Cruz"}
+        else if (userState.level == 1){userState.mapImage ="Symmetrical"}
+        else if (userState.level == 2){ userState.mapImage ="Magnifying"}
+        else if (userState.level == 3){ userState.mapImage ="Dice"}
+        else if (userState.level == 4){ userState.mapImage = "Cloud"}
 
+    } 
     //logs the values chosen for the player character
     console.log("Game function for routing");
     console.log(userState);
+    determineMap();
     return (
         <TutorialView
             name={userState.name}

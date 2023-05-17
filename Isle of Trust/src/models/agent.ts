@@ -4,6 +4,7 @@ import { Face, Hat } from "../generators/pawn";
 export const AGENT_RADIUS = 15;
 
 const defaultPawns = [
+    
     {
         defName: 'Tutor',
         defFace: 4,
