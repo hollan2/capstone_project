@@ -353,7 +353,6 @@ class InfluenceEntry extends React.Component<
         }
     }*/
 
-
     componentDidUpdate(prevProps: InfluenceEntryProps) {
         if (prevProps.turnCount !== this.props.turnCount) {
             // Reset buttonClicked state when turnCount changes
@@ -411,19 +410,11 @@ class InfluenceEntry extends React.Component<
 
     render() {
         const { buttonClicked } = this.state;
-        
+
         const player = this.props.player;
         const agent = this.props.agent;
         const aiCommitment = this.getPromiseBetween(agent, player);
         const playerCommitment = this.getPromiseBetween(player, agent);
-        //const sMaybe = this.state.given === 1 ? "" : "s";
-        //const givenString = String(this.state.given) + " resource" + sMaybe;
-
-        //for changing color of phase buttons when clicking on them
-        //let container = this.containerRef.current;
-        //if(container) {
-            
-        //}
         
         if (this.props.turnCount % 1 == 0) {
             //promise phase
