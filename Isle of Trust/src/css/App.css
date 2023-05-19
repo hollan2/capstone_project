@@ -90,6 +90,7 @@
     grid-area: sidebar;
     display: grid;
     gap: 5px;
+    width: 350px;
 }
 
 .playerSidebar {
@@ -171,12 +172,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.neighbor-promise {
+    margin-left: 45px;
+}
 
 .influence-entry {
     grid-area: influence-entry;
-    display: flex;
     align-items: center;
     gap: 5px;
+    display: grid;
+    grid-template-columns: 40px auto;
 }
 
 .sidebar-agent-info {
@@ -419,23 +424,35 @@
 
 
 #cooperate {
-    background-color: #51e658;
+    background-color: #3d7607;
     height: 30px;
-}
-#cooperate:target {
-    background-color: #51e658;
-    height: 30px;
-    opacity: 0.25;
+    flex-grow: 1;
 }
 
 #reciprocate {
-    background-color: #e1e257;
+    background-color: #a47901;
     height: 30px;
 }
 
 #compete {
-    background-color: #f36252;
+    background-color: #8e0000;
     height: 30px;
+    flex-grow: 1;
+}
+
+#cooperate.selected-buttons {
+    background-color: #6dcc1b;
+
+}
+
+#reciprocate.selected-buttons {
+    background-color: #e4c202;
+
+}
+
+#compete.selected-buttons {
+    background-color: #dd1313;
+
 }
 
 .action-container {

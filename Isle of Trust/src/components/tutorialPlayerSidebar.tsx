@@ -311,6 +311,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
                         spendingMap={this.props.spendingMap}
                         turnCount={this.props.turnCount}
                         promiseRelation={this.props.promiseRelation}
+                        entryNumber={key}
                     />
                 );
                 this.children.push(newChild);
@@ -359,6 +360,7 @@ class InfluenceOptions extends React.Component<InfluenceOptionsProps> {
 }
 
 interface InfluenceEntryProps {
+    entryNumber: Number;
     allowResources: (giving: number, increment: number) => number;
     resourcesGiveable: number;
     agent: Agent;
@@ -369,7 +371,9 @@ interface InfluenceEntryProps {
 }
 
 interface InfluenceEntryState {
+    buttonClicked: string | null;
     given: number;
+    
 }
 
 class InfluenceEntry extends React.Component<
@@ -386,7 +390,15 @@ class InfluenceEntry extends React.Component<
         super(props);
         this.state = {
             given: 0,
+            buttonClicked: null,
         };
+    }
+
+    componentDidUpdate(prevProps: InfluenceEntryProps) {
+        if (prevProps.turnCount !== this.props.turnCount) {
+            // Reset buttonClicked state when turnCount changes
+            this.setState({ buttonClicked: null });
+        }
     }
 
     //gets src promise to dest
@@ -423,7 +435,22 @@ class InfluenceEntry extends React.Component<
             return "honest";
         else return "lie";
     }
+
+    handleButtonChange = (commitment: string) => {
+
+        this.setState((prevState) => {
+            if (prevState.buttonClicked === commitment) {
+                // Deselect the currently selected button
+                return { buttonClicked: null };
+            } else {
+                // Select the clicked button and reset the other buttons
+                return { buttonClicked: commitment };
+            }
+        });
+    };
+
     render() {
+        const { buttonClicked } = this.state;
         const player = this.props.player;
         const agent = this.props.agent;
 
@@ -453,33 +480,33 @@ class InfluenceEntry extends React.Component<
                     </div>
                     <div className="sidebar-agent-info">
                         <button
+                            className={`phase-buttons ${buttonClicked === "cooperate" ? "selected-buttons" : ""}`}
                             id="cooperate"
                             onClick={() => {
-                                player.updatePromise(
-                                    Commitment.Cooperate,
-                                    agent
-                                );
+                                player.updatePromise(Commitment.Cooperate, agent);
+                                this.handleButtonChange("cooperate"); // update buttonClicked state
                             }}
                         >
                             {" "}
                             Together
                         </button>
                         <button
+                            className={`phase-buttons ${buttonClicked === "reciprocate" ? "selected-buttons" : ""}`}
                             id="reciprocate"
                             onClick={() => {
-                                player.updatePromise(
-                                    Commitment.Reciprocate,
-                                    agent
-                                );
+                                player.updatePromise(Commitment.Reciprocate, agent);
+                                this.handleButtonChange("reciprocate");
                             }}
                         >
                             {" "}
                             Match
                         </button>
                         <button
+                            className={`phase-buttons ${buttonClicked === "compete" ? "selected-buttons" : ""}`}
                             id="compete"
                             onClick={() => {
                                 player.updatePromise(Commitment.Compete, agent);
+                                this.handleButtonChange("compete");
                             }}
                         >
                             {" "}
@@ -493,8 +520,8 @@ class InfluenceEntry extends React.Component<
         //action phase
         else {
             return (
-                <div className="container" ref={this.containerRef}>
-                    <div>{agent.name + " promised to " + aiCommitment}</div>
+                <div className="choices-container">
+                    <div className="neighbor-promise">{agent.name + ' promised to ' + aiCommitment}</div>
                     <div className="influence-entry">
                         <div className="influence-agent">
                             <RK.Stage
@@ -513,14 +540,13 @@ class InfluenceEntry extends React.Component<
                         </div>
                         <div className="sidebar-agent-info">
                             <button
+                                className={`phase-buttons ${buttonClicked === "cooperate" ? "selected-buttons" : ""}`}
                                 id="cooperate"
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(
-                                        Choice.Cooperate,
-                                        agent
-                                    );
+                                    player.updateChoice(Choice.Cooperate, agent);
+                                    this.handleButtonChange("cooperate");
                                 }}
                             >
                                 <div className="action-container">
@@ -535,10 +561,11 @@ class InfluenceEntry extends React.Component<
                                 </div>
                             </button>
                             <button
+                                className={`phase-buttons ${buttonClicked === "compete" ? "selected-buttons" : ""}`}
                                 id="compete"
                                 onClick={() => {
-                                    console.log("Select compete");
-                                    player.updateChoice(Choice.Compete, agent);
+                                        player.updateChoice(Choice.Compete, agent);
+                                        this.handleButtonChange("compete");
                                 }}
                             >
                                 <div className="action-container">
