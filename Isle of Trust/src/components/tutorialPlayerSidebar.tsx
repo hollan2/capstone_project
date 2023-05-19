@@ -90,14 +90,6 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     private library_count = 0;
     private university_count = 0;
     //changes everyone of matching strategy to a new strategy
-    private roleChange(oldRole: Strategy, newRole: Strategy, edges: [Agent, Agent, Relation][]){
-        this.props.map.getAllEdges().forEach(([v1, v2, e1]) => {
-            if(v1.ideology.toStrategy() == oldRole)
-                v1.ideology.setStrategy(newRole)
-            if(v2.ideology.toStrategy() == oldRole)
-                v2.ideology.setStrategy(newRole)
-            });
-    }
 
     render() {
         let choices = new choiceTally();

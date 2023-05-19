@@ -289,6 +289,28 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         this.forceUpdate();
     }
 
+    //changes all suspicious agents into students
+    libraryroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Suspicious)
+                v1.ideology.setStrategy(Strategy.Student)
+            if(v2.ideology.toStrategy() == Strategy.Suspicious)
+                v2.ideology.setStrategy(Strategy.Student)
+        });
+        this.setState({})
+    }
+
+    //changes all student agents in reciprocators
+    universityroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Student)
+                v1.ideology.setStrategy(Strategy.Reciprocators)
+            if(v2.ideology.toStrategy() == Strategy.Student)
+                v2.ideology.setStrategy(Strategy.Reciprocators)
+        });
+        this.setState({})       
+    }
+
     drainResources(vertices: Agent[]) {
         vertices.forEach((v1) => {
             v1.resources -= RESOURCE_LOST_PER_TURN;
@@ -525,6 +547,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                         <TutorialPlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
+                            libraryrolechange={this.libraryroleChange.bind(this)}
+                            universityrolechange={this.universityroleChange.bind(this)}
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
@@ -559,6 +583,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                     <TutorialPlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
+                        libraryrolechange={this.libraryroleChange.bind(this)}
+                        universityrolechange={this.universityroleChange.bind(this)}
                         sidebarState={this.state.sidebarState}
                         tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                         countTotalInfluence={this.countTotalInfluence}
