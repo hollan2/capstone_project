@@ -6,6 +6,7 @@ import { TutorialGuide } from "../components/tutorialGuide";
 import { TutorialBoard } from "../components/tutorialBoard";
 import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
 import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
+import { EndOfLevel } from "../components/EndOfLevel";
 import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
@@ -18,7 +19,7 @@ import {
 } from "../models/animation";
 
 import { Face, Hat, GeneratePawn } from "../generators/pawn";
-import { Grid } from "../generators/map";
+import { Grid, GridDefault } from "../generators/map";
 import { SidebarState } from "../components/sideBarState";
 import {
     Agent,
@@ -38,7 +39,7 @@ import {
     Strategy,
     generateCommitment,
     Commitment,
-    getTruth
+    getTruth,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -70,7 +71,11 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -112,8 +117,12 @@ export function TutorialDisplay() {
         hat: "None",
         face: "Glasses",
         ideologyColor: "9ec4ea",
-        startingPoints: "Easy",
-        mapImage: "Small",
+        startingPoints: "easy",
+        mapImage: "Cruz",
+        // mapImage: "Symmetrical",
+        // mapImage: "Magnifying",
+        // mapImage: "Dice",
+        // mapImage: "Cloud",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
     };
 
@@ -140,21 +149,21 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         super(props);
         // Here may be some kind of switch to generate map
         // type based on props, for now it's just the grid
-        const map = new Grid(
+        const map = new GridDefault(
             props.mapImage,
-            DIFFICULTY_VALUES[props.startingPoints]
+            DIFFICULTY_VALUES[props.startingPoints],
+            this.props.level
         ).getGraph();
         const turnCount = 0;
         const stageCount = 0;
         var promiseRelation;
 
         currentMap = props.mapImage;
-        
-       // Puts User Player in position 1 on map
+
+        // Puts User Player in position 1 on map
         const position = 0;
-        const player =
-            map.getVertices()[position];
-        
+        const player = map.getVertices()[position];
+
         //generates player with chosen face/hat/name/ideology
         if (player instanceof Agent) {
             player.face = Face[props.face as keyof typeof Face];
@@ -196,9 +205,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         }
 
         // Set selected to position 1 so user is first player selected on load in
-        let selected = map.getVertices()[position+1];
+        let selected = map.getVertices()[position + 1];
 
-        let sidebarState = new SidebarState(map, player, selected,position);
+        let sidebarState = new SidebarState(map, player, selected, position);
 
         let select = (agent: Agent) => {
             sidebarState.selected = agent;
@@ -206,6 +215,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             sidebarState.selectedToPlayer = map.getEdge(agent, player)!;
             sidebarState.influenceChoices = new SpendingContainer();
             this.setState({ sidebarState: sidebarState });
+            this.updateStageCount();
         };
 
         this.state = {
@@ -287,6 +297,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         //this.drainResources(vertices);
 
         this.forceUpdate();
+        this.updateStageCount();
     }
 
     drainResources(vertices: Agent[]) {
@@ -464,8 +475,14 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 //a reward trust function will be need when trust implmented
 
                 //Checks if the choice each v1 v2 makes is a truth or lie
-                let v1Truth = (v1Choice == getTruth(v1Promise, v2Promise)) ? "Honest" : "Lied";
-                let v2Truth = (v2Choice == getTruth(v2Promise, v1Promise)) ? "Honest" : "Lied";
+                let v1Truth =
+                    v1Choice == getTruth(v1Promise, v2Promise)
+                        ? "Honest"
+                        : "Lied";
+                let v2Truth =
+                    v2Choice == getTruth(v2Promise, v1Promise)
+                        ? "Honest"
+                        : "Lied";
 
                 //add to the history of each edge for each agent
                 e1.history.addTurn(new Turn(v1Choice, v1Promise, v1Truth));
@@ -501,79 +518,78 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //This method keeps track of how many times the arrow button in <TutorialGuide /> has
     //been clicked. This is used to keep track of which stage in the tutorial story the user is at.
-    handleClick = () => {
+    updateStageCount = () => {
         this.setState({
             stageCount: this.state.stageCount + 1,
         });
     };
 
-    render() {
-        //if there is a selected player display right sidebar
+    //If there is a selected player - render the TutorialSelectedSidebar component
+    renderSelectedSidebar = () => {
         if (this.state.selectCharacterDisplay) {
             return (
-                <div className="game">
-                        <TutorialBoard
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            stageCount={this.state.stageCount}
-                        />
-                        <TutorialPlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                            stageCount={this.state.stageCount}
-                        />
-                        <TutorialSelectedSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            deselectCharacter={this.deselectCharacter}
-                            turnCount={this.state.turnCount}
-                        />
-                </div>
-            );
-        } else {
-            return (
-                <div className="game">
-                    <TutorialBoard
-                        map={this.state.map}
-                        turnCount={this.state.turnCount}
-                        selected={this.state.sidebarState.selected}
-                        select={this.state.select.bind(this)}
-                        player={this.state.sidebarState.player}
-                        deselectCharacter={this.deselectCharacter}
-                        current={currentMap}
-                        stageCount={this.state.stageCount}
-                    />
-                    <TutorialPlayerSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        turnCount={this.state.turnCount}
-                        promiseRelation={this.state.promiseRelation}
-                        stageCount={this.state.stageCount}
-                    />
-                    <TutorialGuide
-                        turnCount={this.state.turnCount}
-                        stageCount={this.state.stageCount}
-                        onClick={this.handleClick}
-                        level={this.props.level}
-                    />
-                </div>
+                <TutorialSelectedSidebar
+                    map={this.state.map}
+                    round={this.tempTurn.bind(this)}
+                    sidebarState={this.state.sidebarState}
+                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                    countTotalInfluence={this.countTotalInfluence}
+                    deselectCharacter={this.deselectCharacter}
+                    turnCount={this.state.turnCount}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
             );
         }
+        return null;
+    };
+
+    //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
+    renderEndOfLevel = () => {
+        //Level 0
+        if (this.props.level === 0 && this.state.stageCount === 27) {
+            return <EndOfLevel level={this.props.level} />;
+        }
+        return null;
+    };
+
+    render() {
+        //if there is a selected player display right sidebar
+        let selectedSidebar = this.renderSelectedSidebar();
+        let endOfLevel = this.renderEndOfLevel();
+        return (
+            <div className="game">
+                <TutorialBoard
+                    map={this.state.map}
+                    turnCount={this.state.turnCount}
+                    selected={this.state.sidebarState.selected}
+                    select={this.state.select.bind(this)}
+                    player={this.state.sidebarState.player}
+                    deselectCharacter={this.deselectCharacter}
+                    current={currentMap}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
+                <TutorialPlayerSidebar
+                    map={this.state.map}
+                    round={this.tempTurn.bind(this)}
+                    sidebarState={this.state.sidebarState}
+                    tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                    countTotalInfluence={this.countTotalInfluence}
+                    turnCount={this.state.turnCount}
+                    promiseRelation={this.state.promiseRelation}
+                    stageCount={this.state.stageCount}
+                    level={this.props.level}
+                />
+                {selectedSidebar}
+                <TutorialGuide
+                    turnCount={this.state.turnCount}
+                    stageCount={this.state.stageCount}
+                    onClick={this.updateStageCount}
+                    level={this.props.level}
+                />
+                {endOfLevel}
+            </div>
+        );
     }
 }

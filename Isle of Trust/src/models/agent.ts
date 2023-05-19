@@ -3,6 +3,36 @@ import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
 
+const defaultPawns = [
+    {
+        defName: 'Tutor',
+        defFace: 4,
+        defHat: 4
+    },
+    {
+        defName: 'Rec',
+        defFace: 2,
+        defHat: 3
+    },
+    {
+        defName: 'Susi',
+        defFace: 5,
+        defHat: 1
+    },
+    {
+        defName: 'Domran',
+        defFace: 6,
+        defHat: 2
+    },
+
+    {
+        defName: 'Pessimo',
+        defFace: 3,
+        defHat: 0
+    }
+]
+
+
 // perhaps it would be better if attributes were their own classes that could
 // call methods to increment themselves, but this way is a lot lighter.
 abstract class AttributeContainer {
@@ -73,6 +103,7 @@ export class Agent extends AttributeContainer {
 
     public face: Face;
     public hat: Hat;
+    public level: number;
 
     constructor(
         name: string,
@@ -81,7 +112,8 @@ export class Agent extends AttributeContainer {
         resources: number,
         mood: number,
         id: number,
-        coords: [number, number],     
+        coords: [number, number],
+        level: number
     ) {
         super();
         this.name = name;
@@ -91,22 +123,40 @@ export class Agent extends AttributeContainer {
         this.mood = mood;
         this.id = id;
         this.coords = coords;
+        this.level = level;
+        // Create player based off current level
+        if (level >= 0) {
+            let defFace =
+                Object.values(Face)[
+                defaultPawns[this.level].defFace 
+                ];
+            let defHat =
+                Object.values(Hat)[
+                defaultPawns[this.level].defHat
+                ];
 
-        //this is why I hate enums
-        //also this should later be changed to a generator function to allow player selected appearance
-        let randface =
-            Object.values(Face)[
+            this.face = Face[defFace as keyof typeof Face];
+            this.hat = Hat[defHat as keyof typeof Hat];
+            this.name = defaultPawns[this.level].defName;
+        }
+        // Create Random players
+        else {
+            //this is why I hate enums
+            //also this should later be changed to a generator function to allow player selected appearance
+            let randface =
+                Object.values(Face)[
                 Math.floor(Math.random() * (Object.values(Face).length / 2))
-            ];
-        let randhat =
-            Object.values(Hat)[
+                ];
+            let randhat =
+                Object.values(Hat)[
                 Math.floor(Math.random() * (Object.values(Hat).length / 2))
-            ];
+                ];
 
-        this.face = Face[randface as keyof typeof Face];
-        this.hat = Hat[randhat as keyof typeof Hat];
+            this.face = Face[randface as keyof typeof Face];
+            this.hat = Hat[randhat as keyof typeof Hat];
+        }
     }
-    
+
 
     /* These functions don't serve a purpose anymore, can be removed
     // update the personality in response to how the agent was treated in the previous round.
@@ -130,13 +180,13 @@ export class Agent extends AttributeContainer {
 
         const found = this.promises.some(e => e.promiseTo === promiseTo)
 
-        if(!found) {
+        if (!found) {
             this.promises.push(newPromise);
         }
 
         else {
             const promise = this.getPromiseTo(promiseTo);
-            if(promise) {
+            if (promise) {
                 promise.promise = commitment;
             }
         }
@@ -145,7 +195,7 @@ export class Agent extends AttributeContainer {
     //adds choice from player to list of choices 
     //NOTE on a consecutive round if a player has not chosen a promise, the previous round promise is used
     updateChoice(choice: Choice, choiceTo: Agent) {
-        
+
         const newChoice: choices = {
             choice: choice,
             choiceTo: choiceTo,
@@ -153,13 +203,13 @@ export class Agent extends AttributeContainer {
 
         const found = this.choices.some(e => e.choiceTo === choiceTo)
 
-        if(!found) {
+        if (!found) {
             this.choices.push(newChoice);
         }
 
         else {
             const aChoice = this.getChoiceTo(choiceTo);
-            if(aChoice) {
+            if (aChoice) {
                 aChoice.choice = choice
             }
         }
@@ -179,11 +229,13 @@ export class Agent extends AttributeContainer {
             this.resources += 1;
         else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
             this.resources -= 2;
+        else if (myChoice === Choice.Compete && theirChoice === Choice.Cooperate)
+            this.resources += 3;
         else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
-        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
-            this.resources += 3;
     }
+
+
 
     /*This function doesn't serve a purpose anymore, can be removed
     updateMood(myChoice: Choice, theirChoice: Choice) {
@@ -342,6 +394,7 @@ export class Ideology extends AttributeContainer {
 
     private role: Strategy;
 
+
     constructor(generosity: number, forgiveness: number) {
         super();
         if (
@@ -354,10 +407,14 @@ export class Ideology extends AttributeContainer {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
-    
+
         }
 
-        this.role = Math.floor(Math.random() * 6) 
+        if (generosity == 19){ this.role = 4;}
+        else if (generosity == 15){ this.role = 1;}
+        else if (generosity == 10){ this.role = 3;}
+        else if (generosity == 5){ this.role = 1;}
+        else { this.role = Math.floor(Math.random() * 6);}
     }
 
     // get the strategy associated with this ideology
