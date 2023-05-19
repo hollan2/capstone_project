@@ -545,10 +545,8 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(
-                                        Choice.Cooperate,
-                                        agent
-                                    );
+                                    player.updateChoice(Choice.Cooperate, agent);
+                                    this.handleButtonChange("cooperate");
                                 }}
                             >
                                 <div className="action-container">
