@@ -267,7 +267,7 @@ footer {
 .name-selector {
     display: flex;
     flex-direction: column;
-    width: 50%;   
+    width: 50%;
 }
 
 .selector-stack legend {
