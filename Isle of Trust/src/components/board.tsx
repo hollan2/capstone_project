@@ -64,7 +64,11 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 interface BoardProps {
@@ -88,7 +92,7 @@ export class Board extends React.Component<BoardProps> {
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
         this.select(this.props.selected);
-        this.deselectCharacter(true); 
+        this.deselectCharacter(true);
     }
 
     componentWillUnmount() {
@@ -126,7 +130,6 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
-
         return (
             <div className="board">
                 <div
@@ -316,8 +319,8 @@ function AgentImage(props: AgentImageProps) {
     let selectedScale = 0.18;
     let hoverScale = 0.14;
 
-    // Make the user's player larger in size 
-    if (props.agent.id == props.player.id){
+    // Make the user's player larger in size
+    if (props.agent.id == props.player.id) {
         defaultScale = 0.2;
         selectedScale = 0.2;
         hoverScale = 0.2;
@@ -366,11 +369,11 @@ function AgentImage(props: AgentImageProps) {
     };
 
     // Show personality color if 5 turns have passed or if displaying the user player
-    if(props.turnCount >= 4 || props.agent.id == props.player.id) {
+    if (props.turnCount >= 4 || props.agent.id == props.player.id) {
         switch (props.agent.ideology.toStrategy()) {
             case Strategy.Default:
-                    ideology = { red: 158, green: 196, blue: 234 };
-                    break;
+                ideology = { red: 158, green: 196, blue: 234 };
+                break;
             case Strategy.Suspicious:
                 ideology = { red: 248, green: 179, blue: 101 };
                 break;
@@ -391,7 +394,7 @@ function AgentImage(props: AgentImageProps) {
                 ideology = { red: 158, green: 196, blue: 234 };
                 break;
             default: {
-                ideology = { red: 203, green: 203, blue: 203 }; 
+                ideology = { red: 203, green: 203, blue: 203 };
                 break;
             }
         }

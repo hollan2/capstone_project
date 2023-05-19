@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDom from "react-dom"
+import ReactDom from "react-dom";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -38,7 +38,7 @@ import {
     choiceTally,
     Strategy,
     Choice,
-    Commitment
+    Commitment,
 } from "../models/strategy";
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
@@ -70,7 +70,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -103,12 +103,15 @@ interface SelectedSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
-    deselectCharacter:(value: boolean) => void;
+    deselectCharacter: (value: boolean) => void;
     turnCount: number;
 }
 
-export class SelectedSidebar extends React.Component<SelectedSidebarProps, unknown> {
 
+export class SelectedSidebar extends React.Component<
+    SelectedSidebarProps,
+    unknown
+> {
     render() {
         return (
             <div className="sidebar selectedSidebar">
@@ -124,9 +127,9 @@ export class SelectedSidebar extends React.Component<SelectedSidebarProps, unkno
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                 />
-                <History 
+                <History
                     sidebarState={this.props.sidebarState}
-                    map={this.props.map} 
+                    map={this.props.map}
                     turnCount={this.props.turnCount}
                 />
             </div>
@@ -141,15 +144,15 @@ interface SelectedDisplayProps {
         map: Graph<Agent, Relation>,
         agent: Agent
     ) => choiceTally;
-    
+
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
-    deselectCharacter:(value: boolean) => void;
+    deselectCharacter: (value: boolean) => void;
     turnCount: number;
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
-     
+  
     deselectCharacter(value: boolean) {
         this.props.deselectCharacter(false);
     }
@@ -169,14 +172,16 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                     <div>
                         selected: <span className="agent-name">{name}</span>
                     </div>
-                    <div 
+                    <div
                         className="deselect"
                         onClick={() => {
                             this.deselectCharacter(false);
-                            this.props.sidebarState.selected = this.props.map.getVertices()[userPosition];
-                        }}>
+                            this.props.sidebarState.selected =
+                                this.props.map.getVertices()[userPosition];
+                        }}
+                    >
                         &#9746;
-                    </div> 
+                    </div>
                 </div>
                 <Display
                     map={this.props.map}
@@ -245,8 +250,9 @@ class Stats extends React.Component<StatsProps, unknown> {
             <div className="stats-container">
                 <div className="stats">
                     <p>
-                        They've cooperated with you {theirChoices.gave} times, while
-                        you've cooperated with them {yourChoices.gave} times.
+                        They've cooperated with you {theirChoices.gave} times,
+                        while you've cooperated with them {yourChoices.gave}{" "}
+                        times.
                     </p>
                     <p>
                         They've cheated you {theirChoices.cheated} times, while
@@ -258,19 +264,17 @@ class Stats extends React.Component<StatsProps, unknown> {
     }
 }
 
-interface HistoryProps{
+interface HistoryProps {
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     turnCount: number;
 }
 
-
 class History extends React.Component<HistoryProps> {
-    
     private children: JSX.Element[] = [];
 
     renderNeighbors = () => {
-        this.children = []
+        this.children = [];
         //Get the neighbors of the selected player from the graph
         const neighbors = this.props.map.getEdges(
             this.props.sidebarState.selected
@@ -278,48 +282,47 @@ class History extends React.Component<HistoryProps> {
         //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
         for (const entry of neighbors.entries()) {
             this.children.push(
-            <HistoryNeighbors 
-            agent={entry[0]} 
-            relation={entry[1]}
-            turnCount={this.props.turnCount}
-            />);
-            
-        };
+                <HistoryNeighbors
+                    agent={entry[0]}
+                    relation={entry[1]}
+                    turnCount={this.props.turnCount}
+                />
+            );
+        }
     };
-  
- 
-    render() { 
 
+    render() {
         this.renderNeighbors();
 
         return (
             <div className="history-container">
                 <div className="history-title">
-                    <h3>See history with neighbors:</h3> 
+                    <h3>See history with neighbors:</h3>
                 </div>
 
-                <div className="history-agent">
-                    {this.children}
-                </div>
+                <div className="history-agent">{this.children}</div>
             </div>
         );
     }
 }
 
-interface HistoryNeighborsProps{
+interface HistoryNeighborsProps {
     agent: Agent;
     relation: Relation;
     turnCount: number;
 }
 
-interface HistoryNeighborsState{
+interface HistoryNeighborsState {
     show: boolean;
 }
 
-class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNeighborsState> {
+class HistoryNeighbors extends React.Component<
+    HistoryNeighborsProps,
+    HistoryNeighborsState
+> {
     state = {
-        show: false
-    }
+        show: false,
+    };
 
     private stageRef = React.createRef<Konva.Stage>();
     private agentImageScale: number = 0.1;
@@ -330,53 +333,60 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
     //or hide the popup
     changeState = () => {
         this.setState({ show: !this.state.show });
-      };
+    };
 
     render() {
         return (
             <div className="history-display">
-                    <RK.Stage
-                        ref={this.stageRef}
-                        width={this.canvasWidth}
-                        height={this.canvasHeight}
-                    >
-                        <RK.Layer>
-                            <SidebarAgentImage
-                                canvasWidth={this.canvasWidth}
-                                agent={this.props.agent}
-                                turnCount={this.props.turnCount}
-                            />
-                        </RK.Layer>
-                    </RK.Stage>
-                    <div className="history-view">
-                        <button onClick={this.changeState}>View</button>
-                        {this.state.show && (<HistoryPopUp history={this.props.relation.history} changeState={this.changeState}/>)}
-                    </div>
+                <RK.Stage
+                    ref={this.stageRef}
+                    width={this.canvasWidth}
+                    height={this.canvasHeight}
+                >
+                    <RK.Layer>
+                        <SidebarAgentImage
+                            canvasWidth={this.canvasWidth}
+                            agent={this.props.agent}
+                            turnCount={this.props.turnCount}
+                        />
+                    </RK.Layer>
+                </RK.Stage>
+                <div className="history-view">
+                    <button onClick={this.changeState}>View</button>
+                    {this.state.show && (
+                        <HistoryPopUp
+                            history={this.props.relation.history}
+                            changeState={this.changeState}
+                        />
+                    )}
+                </div>
             </div>
         );
     }
 }
 
-
-interface HistoryPopUpProps{
+interface HistoryPopUpProps {
     history: TurnLog;
     changeState: (show: boolean) => void;
 }
 
-
-class HistoryPopUp extends React.Component<HistoryPopUpProps>
-{
+class HistoryPopUp extends React.Component<HistoryPopUpProps> {
     //calls the passed in function to change the parent's state to hide the popup
     handleCloseClick = () => {
         this.props.changeState(false);
-      };
-    
+    };
+
     private History: TurnLog = this.props.history;
 
     render() {
-        const list = this.History.actions.map((turn, i) => (
-            <li key={i}>Round: {i+1} | Promise: {Commitment[turn.commitment]} | Action: {Choice[turn.choice]}</li>
-            )).reverse();
+        const list = this.History.actions
+            .map((turn, i) => (
+                <li key={i}>
+                    Round: {i + 1} | Promise: {Commitment[turn.commitment]} |
+                    Action: {Choice[turn.choice]}
+                </li>
+            ))
+            .reverse();
         return ReactDom.createPortal(
             <div className="popup-container">
                 <div className="overlay"></div>
@@ -386,15 +396,12 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                     </div>
                     <div className="popup-content">
                         <h1>History:</h1>
-                        <ul>
-                                {list}
-                        </ul>
+                        <ul>{list}</ul>
                     </div>
                 </div>
             </div>,
             //Used for React Portal Popup Modal
-          document.getElementById("portal")!
+            document.getElementById("portal")!
         );
-      }
-    
+    }
 }

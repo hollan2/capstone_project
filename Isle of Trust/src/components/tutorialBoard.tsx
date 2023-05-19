@@ -30,7 +30,11 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
+    Symmetrical: "url(../Maps/mapSymmetrical.png)",
+    Magnifying: "url(../Maps/mapMagnifying.png)",
+    Dice: "url(../Maps/mapDice.png)",
+    Cloud: "url(../Maps/mapCloud.png)",
 };
 
 interface TutorialBoardProps {
@@ -42,6 +46,7 @@ interface TutorialBoardProps {
     player: Agent;
     deselectCharacter: (value: boolean) => void;
     current: string;
+    level: number;
 }
 
 export class TutorialBoard extends React.Component<TutorialBoardProps> {
@@ -90,21 +95,34 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.props.deselectCharacter(value);
     }
 
+    //Decides wheter or not disable the board based on level and stageCount
+    disableScreen(): boolean {
+        //Tutorial Level 0
+        if (
+            this.props.level === 0 &&
+            this.props.stageCount !== 15 &&
+            this.props.stageCount < 21
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         return (
             <div
                 className="board"
-                style={
-                    this.props.stageCount !== 3 ? { pointerEvents: "none" } : {}
-                }
+                style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1>
-                        Tutorial Level 1
+                    <h1 id="tutorialHeader">
+                        Tutorial Level {this.props.level}
                     </h1>
                 </article>
                 <div
-                    className="map"
+                    className={
+                        this.props.stageCount === 14 ? "map spotlight" : "map"
+                    }
                     ref={this.containerRef}
                     style={{
                         backgroundImage: MAP_URL[this.props.current],
@@ -313,8 +331,8 @@ function AgentImage(props: AgentImageProps) {
 
     switch (props.agent.ideology.toStrategy()) {
         case Strategy.Default:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
+            ideology = { red: 158, green: 196, blue: 234 };
+            break;
         case Strategy.Suspicious:
             ideology = { red: 248, green: 179, blue: 101 };
             break;
@@ -335,7 +353,7 @@ function AgentImage(props: AgentImageProps) {
             ideology = { red: 158, green: 196, blue: 234 };
             break;
         default: {
-            ideology = { red: 203, green: 203, blue: 203 }; 
+            ideology = { red: 203, green: 203, blue: 203 };
             break;
         }
     }

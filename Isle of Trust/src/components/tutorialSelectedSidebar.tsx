@@ -23,7 +23,7 @@ export const MAP_URL: { [key: string]: string } = {
     Ring: "url(../Maps/mapRing.png)",
     Spokes: "url(../Maps/mapSpokes.png)",
     Crescent: "url(../Maps/mapCrescent.png)",
-    Small: "url(../Maps/mapSmall.png)",
+    Cruz: "url(../Maps/mapCruz.png)",
 };
 
 interface TutorialSelectedSidebarProps {
@@ -37,6 +37,8 @@ interface TutorialSelectedSidebarProps {
     round: () => void;
     deselectCharacter: (value: boolean) => void;
     turnCount: number;
+    stageCount: number;
+    level: number;
 }
 
 export class TutorialSelectedSidebar extends React.Component<
@@ -45,7 +47,13 @@ export class TutorialSelectedSidebar extends React.Component<
 > {
     render() {
         return (
-            <div className="sidebar selectedSidebar">
+            <div
+                className={
+                    this.props.level === 0 && this.props.stageCount === 16
+                        ? "sidebar selectedSidebar spotlight"
+                        : "sidebar selectedSidebar"
+                }
+            >
                 <SelectedDisplay
                     map={this.props.map}
                     sidebarState={this.props.sidebarState}
@@ -53,6 +61,8 @@ export class TutorialSelectedSidebar extends React.Component<
                     countTotalInfluence={this.props.countTotalInfluence}
                     deselectCharacter={this.props.deselectCharacter}
                     turnCount={this.props.turnCount}
+                    stageCount={this.props.stageCount}
+                    level={this.props.level}
                 />
                 <Stats
                     sidebarState={this.props.sidebarState}
@@ -62,6 +72,8 @@ export class TutorialSelectedSidebar extends React.Component<
                     sidebarState={this.props.sidebarState}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
+                    stageCount={this.props.stageCount}
+                    level={this.props.level}
                 />
             </div>
         );
@@ -80,6 +92,8 @@ interface SelectedDisplayProps {
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     deselectCharacter: (value: boolean) => void;
     turnCount: number;
+    stageCount: number;
+    level: number;
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
@@ -95,7 +109,13 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
             name = them.name;
         }
         return (
-            <div className="selected-display">
+            <div
+                className={
+                    this.props.stageCount === 17 && this.props.level === 0
+                        ? "selected-display spotlight"
+                        : "selected-display"
+                }
+            >
                 <div className="agent-type" id="selected-character">
                     <div>
                         selected: <span className="agent-name">{name}</span>
@@ -198,9 +218,12 @@ interface HistoryProps {
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     turnCount: number;
+    stageCount: number;
+    level: number;
 }
 
 class History extends React.Component<HistoryProps> {
+    private historyRef = React.createRef<HTMLDivElement>();
     private children: JSX.Element[] = [];
 
     renderNeighbors = () => {
@@ -212,16 +235,32 @@ class History extends React.Component<HistoryProps> {
         //Loop through each entry (a neighbor) and append to the children array which wil be used to display the neighbors later
         for (const entry of neighbors.entries()) {
             this.children.push(
-                <HistoryNeighbors agent={entry[0]} relation={entry[1]} turnCount={this.props.turnCount}/>
+                <HistoryNeighbors
+                    agent={entry[0]}
+                    relation={entry[1]}
+                    turnCount={this.props.turnCount}
+                />
             );
         }
     };
 
+    //Scrolls to the History panel on the screen. Used for Tutorial level 0.
+    scrollToElement = () => {
+        if (this.historyRef.current) this.historyRef.current.scrollIntoView();
+    };
+
     render() {
         this.renderNeighbors();
-
+        if (this.props.stageCount === 18) this.scrollToElement();
         return (
-            <div className="history-container">
+            <div
+                className={
+                    this.props.stageCount === 18 && this.props.level === 0
+                        ? "history-container spotlight"
+                        : "history-container"
+                }
+                ref={this.historyRef}
+            >
                 <div className="history-title">
                     <h3>See history of neighbors:</h3>
                 </div>

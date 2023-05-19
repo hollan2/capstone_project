@@ -1,17 +1,17 @@
 import { Graph } from "../models/graph";
 import * as util from "../utilities";
-import {
-    Agent,
-    Ideology,
-    Personality,
-    Relation,
-} from "../models/agent";
+import { Agent, Ideology, Personality, Relation } from "../models/agent";
 import ProngedJson from "../data/mapPronged.json";
 import ChokeJson from "../data/mapChoke.json";
 import CrescentJson from "../data/mapCrescent.json";
 import RingJson from "../data/mapRing.json";
 import SpokesJson from "../data/mapSpokes.json";
-import SmallJson from "../data/mapSmall.json";
+import CruzJson from "../data/mapCruz.json";
+import SymmetricalJson from "../data/mapSymmetrical.json";
+import MagnifyingJson from "../data/mapMagnifying.json";
+import DiceJson from "../data/mapDice.json";
+import CloudJson from "../data/mapCloud.json";
+
 import * as genA from "./agent";
 
 //import { MAP_INDEX } from "../App";
@@ -59,8 +59,20 @@ export class Map {
             case "Crescent":
                 json = CrescentJson;
                 break;
-            case "Small":
-                json = SmallJson;
+            case "Cruz":
+                json = CruzJson;
+                break;
+            case "Symmetrical":
+                json = SymmetricalJson;
+                break;
+            case "Magnifying":
+                json = MagnifyingJson;
+                break;
+            case "Dice":
+                json = DiceJson;
+                break;
+            case "Cloud":
+                json = CloudJson;
                 break;
         }
         this.jsonData = JSON.parse(JSON.stringify(json));
@@ -91,6 +103,58 @@ export class Grid extends Map {
                     vID,
                     [point.x, point.y],
                     this.startingResources
+                );
+                ++vID;
+                this.graph.insertVertex(v);
+            });
+        }
+    }
+
+    generateEdges() {
+        const all = this.graph.getVertices();
+        if (this.jsonData) {
+            this.jsonData.edges.forEach((edge) => {
+                this.graph.insertEdge(
+                    all[edge.v1],
+                    all[edge.v2],
+                    new Relation(10, 10)
+                );
+                this.graph.insertEdge(
+                    all[edge.v2],
+                    all[edge.v1],
+                    new Relation(10, 10)
+                );
+            });
+        }
+    }
+}
+
+
+
+// Used to create tutorial selected players per level.
+export class GridDefault extends Map {
+    startingResources: number;
+    level: number;
+    constructor(select: string, resource: number = 10, level:number) {
+        super(select);
+
+        this.startingResources = resource;
+        this.level = level;
+        this.generateVertices();
+        this.generateEdges();
+    }
+
+    generateVertices() {
+        let vID = 1;
+
+        // Generates agent vertices and inserts them to graph
+        if (this.jsonData) {
+            this.jsonData.points.forEach((point) => {
+                const v = genA.genDefaultAgent(
+                    vID,
+                    [point.x, point.y],
+                    this.startingResources,
+                    this.level
                 );
                 ++vID;
                 this.graph.insertVertex(v);

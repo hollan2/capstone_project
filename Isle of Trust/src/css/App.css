@@ -44,7 +44,7 @@
 
 .hintbtn {
     position: fixed;
-    right: 20%;
+    right: 22%;
     top: 70px;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
     transform: scale(1);
@@ -72,10 +72,25 @@
     }
 }
 
+.highlightText {
+    animation: fontEnlarger 2s infinite;
+}
+
+@keyframes fontEnlarger {
+    0% {
+        font-size: 1.1em;
+    }
+    100% {
+        font-size: 1.2em;
+        color: red;
+    }
+}
+
 .sidebar {
     grid-area: sidebar;
     display: grid;
     gap: 5px;
+    width: 350px;
 }
 
 .investmentSidebar{
@@ -169,12 +184,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.neighbor-promise {
+    margin-left: 45px;
+}
 
 .influence-entry {
     grid-area: influence-entry;
-    display: flex;
     align-items: center;
     gap: 5px;
+    display: grid;
+    grid-template-columns: 40px auto;
 }
 
 .sidebar-agent-info {
@@ -292,7 +311,7 @@
 .map {
     aspect-ratio: 4 / 3;
     max-width: 100vmin;
-    max-height: 100vmin;
+    max-height: 90vmin;
     margin: auto;
 }
 
@@ -417,23 +436,35 @@
 
 
 #cooperate {
-    background-color: #51e658;
+    background-color: #3d7607;
     height: 30px;
-}
-#cooperate:target {
-    background-color: #51e658;
-    height: 30px;
-    opacity: 0.25;
+    flex-grow: 1;
 }
 
 #reciprocate {
-    background-color: #e1e257;
+    background-color: #a47901;
     height: 30px;
 }
 
 #compete {
-    background-color: #f36252;
+    background-color: #8e0000;
     height: 30px;
+    flex-grow: 1;
+}
+
+#cooperate.selected-buttons {
+    background-color: #6dcc1b;
+
+}
+
+#reciprocate.selected-buttons {
+    background-color: #e4c202;
+
+}
+
+#compete.selected-buttons {
+    background-color: #dd1313;
+
 }
 
 .action-container {
