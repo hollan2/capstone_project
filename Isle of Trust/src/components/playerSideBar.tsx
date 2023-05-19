@@ -504,10 +504,8 @@ class InfluenceEntry extends React.Component<
                                 onClick={() => {
                                     //determine if give or cheat then update choice
                                     console.log("Select cooperate");
-                                    player.updateChoice(
-                                        Choice.Cooperate,
-                                        agent
-                                    );
+                                    player.updateChoice(Choice.Cooperate, agent);
+                                    this.handleButtonChange("cooperate");
                                 }}
                             >
                                 <div className="action-container">
@@ -524,11 +522,10 @@ class InfluenceEntry extends React.Component<
                             <button
                                 className={`phase-buttons ${buttonClicked === "compete" ? "selected-buttons" : ""}`}
                                 id="compete"
-                                onClick={() => {
-
+                                onClick={() => { 
                                     console.log("Select compete");
                                     player.updateChoice(Choice.Compete, agent);
-
+                                    this.handleButtonChange("compete");
                                 }}
                             >
                                 <div className="action-container">
