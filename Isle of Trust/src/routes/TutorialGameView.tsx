@@ -254,7 +254,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             neighbors.forEach((relation, neighbor) => {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
-                sumChoices.gave += tally.gave;
+                sumChoices.together += tally.together;
                 sumChoices.cheated += tally.cheated;
             });
         }

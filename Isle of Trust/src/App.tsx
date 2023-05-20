@@ -173,8 +173,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             neighbors.forEach((relation, neighbor) => {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
-                sumChoices.gave += tally.gave;
+                sumChoices.together += tally.together;
+                sumChoices.solo += tally.solo;
                 sumChoices.cheated += tally.cheated;
+                sumChoices.honest += tally.honest;
             });
         }
         return sumChoices;
@@ -591,7 +593,6 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
     }
 
     render() {
-        let totalInfluence: String = "None";
         let agentPoints: number = 0;
         let agentStrat: string = "No strategy";
         let agentGoal: string = "Avenge me...";
@@ -601,16 +602,14 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
         let firstNeighbor: [Agent, Relation] = neighbors.entries().next().value;
         let relation = firstNeighbor[1];
         let round: number = relation.history.length();
+        let numOfActions = round * neighbors.size;
+
         if (this.props.agent instanceof Agent) {
             const agent = this.props.agent as Agent;
             let strat = agent.ideology.toStrategy();
             agentStrat = Strategy[strat];
             agentGoal = taglineFromStrategy(strat);
             agentPoints = agent.resources;
-            totalInfluence = this.props.countTotalInfluence(
-                this.props.map,
-                agent
-            );
         }
         return (
             <section className="display" ref={this.containerRef}>
@@ -630,24 +629,31 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                         "{agentGoal}" ({agentStrat})
                     </p>
                 </div>
-                <div className="stats">
+                <div className="stats text-nowrap">
                     <p className="end">{agentPoints} resources</p>
                     <p className="end">
-                        Cooperated {this.props.agentChoices.gave} times /{" "}
-                        {round} rounds
+                        Together {this.props.agentChoices.together} /{" "}
+                        {numOfActions}
                     </p>
                     <p className="end">
-                        Cheated {this.props.agentChoices.cheated} times /{" "}
-                        {round} rounds
+                        Solo {this.props.agentChoices.solo} /{" "}
+                        {numOfActions}
                     </p>
-                    <div className="end">regionally {totalInfluence}</div>
+                    <p className="end">
+                        Honest {this.props.agentChoices.honest} /{" "}
+                        {numOfActions}
+                    </p>
+                    <p className="end">
+                        Cheated {this.props.agentChoices.cheated} /{" "}
+                        {numOfActions}
+                    </p>
                 </div>
-                <Mood agent={this.props.agent} />
             </section>
         );
     }
 }
 
+// 5/2023 - Removed Mood as we didn't have time to update it. Keeping for future use. 
 interface MoodProps {
     agent: Agent;
 }
