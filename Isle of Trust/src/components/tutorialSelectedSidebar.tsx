@@ -285,9 +285,7 @@ class HistoryNeighbors extends React.Component<
     HistoryNeighborsProps,
     HistoryNeighborsState
 > {
-    state = {
-        show: false,
-    };
+
 
     private stageRef = React.createRef<Konva.Stage>();
     private agentImageScale: number = 0.1;

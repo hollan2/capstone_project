@@ -101,6 +101,7 @@
 .investmentButton{
     height: 100%;
     margin: 5px;
+    margin-top: 8px;
     display: center;
 }
 
@@ -176,6 +177,31 @@
 .influence-title {
     font-size: 1.2em;
     border-bottom: 2px solid var(--dark-blue);
+}
+
+.hint-text{
+    min-height: 2rem;
+    font-size: 0.8em;
+    padding-top: 0.5em;
+    background-color: var(--lighter-blue);
+    border-radius: var(--std-border-radius);
+    animation: fadeIn 2s; 
+}
+
+.hint-empty{
+    min-height: 2rem;
+    padding-top: 0.2em;
+    animation: fadeOut 2s; 
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    100% { opacity: 1; }
+    0% { opacity: 0; }
 }
 
 .influence-options {

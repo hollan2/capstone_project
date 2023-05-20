@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -141,8 +141,20 @@ interface PlayerDisplayProps {
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     private library_count = 0;
     private university_count = 0;
-    //changes everyone of matching strategy to a new strategy
+    hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
 
+
+    //set the text to the hint if the players hover over the invest button
+    setText(newText: string){
+        this.hintText = <div className="hint-text">{newText}</div>
+        this.setState({PlayerDisplay: this})
+    };
+
+    //resets the hint 
+    setEmpty(){
+        this.hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
+        this.setState({PlayerDisplay: this})       
+    }
 
     render() {
         let choices = new choiceTally();
@@ -166,11 +178,13 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                 />
             <div className="investmentSidebar">
                 <div className="influence-title">
-                    Invest in Public Services
+                    {this.hintText}
                 </div>
                 <button
                     id="library"
                     className="investmentButton"
+                    onMouseEnter= {() =>this.setText("Hint: changes Suspicous Inhabitants to Students")}
+                    onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
                         if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
@@ -195,12 +209,14 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                 <button
                     id="university"
                     className="investmentButton"
+                    onMouseEnter= {() =>this.setText("Hint: changes Student Inhabitants to Reciprocators")}
+                    onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
                         if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.setState({PlayerDisplay: this})
                         }
 
                         //if the count is equal to 14, add to the count and change the personas
@@ -209,17 +225,14 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.props.universityrolechange()
-                            this.setState({sidebarState: this.props.sidebarState})
+                            this.setState({PlayerDisplay: this})
                         }
-                    
                     }}
                 >
-                    {" "}
                     University {this.university_count}
                 </button>
               </div>
             </div>
-
         );
     }
 }
