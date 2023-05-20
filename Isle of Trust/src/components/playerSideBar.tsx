@@ -183,7 +183,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                 <button
                     id="library"
                     className="investmentButton"
-                    onMouseEnter= {() =>this.setText("Hint: changes Suspicous Inhabitants to Students")}
+                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Suspicous to Students")}
                     onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
@@ -198,18 +198,17 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                             this.library_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.props.libraryrolechange()
-                            this.setState({PlayerDisplay: this})
                         }
                     }}
                 >
                     {" "}
-                    Library {this.library_count}
+                    Library: {this.library_count}
                 </button>
 
                 <button
                     id="university"
                     className="investmentButton"
-                    onMouseEnter= {() =>this.setText("Hint: changes Student Inhabitants to Reciprocators")}
+                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Students to Reciprocators")}
                     onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
@@ -225,11 +224,11 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                             this.university_count += 1
                             this.props.sidebarState.player.resources -= 1
                             this.props.universityrolechange()
-                            this.setState({PlayerDisplay: this})
                         }
                     }}
                 >
-                    University {this.university_count}
+                    {" "}
+                    University: {this.university_count}
                 </button>
               </div>
             </div>
