@@ -108,10 +108,11 @@
 
 .playerSidebar {
     grid-area: playerSidebar;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
         "playerDisplay"
-        "influenceMenu";
+        "influenceMenu"
+        "history";
 }
 
 .selectedSidebar {
@@ -119,7 +120,7 @@
     border-radius: 5px;
     background-color: var(--white);
     grid-area: selectedSidebar;
-    grid-template-rows: auto 0.1fr 1fr;
+    grid-template-rows: auto .1fr 1fr;
     grid-template-areas:
         "selectedDisplay"
         "stats"
@@ -412,21 +413,37 @@
     border-radius: var(--std-border-radius);
     margin: 10px;
 }
+.playerSidebar .history-container {
+    background-color: white;
+    padding: 15px;
+    margin: 0px;
+    border-radius: 0px;
+
+}
 
 .history-title {
     border-bottom: 2px solid var(--dark-blue);
 }
 
-.history-display {
+.history-agent {
     display: flex;
     flex-direction: row;
+}
+.history-display {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
+
 .popup {
+    display: flex;
+    flex-direction: column;
     width: 500px;
     height: 500px;
-    background-color: var(--lighter-blue);
+    background-color: white;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -451,12 +468,49 @@
 
 .popup-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.history-header {
+    display: flex;
+    padding-top: 10px;
+    text-align: center;
+}
+.history-header > * {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .popup-content {
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.history-table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    table-layout: fixed;
+    width: 100%;
+}
+  
+.history-table th,
+.history-table td {
+    border: 1px solid black;
+    width: 20%;
 }
 
 

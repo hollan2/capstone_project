@@ -146,6 +146,7 @@ export class GridDefault extends Map {
 
     generateVertices() {
         let vID = 1;
+        let spot = 0;
 
         // Generates agent vertices and inserts them to graph
         if (this.jsonData) {
@@ -154,9 +155,11 @@ export class GridDefault extends Map {
                     vID,
                     [point.x, point.y],
                     this.startingResources,
-                    this.level
+                    spot
                 );
                 ++vID;
+                console.log( "here is spot:", {spot})
+                if (this.level != 0){ ++spot;}
                 this.graph.insertVertex(v);
             });
         }

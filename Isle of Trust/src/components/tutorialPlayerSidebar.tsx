@@ -8,6 +8,8 @@ import { SidebarAgentImage } from "../App";
 import { Agent, Relation, SpendingContainer } from "../models/agent";
 import { Graph } from "../models/graph";
 import { choiceTally, Commitment, Choice, Strategy } from "../models/strategy";
+import { History } from "./selectedSideBar"
+
 export const RESIZE_TIMEOUT = 500;
 
 export const SCENE_WIDTH = 800;
@@ -69,6 +71,11 @@ export class TutorialPlayerSidebar extends React.Component<
                     promiseRelation={this.props.promiseRelation}
                     stageCount={this.props.stageCount}
                     level={this.props.level}
+                />
+                <History
+                    selected={this.props.sidebarState.player}
+                    map={this.props.map}
+                    turnCount={this.props.turnCount}
                 />
             </div>
         );
