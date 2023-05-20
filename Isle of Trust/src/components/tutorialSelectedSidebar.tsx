@@ -251,7 +251,8 @@ class History extends React.Component<HistoryProps> {
 
     render() {
         this.renderNeighbors();
-        if (this.props.stageCount === 18) this.scrollToElement();
+        if (this.props.stageCount === 18 && this.props.level === 0)
+            this.scrollToElement();
         return (
             <div
                 className={
