@@ -113,7 +113,7 @@ class Professor extends React.Component<ProfessorProps, ProfessorState> {
     render() {
         return (
             <div className="tutorialGuide">
-                <div className="textBox">
+                <div className="textbox" id="textbox">
                     <AnimatedText
                         type="chars" // animate words or chars
                         animation={{

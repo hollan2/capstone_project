@@ -29,11 +29,15 @@
     z-index: 6;
 }
 
-.textBox {
+.textbox {
     background-color: white;
     width: 300px;
     border-radius: 20px;
     padding: 10px;
+}
+
+#textbox {
+    text-transform: none;
 }
 
 .arrowbtn {
@@ -421,8 +425,6 @@
     padding: 10px;
 }
 
-
-
 #cooperate {
     background-color: #3d7607;
     height: 30px;
@@ -442,17 +444,14 @@
 
 #cooperate.selected-buttons {
     background-color: #6dcc1b;
-
 }
 
 #reciprocate.selected-buttons {
     background-color: #e4c202;
-
 }
 
 #compete.selected-buttons {
     background-color: #dd1313;
-
 }
 
 .action-container {
