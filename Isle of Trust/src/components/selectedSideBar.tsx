@@ -96,6 +96,7 @@ interface SelectedSidebarProps {
     turnCount: number;
 }
 
+
 export class SelectedSidebar extends React.Component<
     SelectedSidebarProps,
     unknown
@@ -143,6 +144,7 @@ interface SelectedDisplayProps {
 }
 
 class SelectedDisplay extends React.Component<SelectedDisplayProps> {
+  
     deselectCharacter(value: boolean) {
         this.props.deselectCharacter(false);
     }

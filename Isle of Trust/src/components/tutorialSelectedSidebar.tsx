@@ -287,6 +287,7 @@ interface HistoryNeighborsState{
     show: boolean;
 }
 
+
 class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNeighborsState> {
     state = {
         show: false

@@ -161,11 +161,9 @@ export class Agent extends AttributeContainer {
 
     // update the ideology to match the personality.
     updateIdeology() {}
-
-    adoptIdeology(i: Ideology) {
-        this.ideology = new Ideology(i.getGenerosity(), i.getForgiveness());
-    }
     */
+
+
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {
@@ -426,6 +424,7 @@ export class Ideology extends AttributeContainer {
     }
 }
 
+//PERSONALITY IS NO LONGER IN USE
 // Immutable personality traits which affect how the agent influences others and
 // adapts their own ideology.
 export class Personality extends AttributeContainer {

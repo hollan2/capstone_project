@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -45,6 +45,9 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
+import { Stream } from "stream";
+import { SelectedSidebar } from "./selectedSideBar";
+import { Board } from "./board";
 /*
 import { timeStamp } from "console";
 */
@@ -89,6 +92,8 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     turnCount: number;
     promiseRelation: any;
 }
@@ -101,6 +106,8 @@ export class PlayerSidebar extends React.Component<
         return (
             <div className="sidebar playerSidebar">
                 <PlayerDisplay
+                    libraryrolechange={this.props.libraryrolechange}
+                    universityrolechange={this.props.universityrolechange}
                     map={this.props.map}
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
@@ -125,6 +132,8 @@ export class PlayerSidebar extends React.Component<
 }
 
 interface PlayerDisplayProps {
+    libraryrolechange:() => void;
+    universityrolechange:() => void;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -136,6 +145,23 @@ interface PlayerDisplayProps {
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
+    private library_count = 0;
+    private university_count = 0;
+    hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
+
+
+    //set the text to the hint if the players hover over the invest button
+    setText(newText: string){
+        this.hintText = <div className="hint-text">{newText}</div>
+        this.setState({PlayerDisplay: this})
+    };
+
+    //resets the hint 
+    setEmpty(){
+        this.hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
+        this.setState({PlayerDisplay: this})       
+    }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -156,6 +182,61 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
                 />
+            <div className="investmentSidebar">
+                <div className="influence-title">
+                    {this.hintText}
+                </div>
+                <button
+                    id="library"
+                    className="investmentButton"
+                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Suspicous to Students")}
+                    onMouseLeave= {() =>this.setEmpty()}
+                    onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
+                        if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({PlayerDisplay: this})
+                        }
+                        //if the count is equal to 14, add to the count and change the personas
+                        else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.library_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.props.libraryrolechange()
+                        }
+                    }}
+                >
+                    {" "}
+                    Library: {this.library_count}
+                </button>
+
+                <button
+                    id="university"
+                    className="investmentButton"
+                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Students to Reciprocators")}
+                    onMouseLeave= {() =>this.setEmpty()}
+                    onClick={() => {
+                        //if the invested amount is less than 14 keep adding to the count
+                        if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.setState({PlayerDisplay: this})
+                        }
+
+                        //if the count is equal to 14, add to the count and change the personas
+                        else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
+                        {
+                            this.university_count += 1
+                            this.props.sidebarState.player.resources -= 1
+                            this.props.universityrolechange()
+                        }
+                    }}
+                >
+                    {" "}
+                    University: {this.university_count}
+                </button>
+              </div>
             </div>
         );
     }
@@ -176,7 +257,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         const neighbors = this.props.map.getEdges(
             this.props.sidebarState.player
         )!;
-
+        
         if (this.props.sidebarState.player instanceof Agent) {
             if (this.props.turnCount % 1 == 0) {
                 return (
