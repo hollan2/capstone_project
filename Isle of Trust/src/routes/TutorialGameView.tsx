@@ -111,8 +111,6 @@ export interface StartInfo {
 }
 
 export function TutorialDisplay() {
-
-   
     const location = useLocation();
     const userState = {
         name: "User Player",
@@ -121,16 +119,21 @@ export function TutorialDisplay() {
         ideologyColor: "9ec4ea",
         startingPoints: "Easy",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
-        mapImage: " "
+        mapImage: " ",
     };
-    function determineMap(){
-        if (userState.level == 0){ userState.mapImage = "Cruz"}
-        else if (userState.level == 1){userState.mapImage ="Symmetrical"}
-        else if (userState.level == 2){ userState.mapImage ="Magnifying"}
-        else if (userState.level == 3){ userState.mapImage ="Dice"}
-        else if (userState.level == 4){ userState.mapImage = "Cloud"}
-
-    } 
+    function determineMap() {
+        if (userState.level == 0) {
+            userState.mapImage = "Cruz";
+        } else if (userState.level == 1) {
+            userState.mapImage = "Symmetrical";
+        } else if (userState.level == 2) {
+            userState.mapImage = "Magnifying";
+        } else if (userState.level == 3) {
+            userState.mapImage = "Dice";
+        } else if (userState.level == 4) {
+            userState.mapImage = "Cloud";
+        }
+    }
     //logs the values chosen for the player character
     console.log("Game function for routing");
     console.log(userState);
@@ -554,6 +557,14 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
     renderEndOfLevel = () => {
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
+            return <EndOfLevel level={this.props.level} />;
+        }
+        //Levels 1-5
+        if (
+            this.props.level >= 1 &&
+            this.props.level <= 5 &&
+            this.state.turnCount === 10
+        ) {
             return <EndOfLevel level={this.props.level} />;
         }
         return null;

@@ -38,6 +38,26 @@ export function TutorialGuide({
         ) {
             return true;
         }
+        //Tutorial Level 1
+        if (level === 1 && stageCount < 5) {
+            return true;
+        }
+        //Tutorial Level 2
+        if (level === 2 && stageCount < 5) {
+            return true;
+        }
+        //Tutorial Level 3
+        if (level === 3 && stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 4
+        if (level === 4 && stageCount < 3) {
+            return true;
+        }
+        //Tutorial Level 5
+        if (level === 5 && stageCount < 5) {
+            return true;
+        }
 
         return false;
     }
@@ -93,7 +113,7 @@ class Professor extends React.Component<ProfessorProps, ProfessorState> {
     render() {
         return (
             <div className="tutorialGuide">
-                <div className="textBox">
+                <div className="textbox" id="textbox">
                     <AnimatedText
                         type="chars" // animate words or chars
                         animation={{
