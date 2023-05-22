@@ -15,6 +15,8 @@ import {
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { Grid } from "./generators/map";
 import { PlayerSidebar } from "./components/playerSideBar";
+import { YearCounter } from "./components/yearCounter";
+import { ResourceCounter } from "./components/resourceCounter";
 import { SelectedSidebar } from "./components/selectedSideBar";
 import { SidebarState } from "./components/sideBarState";
 import { Board } from "./components/board";
@@ -46,7 +48,6 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
-import { YearCounter } from "./components/yearCounter";
 /*
 import { timeStamp } from "console";
 */
@@ -113,7 +114,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             props.mapImage,
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
-        const turnCount = 0;
+        const turnCount = 1951; // Year the game starts
         var promiseRelation;
 
         currentMap = props.mapImage;
@@ -179,6 +180,18 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             });
         }
         return sumChoices;
+    }
+
+    countTotalResources(
+        map : Graph<Agent, Relation>,
+    ): number {
+        const agents = map.getVertices()
+
+        let totalResources = 0;
+        for (let i = 0; i < agents.length; ++i) {
+            totalResources += agents[i].resources
+        }
+        return totalResources;
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -497,8 +510,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         promiseRelation={this.state.promiseRelation}
                     />
                     <YearCounter
-                        round={this.tempTurn.bind(this)}
                         turnCount={this.state.turnCount}
+                    />
+                    <ResourceCounter
+                        totalResources={this.countTotalResources(this.state.map)}
                     />
                     <SelectedSidebar
                         map={this.state.map}
@@ -533,8 +548,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         promiseRelation={this.state.promiseRelation}
                     />
                     <YearCounter
-                        round={this.tempTurn.bind(this)}
                         turnCount={this.state.turnCount}
+                    />
+                    <ResourceCounter
+                        totalResources={this.countTotalResources(this.state.map)}
                     />
                 </div>
             );
@@ -542,7 +559,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 }
 
-interface DisplayState {
+export interface DisplayState {
     scale: number;
 }
 
