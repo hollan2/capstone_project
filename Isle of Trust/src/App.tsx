@@ -448,6 +448,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             player = {this.state.sidebarState.player}
                             deselectCharacter={this.deselectCharacter}
                             current = {currentMap}
+                            totalResources={this.countTotalResources(this.state.map)}
                         />
                         <PlayerSidebar
                             map={this.state.map}
@@ -487,6 +488,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     <PlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
+                        libraryrolechange={this.libraryroleChange.bind(this)}
+                        universityrolechange={this.universityroleChange.bind(this)}
                         sidebarState={this.state.sidebarState}
                         tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                         countTotalInfluence={this.countTotalInfluence}
