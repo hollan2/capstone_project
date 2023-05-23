@@ -16,7 +16,7 @@ export class YearCounter extends React.Component<
 > {
     render() {
         return (
-            <div className="sidebar yearCounter">
+            <div className="yearCounter">
                 <YearCounterDisplay
                     turnCount={this.props.turnCount}
                 />
@@ -32,8 +32,9 @@ interface YearCounterDisplayProps {
 class YearCounterDisplay extends React.Component<YearCounterDisplayProps> {
     render() {
         return (
-            <div className={"yearCounterDisplay"}>
-                <span className="year">{this.props.turnCount}</span>
+            <div className={"yearCounterDisplay"} >
+                <h4>Year:</h4>
+                <p className="year mb-1">{this.props.turnCount}</p>
             </div>
         );
     }

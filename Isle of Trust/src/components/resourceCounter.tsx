@@ -16,7 +16,7 @@ export class ResourceCounter extends React.Component<
 > {
     render() {
         return (
-            <div className="sidebar resourceCounter">
+            <div className="resourceCounter">
                 <ResourceCounterDisplay
                     totalResources={this.props.totalResources}
                 />
@@ -32,8 +32,9 @@ interface ResourceCounterDisplayProps {
 class ResourceCounterDisplay extends React.Component<ResourceCounterDisplayProps> {
     render() {
         return (
-            <div className={"resourceCounterDisplay"}>
-                Total Resources: <span className="resources">{this.props.totalResources}</span>
+            <div className={"resourceCounterDisplay text-center"}>
+                <h5 className="text-nowrap">Total Resources:</h5>
+                <p className="resources mb-1">{this.props.totalResources}</p>
             </div>
         );
     }

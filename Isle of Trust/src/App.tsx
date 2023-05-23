@@ -130,7 +130,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name;
-
+            
             console.log("ID");
             console.log(player.id);
             this.player_id = player.id;
@@ -485,7 +485,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
-    }
+    }  
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
@@ -508,12 +508,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
-                    />
-                    <YearCounter
-                        turnCount={this.state.turnCount}
-                    />
-                    <ResourceCounter
-                        totalResources={this.countTotalResources(this.state.map)}
                     />
                     <SelectedSidebar
                         map={this.state.map}
@@ -546,12 +540,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
-                    />
-                    <YearCounter
-                        turnCount={this.state.turnCount}
-                    />
-                    <ResourceCounter
-                        totalResources={this.countTotalResources(this.state.map)}
                     />
                 </div>
             );

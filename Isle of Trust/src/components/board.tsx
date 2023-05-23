@@ -42,6 +42,8 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
+import { YearCounter } from "./yearCounter";
+import { ResourceCounter } from "./resourceCounter";
 /*
 import { timeStamp } from "console";
 */
@@ -298,6 +300,12 @@ export class Board extends React.Component<BoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
+                <YearCounter
+                    turnCount={1951}
+                />
+                <ResourceCounter
+                    totalResources={100}
+                />
             </div>
         );
     }
