@@ -100,8 +100,8 @@ export const generateCommitment = (
             else
                 return Commitment.Cooperate
             }
+        //alwats returns compete
         case Strategy.Suspicious:
-            //alwats returns compete
             return Commitment.Compete;
         case Strategy.Student:
             {
@@ -209,11 +209,15 @@ export class Turn {
 }
 
 export class choiceTally {
-    public gave: number;
+    public together: number;
+    public solo: number;
+    public honest: number;
     public cheated: number;
 
     constructor() {
-        this.gave = 0;
+        this.together = 0;
+        this.solo = 0;
+        this.honest = 0;
         this.cheated = 0;
     }
 
@@ -222,10 +226,13 @@ export class choiceTally {
         for (let i = 0; i < history.length; ++i) {
             let action = history[i];
             if (action.choice === Choice.Cooperate) 
-                this.gave += 1;
+                this.together += 1;
+            else if (action.choice === Choice.Compete) 
+                this.solo += 1;
             if (action.truth === "Lied")
                 this.cheated += 1;
-
+            else 
+                this.honest += 1;
         }
     }
 }

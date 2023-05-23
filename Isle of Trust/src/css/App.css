@@ -30,11 +30,15 @@
     z-index: 6;
 }
 
-.textBox {
+.textbox {
     background-color: white;
     width: 300px;
     border-radius: 20px;
     padding: 10px;
+}
+
+#textbox {
+    text-transform: none;
 }
 
 .arrowbtn {
@@ -91,14 +95,29 @@
     grid-area: sidebar;
     display: grid;
     gap: 5px;
+    width: 350px;
 }
+
+.investmentSidebar{
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.investmentButton{
+    height: 100%;
+    margin: 5px;
+    margin-top: 8px;
+    display: center;
+}
+
 
 .playerSidebar {
     grid-area: playerSidebar;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
         "playerDisplay"
-        "influenceMenu";
+        "influenceMenu"
+        "history";
 }
 
 .selectedSidebar {
@@ -106,7 +125,7 @@
     border-radius: 5px;
     background-color: var(--white);
     grid-area: selectedSidebar;
-    grid-template-rows: auto 0.1fr 1fr;
+    grid-template-rows: auto .1fr 1fr;
     grid-template-areas:
         "selectedDisplay"
         "stats"
@@ -166,18 +185,47 @@
     border-bottom: 2px solid var(--dark-blue);
 }
 
+.hint-text{
+    min-height: 2rem;
+    font-size: 0.8em;
+    padding-top: 0.5em;
+    background-color: var(--lighter-blue);
+    border-radius: var(--std-border-radius);
+    animation: fadeIn 2s; 
+}
+
+.hint-empty{
+    min-height: 2rem;
+    padding-top: 0.2em;
+    animation: fadeOut 2s; 
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    100% { opacity: 1; }
+    0% { opacity: 0; }
+}
+
 .influence-options {
     grid-area: influence-options;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
+.neighbor-promise {
+    margin-left: 45px;
+}
 
 .influence-entry {
     grid-area: influence-entry;
-    display: flex;
     align-items: center;
     gap: 5px;
+    display: grid;
+    grid-template-columns: 40px auto;
 }
 
 .sidebar-agent-info {
@@ -370,21 +418,37 @@
     border-radius: var(--std-border-radius);
     margin: 10px;
 }
+.playerSidebar .history-container {
+    background-color: white;
+    padding: 15px;
+    margin: 0px;
+    border-radius: 0px;
+
+}
 
 .history-title {
     border-bottom: 2px solid var(--dark-blue);
 }
 
-.history-display {
+.history-agent {
     display: flex;
     flex-direction: row;
+}
+.history-display {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
+
 .popup {
+    display: flex;
+    flex-direction: column;
     width: 500px;
     height: 500px;
-    background-color: var(--lighter-blue);
+    background-color: white;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -409,34 +473,78 @@
 
 .popup-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.history-header {
+    display: flex;
+    padding-top: 10px;
+    text-align: center;
+}
+.history-header > * {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .popup-content {
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
 
-
+.history-table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    table-layout: fixed;
+    width: 100%;
+}
+  
+.history-table th,
+.history-table td {
+    border: 1px solid black;
+    width: 20%;
+}
 
 #cooperate {
-    background-color: #51e658;
+    background-color: #3d7607;
     height: 30px;
-}
-#cooperate:target {
-    background-color: #51e658;
-    height: 30px;
-    opacity: 0.25;
+    flex-grow: 1;
 }
 
 #reciprocate {
-    background-color: #e1e257;
+    background-color: #a47901;
     height: 30px;
 }
 
 #compete {
-    background-color: #f36252;
+    background-color: #8e0000;
     height: 30px;
+    flex-grow: 1;
+}
+
+#cooperate.selected-buttons {
+    background-color: #6dcc1b;
+}
+
+#reciprocate.selected-buttons {
+    background-color: #e4c202;
+}
+
+#compete.selected-buttons {
+    background-color: #dd1313;
 }
 
 .action-container {

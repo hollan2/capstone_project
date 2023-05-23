@@ -175,8 +175,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             neighbors.forEach((relation, neighbor) => {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
-                sumChoices.gave += tally.gave;
+                sumChoices.together += tally.together;
+                sumChoices.solo += tally.solo;
                 sumChoices.cheated += tally.cheated;
+                sumChoices.honest += tally.honest;
             });
         }
         return sumChoices;
@@ -228,14 +230,31 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         const vertices = this.state.map.getVertices();
         const edges = this.state.map.getAllEdges();
 
-        //these lines can be removed
-        //this.drainInfluence(edges);
-        //this.handleInfluenceChanges(vertices);
-
         this.generateRound(edges);
-        //this.drainResources(vertices);
 
         this.forceUpdate();
+    }
+
+    //changes all suspicious agents into students
+    libraryroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Suspicious)
+                v1.ideology.setStrategy(Strategy.Student)
+            if(v2.ideology.toStrategy() == Strategy.Suspicious)
+                v2.ideology.setStrategy(Strategy.Student)
+        });
+        this.setState({})
+    }
+
+    //changes all student agents in reciprocators
+    universityroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Student)
+                v1.ideology.setStrategy(Strategy.Reciprocators)
+            if(v2.ideology.toStrategy() == Strategy.Student)
+                v2.ideology.setStrategy(Strategy.Reciprocators)
+        });
+        this.setState({})       
     }
 
     drainResources(vertices: Agent[]) {
@@ -243,45 +262,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             v1.resources -= RESOURCE_LOST_PER_TURN;
         });
     }
-
-    /* THESE functions don't serve a purpose anymore, can be removed
-    drainInfluence(edges: [Agent, Agent, Relation][]) {
-        edges.forEach(([v1, v2, e]) => {
-            const v2Agent = v2 as Agent;
-            const maxInfluenceChange =
-                BASE_INFLUENCE_LOST_PER_TURN *
-                v2Agent.getInfluenceability();
-            e.influence = e.incrementAttributeBy(
-                -maxInfluenceChange,
-                e.influence
-            );
-        });
-    }
-
-    handleInfluenceChanges(vertices: Agent[]) {
-        vertices.forEach((v1) => {
-                const v1Relations = this.state.map.getEdges(v1)!;
-                let spendingMap = new SpendingContainer();
-                if (v1 === this.state.sidebarState.player) {
-                    spendingMap = this.state.sidebarState.influenceChoices;
-                } else {
-                    spendingMap = v1.autoDisperseInfluence(v1Relations);
-                }
-                spendingMap.data.forEach((allotment, v2) => {
-                    v2.resources += allotment;
-                    v1.resources -= allotment;
-                    this.state.map
-                        .getEdge(v1, v2)!
-                        .addInfluenceBasedOn(
-                            allotment,
-                            v2.personality.getVolatility()
-                        );
-                });
-                this.driftIdeology(v1);
-        });
-    }
-    */
-
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
         var Promise_relation: [
@@ -449,76 +429,46 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             return { turnCount: this.state.turnCount + 0.5 };
         });
     }
-    /* This function doesn't serve a purpose anymore, can be removed
-    driftIdeology(agent: Agent) {
-        // Drift factor represents by how many attribute points an agent will drift towards a new ideology.
-        // A factor of 4 = an agent will change its ideology by 4 points (dividing the 4 points appropriately
-        // among its generosity and forgiveness.)
-        // Drift factor has an intended range of 1-10. (Keep in mind that since the change is divided between
-        // generotisy and forgiveness, it still represents a max change of 5 in either.)
-        const driftFactor = 1 + agent.getInfluenceability() * 19;
 
-        const ideologyAppeal: Map<Ideology, number> = new Map();
-        const neighbors = this.state.map.getEdges(agent)!;
-        let totalInfluence = 0;
-        
-        //calcautes the total influnce of all nehboors
-        neighbors.forEach((relation: Relation, neighbor: Agent) => {
-            const theirInfluence = this.state.map.getEdge(
-                neighbor,
-                agent
-            )!.influence;
-            ideologyAppeal.set(neighbor.ideology, theirInfluence);
-            totalInfluence += theirInfluence;
-        });
-
-        const drifts = new DriftContainer();
-        ideologyAppeal.forEach((theirInfluence, ideology) => {
-            const drift: number = Math.round(
-                driftFactor * (theirInfluence / totalInfluence)
-            );
-            drifts.data.set(ideology, drift);
-        });
-        agent.driftIdeology(drifts);
-    }
-    */
 
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
     }  
+
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                    <Board
-                        map={this.state.map}
-                        turnCount={this.state.turnCount}
-                        selected={this.state.sidebarState.selected}
-                        select={this.state.select.bind(this)}
-                        player={this.state.sidebarState.player}
-                        deselectCharacter={this.deselectCharacter}
-                        current={currentMap}
-                        totalResources={this.countTotalResources(this.state.map)}
-                    />
-                    <PlayerSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        turnCount={this.state.turnCount}
-                        promiseRelation={this.state.promiseRelation}
-                    />
-                    <SelectedSidebar
-                        map={this.state.map}
-                        round={this.tempTurn.bind(this)}
-                        sidebarState={this.state.sidebarState}
-                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                        countTotalInfluence={this.countTotalInfluence}
-                        deselectCharacter={this.deselectCharacter}
-                        turnCount={this.state.turnCount}
-                    />
+                        <Board
+                            map={this.state.map}
+                            turnCount={this.state.turnCount}
+                            selected={this.state.sidebarState.selected}
+                            select={this.state.select.bind(this)}
+                            player = {this.state.sidebarState.player}
+                            deselectCharacter={this.deselectCharacter}
+                            current = {currentMap}
+                        />
+                        <PlayerSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            libraryrolechange={this.libraryroleChange.bind(this)}
+                            universityrolechange={this.universityroleChange.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                            turnCount={this.state.turnCount}
+                            promiseRelation={this.state.promiseRelation}
+                        />
+                        <SelectedSidebar
+                            map={this.state.map}
+                            round={this.tempTurn.bind(this)}
+                            sidebarState={this.state.sidebarState}
+                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                            countTotalInfluence={this.countTotalInfluence}
+                            deselectCharacter={this.deselectCharacter}
+                            turnCount={this.state.turnCount}
+                        />
                 </div>
             );
         } else {
@@ -607,7 +557,6 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
     }
 
     render() {
-        let totalInfluence: String = "None";
         let agentPoints: number = 0;
         let agentStrat: string = "No strategy";
         let agentGoal: string = "Avenge me...";
@@ -617,16 +566,14 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
         let firstNeighbor: [Agent, Relation] = neighbors.entries().next().value;
         let relation = firstNeighbor[1];
         let round: number = relation.history.length();
+        let numOfActions = round * neighbors.size;
+
         if (this.props.agent instanceof Agent) {
             const agent = this.props.agent as Agent;
             let strat = agent.ideology.toStrategy();
             agentStrat = Strategy[strat];
             agentGoal = taglineFromStrategy(strat);
             agentPoints = agent.resources;
-            totalInfluence = this.props.countTotalInfluence(
-                this.props.map,
-                agent
-            );
         }
         return (
             <section className="display" ref={this.containerRef}>
@@ -646,24 +593,31 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                         "{agentGoal}" ({agentStrat})
                     </p>
                 </div>
-                <div className="stats">
+                <div className="stats text-nowrap">
                     <p className="end">{agentPoints} resources</p>
                     <p className="end">
-                        Cooperated {this.props.agentChoices.gave} times /{" "}
-                        {round} rounds
+                        Together {this.props.agentChoices.together} /{" "}
+                        {numOfActions}
                     </p>
                     <p className="end">
-                        Cheated {this.props.agentChoices.cheated} times /{" "}
-                        {round} rounds
+                        Solo {this.props.agentChoices.solo} /{" "}
+                        {numOfActions}
                     </p>
-                    <div className="end">regionally {totalInfluence}</div>
+                    <p className="end">
+                        Honest {this.props.agentChoices.honest} /{" "}
+                        {numOfActions}
+                    </p>
+                    <p className="end">
+                        Cheated {this.props.agentChoices.cheated} /{" "}
+                        {numOfActions}
+                    </p>
                 </div>
-                <Mood agent={this.props.agent} />
             </section>
         );
     }
 }
 
+// 5/2023 - Removed Mood as we didn't have time to update it. Keeping for future use. 
 interface MoodProps {
     agent: Agent;
 }

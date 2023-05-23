@@ -9,10 +9,9 @@ interface EndOfLevelProps {
     level: number;
 }
 export function EndOfLevel({ level }: EndOfLevelProps) {
-
     function updateLevel() {
         level++;
-      }
+    }
     return ReactDom.createPortal(
         <div className="popup-container">
             <div className="overlay"></div>
@@ -20,7 +19,11 @@ export function EndOfLevel({ level }: EndOfLevelProps) {
                 <div className="popup-content">
                     <h1 className="text-center">Congratulations!</h1>
                     <h2 className="text-center">You finished Level {level}</h2>
-                    <Link reloadDocument className="link" to={"/level" + (level + 1)}>
+                    <Link
+                        reloadDocument
+                        className="link"
+                        to={"/level" + (level + 1)}
+                    >
                         <button onClick={updateLevel}> Next Level</button>
                     </Link>
                 </div>
@@ -30,14 +33,3 @@ export function EndOfLevel({ level }: EndOfLevelProps) {
         document.getElementById("portal")!
     );
 }
-
-//     <div className="popup-container">
-//     <div className="overlay"></div>
-//     <div className="popup">
-//         <div className="popup-content">
-//             <h1>Congratulations!</h1>
-//             <h2>You finished Level {level}</h2>
-//             <button onClick={onClick}>X</button>
-//         </div>
-//     </div>
-// </div>,

@@ -5,33 +5,37 @@ export const AGENT_RADIUS = 15;
 
 const defaultPawns = [
     {
-        defName: 'Tutor',
+        defName: "Tutor",
         defFace: 4,
-        defHat: 4
+        defHat: 4,
+        resources: 10,
     },
     {
-        defName: 'Rec',
+        defName: "Rec",
         defFace: 2,
-        defHat: 3
+        defHat: 3,
+        resources: 5,
     },
     {
-        defName: 'Susi',
+        defName: "Susi",
         defFace: 5,
-        defHat: 1
+        defHat: 1,
+        resources: 2,
     },
     {
-        defName: 'Domran',
+        defName: "Domran",
         defFace: 6,
-        defHat: 2
+        defHat: 2,
+        resources: 8,
     },
 
     {
-        defName: 'Pessimo',
+        defName: "Pessimo",
         defFace: 3,
-        defHat: 0
-    }
-]
-
+        defHat: 0,
+        resources: 0,
+    },
+];
 
 // perhaps it would be better if attributes were their own classes that could
 // call methods to increment themselves, but this way is a lot lighter.
@@ -87,8 +91,7 @@ export interface choices {
     choiceTo: Agent;
 }
 
-export interface userChoice {
-}
+export interface userChoice {}
 
 export class Agent extends AttributeContainer {
     public id: number;
@@ -117,7 +120,6 @@ export class Agent extends AttributeContainer {
     ) {
         super();
         this.name = name;
-        this.resources = resources;
         this.ideology = ideology;
         this.personality = personality;
         this.mood = mood;
@@ -126,18 +128,13 @@ export class Agent extends AttributeContainer {
         this.level = level;
         // Create player based off current level
         if (level >= 0) {
-            let defFace =
-                Object.values(Face)[
-                defaultPawns[this.level].defFace 
-                ];
-            let defHat =
-                Object.values(Hat)[
-                defaultPawns[this.level].defHat
-                ];
+            let defFace = Object.values(Face)[defaultPawns[this.level].defFace];
+            let defHat = Object.values(Hat)[defaultPawns[this.level].defHat];
 
             this.face = Face[defFace as keyof typeof Face];
             this.hat = Hat[defHat as keyof typeof Hat];
             this.name = defaultPawns[this.level].defName;
+            this.resources = defaultPawns[this.level].resources;
         }
         // Create Random players
         else {
@@ -145,18 +142,18 @@ export class Agent extends AttributeContainer {
             //also this should later be changed to a generator function to allow player selected appearance
             let randface =
                 Object.values(Face)[
-                Math.floor(Math.random() * (Object.values(Face).length / 2))
+                    Math.floor(Math.random() * (Object.values(Face).length / 2))
                 ];
             let randhat =
                 Object.values(Hat)[
-                Math.floor(Math.random() * (Object.values(Hat).length / 2))
+                    Math.floor(Math.random() * (Object.values(Hat).length / 2))
                 ];
 
             this.face = Face[randface as keyof typeof Face];
             this.hat = Hat[randhat as keyof typeof Hat];
+            this.resources = resources;
         }
     }
-
 
     /* These functions don't serve a purpose anymore, can be removed
     // update the personality in response to how the agent was treated in the previous round.
@@ -164,27 +161,22 @@ export class Agent extends AttributeContainer {
 
     // update the ideology to match the personality.
     updateIdeology() {}
-
-    adoptIdeology(i: Ideology) {
-        this.ideology = new Ideology(i.getGenerosity(), i.getForgiveness());
-    }
     */
+
+
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {
-
         const newPromise: promises = {
             promise: commitment,
-            promiseTo: promiseTo
+            promiseTo: promiseTo,
         };
 
-        const found = this.promises.some(e => e.promiseTo === promiseTo)
+        const found = this.promises.some((e) => e.promiseTo === promiseTo);
 
         if (!found) {
             this.promises.push(newPromise);
-        }
-
-        else {
+        } else {
             const promise = this.getPromiseTo(promiseTo);
             if (promise) {
                 promise.promise = commitment;
@@ -192,47 +184,50 @@ export class Agent extends AttributeContainer {
         }
     }
 
-    //adds choice from player to list of choices 
+    //adds choice from player to list of choices
     //NOTE on a consecutive round if a player has not chosen a promise, the previous round promise is used
     updateChoice(choice: Choice, choiceTo: Agent) {
-
         const newChoice: choices = {
             choice: choice,
             choiceTo: choiceTo,
         };
 
-        const found = this.choices.some(e => e.choiceTo === choiceTo)
+        const found = this.choices.some((e) => e.choiceTo === choiceTo);
 
         if (!found) {
             this.choices.push(newChoice);
-        }
-
-        else {
+        } else {
             const aChoice = this.getChoiceTo(choiceTo);
             if (aChoice) {
-                aChoice.choice = choice
+                aChoice.choice = choice;
             }
         }
     }
 
     getPromiseTo(agent: Agent) {
-        return this.promises.find(e => e.promiseTo === agent)
+        return this.promises.find((e) => e.promiseTo === agent);
     }
 
     getChoiceTo(agent: Agent) {
-        return this.choices.find(e => e.choiceTo === agent)
+        return this.choices.find((e) => e.choiceTo === agent);
     }
 
     //rewards resources base off agent's choices
     rewardResources(myChoice: Choice, theirChoice: Choice) {
         if (myChoice === Choice.Cooperate && theirChoice === Choice.Cooperate)
             this.resources += 1;
-        else if (myChoice === Choice.Cooperate && theirChoice === Choice.Compete)
+        else if (
+            myChoice === Choice.Cooperate &&
+            theirChoice === Choice.Compete
+        )
             this.resources -= 2;
+        else if (
+            myChoice === Choice.Compete &&
+            theirChoice === Choice.Cooperate
+        )
+            this.resources += 3;
         else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
-        else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
-            this.resources += 3;
     }
 
     /*This function doesn't serve a purpose anymore, can be removed
@@ -392,7 +387,6 @@ export class Ideology extends AttributeContainer {
 
     private role: Strategy;
 
-
     constructor(generosity: number, forgiveness: number) {
         super();
         if (
@@ -405,14 +399,19 @@ export class Ideology extends AttributeContainer {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
-
         }
 
-        if (generosity == 19){ this.role = 4;}
-        else if (generosity == 15){ this.role = 1;}
-        else if (generosity == 10){ this.role = 3;}
-        else if (generosity == 5){ this.role = 1;}
-        else { this.role = Math.floor(Math.random() * 6);}
+        if (generosity == 19) {
+            this.role = 4;
+        } else if (generosity == 15) {
+            this.role = 2;
+        } else if (generosity == 10) {
+            this.role = 3;
+        } else if (generosity == 5) {
+            this.role = 1;
+        } else {
+            this.role = Math.floor(Math.random() * 6);
+        }
     }
 
     // get the strategy associated with this ideology
@@ -425,6 +424,7 @@ export class Ideology extends AttributeContainer {
     }
 }
 
+//PERSONALITY IS NO LONGER IN USE
 // Immutable personality traits which affect how the agent influences others and
 // adapts their own ideology.
 export class Personality extends AttributeContainer {

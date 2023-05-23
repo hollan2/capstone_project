@@ -105,6 +105,27 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         ) {
             return true;
         }
+
+        //Tutorial Level 1
+        if (this.props.level === 1 && this.props.stageCount < 5) {
+            return true;
+        }
+        //Tutorial Level 2
+        if (this.props.level === 2 && this.props.stageCount < 5) {
+            return true;
+        }
+        //Tutorial Level 3
+        if (this.props.level === 3 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 4
+        if (this.props.level === 4 && this.props.stageCount < 3) {
+            return true;
+        }
+        //Tutorial Level 5
+        if (this.props.level === 5 && this.props.stageCount < 5) {
+            return true;
+        }
         return false;
     }
 
@@ -121,7 +142,9 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 </article>
                 <div
                     className={
-                        this.props.stageCount === 14 ? "map spotlight" : "map"
+                        this.props.stageCount === 14 && this.props.level === 0
+                            ? "map spotlight"
+                            : "map"
                     }
                     ref={this.containerRef}
                     style={{

@@ -1,0 +1,14 @@
+Stage 0 Hint Placeholder
+~Stage 1 Hint Placeholder
+~Stage 2 Hint Placeholder
+~Stage 3 Hint Placeholder
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!
+~ Goals: Keep watch of everyone, ensuring that no one goes below 1 resource. Like previously, they must also pay 5 tons in mortgage after 10 years. Watch out for Domran, they will be difficult to work with with their random actions!

@@ -118,17 +118,26 @@ export function TutorialDisplay() {
         face: "Glasses",
         ideologyColor: "9ec4ea",
         startingPoints: "Easy",
-        mapImage: "Cruz",
-        // mapImage: "Symmetrical",
-        // mapImage: "Magnifying",
-        // mapImage: "Dice",
-        // mapImage: "Cloud",
         level: parseInt(location.pathname.replace(/^\D+/g, "")),
+        mapImage: " ",
     };
-
+    function determineMap() {
+        if (userState.level == 0) {
+            userState.mapImage = "Cruz";
+        } else if (userState.level == 1) {
+            userState.mapImage = "Symmetrical";
+        } else if (userState.level == 2) {
+            userState.mapImage = "Magnifying";
+        } else if (userState.level == 3) {
+            userState.mapImage = "Dice";
+        } else if (userState.level == 4) {
+            userState.mapImage = "Cloud";
+        }
+    }
     //logs the values chosen for the player character
     console.log("Game function for routing");
     console.log(userState);
+    determineMap();
     return (
         <TutorialView
             name={userState.name}
@@ -248,7 +257,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             neighbors.forEach((relation, neighbor) => {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
-                sumChoices.gave += tally.gave;
+                sumChoices.together += tally.together;
                 sumChoices.cheated += tally.cheated;
             });
         }
@@ -298,6 +307,28 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         this.forceUpdate();
         this.updateStageCount();
+    }
+
+    //changes all suspicious agents into students
+    libraryroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Suspicious)
+                v1.ideology.setStrategy(Strategy.Student)
+            if(v2.ideology.toStrategy() == Strategy.Suspicious)
+                v2.ideology.setStrategy(Strategy.Student)
+        });
+        this.setState({})
+    }
+
+    //changes all student agents in reciprocators
+    universityroleChange(){
+        this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
+            if(v1.ideology.toStrategy() == Strategy.Student)
+                v1.ideology.setStrategy(Strategy.Reciprocators)
+            if(v2.ideology.toStrategy() == Strategy.Student)
+                v2.ideology.setStrategy(Strategy.Reciprocators)
+        });
+        this.setState({})       
     }
 
     drainResources(vertices: Agent[]) {
@@ -550,6 +581,14 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.props.level === 0 && this.state.stageCount === 27) {
             return <EndOfLevel level={this.props.level} />;
         }
+        //Levels 1-5
+        if (
+            this.props.level >= 1 &&
+            this.props.level <= 5 &&
+            this.state.turnCount === 10
+        ) {
+            return <EndOfLevel level={this.props.level} />;
+        }
         return null;
     };
 
@@ -573,6 +612,8 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 <TutorialPlayerSidebar
                     map={this.state.map}
                     round={this.tempTurn.bind(this)}
+                        libraryrolechange={this.libraryroleChange.bind(this)}
+                        universityrolechange={this.universityroleChange.bind(this)}
                     sidebarState={this.state.sidebarState}
                     tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                     countTotalInfluence={this.countTotalInfluence}
