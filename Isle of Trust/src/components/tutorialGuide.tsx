@@ -70,12 +70,11 @@ export function TutorialGuide({
                 level={level}
             />
         );
-    } else if (level === 0) {
+    } else {
         return (
             <Hint turnCount={turnCount} stageCount={stageCount} level={level} />
         );
     }
-    return null;
 }
 
 //Renders the professor image, the "next" button, the text box, and the animated text.
