@@ -42,6 +42,8 @@ import { getActiveElement } from "@testing-library/user-event/dist/utils";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
+import { YearCounter } from "./yearCounter";
+import { ResourceCounter } from "./resourceCounter";
 /*
 import { timeStamp } from "console";
 */
@@ -57,6 +59,7 @@ const MOOD_IMAGE_SIDE_LENGTH = 511;
 
 const RESOURCE_LOST_PER_TURN = 3;
 const BASE_INFLUENCE_LOST_PER_TURN = 2;
+const START_YEAR = 1951;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
@@ -79,6 +82,7 @@ interface BoardProps {
     player: Agent;
     deselectCharacter: (value: boolean) => void;
     current: string;
+    totalResources: number;
 }
 
 export class Board extends React.Component<BoardProps> {
@@ -130,6 +134,8 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
+        let year = this.props.turnCount + START_YEAR
+
         return (
             <div className="board">
                 <div
@@ -298,6 +304,12 @@ export class Board extends React.Component<BoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
+                <YearCounter
+                    turnCount={year}
+                />
+                <ResourceCounter
+                    totalResources={this.props.totalResources}
+                />
             </div>
         );
     }

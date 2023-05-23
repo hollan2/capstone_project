@@ -15,6 +15,8 @@ import {
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { Grid } from "./generators/map";
 import { PlayerSidebar } from "./components/playerSideBar";
+import { YearCounter } from "./components/yearCounter";
+import { ResourceCounter } from "./components/resourceCounter";
 import { SelectedSidebar } from "./components/selectedSideBar";
 import { SidebarState } from "./components/sideBarState";
 import { Board } from "./components/board";
@@ -128,7 +130,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name;
-
+            
             console.log("ID");
             console.log(player.id);
             this.player_id = player.id;
@@ -180,6 +182,18 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             });
         }
         return sumChoices;
+    }
+
+    countTotalResources(
+        map : Graph<Agent, Relation>,
+    ): number {
+        const agents = map.getVertices()
+
+        let totalResources = 0;
+        for (let i = 0; i < agents.length; ++i) {
+            totalResources += agents[i].resources
+        }
+        return totalResources;
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -419,8 +433,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
-    }
-
+    }  
 
     render() {
         //if there is a selected player display right sidebar
@@ -461,34 +474,32 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         } else {
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            libraryrolechange={this.libraryroleChange.bind(this)}
-                            universityrolechange={this.universityroleChange.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                        />
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                        totalResources={this.countTotalResources(this.state.map)}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        turnCount={this.state.turnCount}
+                        promiseRelation={this.state.promiseRelation}
+                    />
                 </div>
             );
         }
     }
 }
 
-interface DisplayState {
+export interface DisplayState {
     scale: number;
 }
 

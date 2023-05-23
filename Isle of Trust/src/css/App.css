@@ -1,6 +1,7 @@
 @import url("index.css");
 
 .game {
+    position: relative;
     line-height: 1.2;
     text-transform: lowercase;
     width: auto;
@@ -554,4 +555,34 @@
     border: 4px solid;
     border-color: red;
     z-index: 5;
+}
+
+.yearCounter {
+    display: inline-flex;
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    background-color: white;
+    width: 15%;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    bottom: 0;
+    float: left;
+    margin-bottom: 30px;
+}
+
+.resourceCounter {
+    display: inline-flex;
+    float: right;
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    background-color: white;
+    width: 15%;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    bottom: 0;
+    margin-bottom: 30px;
+    margin-right: 5px;
+    right: 20%;
 }
