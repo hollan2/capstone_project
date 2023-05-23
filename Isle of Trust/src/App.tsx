@@ -114,7 +114,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             props.mapImage,
             DIFFICULTY_VALUES[props.startingPoints]
         ).getGraph();
-        const turnCount = 1951; // Year the game starts
+        const turnCount = 0;
         var promiseRelation;
 
         currentMap = props.mapImage;
@@ -499,6 +499,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         player={this.state.sidebarState.player}
                         deselectCharacter={this.deselectCharacter}
                         current={currentMap}
+                        totalResources={this.countTotalResources(this.state.map)}
                     />
                     <PlayerSidebar
                         map={this.state.map}
@@ -531,6 +532,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         player={this.state.sidebarState.player}
                         deselectCharacter={this.deselectCharacter}
                         current={currentMap}
+                        totalResources={this.countTotalResources(this.state.map)}
                     />
                     <PlayerSidebar
                         map={this.state.map}
