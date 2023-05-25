@@ -384,6 +384,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     );
                 }
 
+                this.studentCheck(v1)
+                this.studentCheck(v2)
+
                 console.log(v1.name, v1Choice, v1Promise);
                 console.log(v2.name, v2Choice, v2Promise);
                 //rewards the agents resouces based on their resources
@@ -428,6 +431,44 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.setState((state) => {
             return { turnCount: this.state.turnCount + 0.5 };
         });
+    }
+
+    //converts students into recipricators if the critera is met
+    studentCheck(agent: Agent){
+        if(agent.ideology.toStrategy() == 1)
+        {
+            var otherHistory
+            var agentRelations
+            var timesCooperate
+            var temphist
+            agentRelations = this.state.map.getEdges(agent); 
+            console.log(agentRelations)
+
+            if(agentRelations)
+            {
+                agentRelations.forEach((value: Relation, key: Agent) => {
+                    timesCooperate = 0
+                    otherHistory = this.state.map.getEdge(key, agent);
+                    if(otherHistory)
+                    {
+                        temphist = otherHistory.history.actions;
+                        for (var i = 0; i < otherHistory.history.length(); i++) {
+                            if (temphist[i].choice === 1)
+                                timesCooperate += 1;
+                            //if the 3 cooperates aren't in succession, we set timeCooperate back to 0
+                            else if(timesCooperate < 3) 
+                                timesCooperate = 0;
+                            console.log("COUNT: ", timesCooperate)
+                        }
+                        if(timesCooperate == 3){
+                            console.log("CHANGING STUDENT")
+                            agent.ideology.setStrategy(3)
+                        }
+                    }
+                });
+            }
+        }
+
     }
 
 
@@ -671,9 +712,6 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
             props.agent.ideology.toStrategy() == Strategy.Player
         ) {
             switch (props.agent.ideology.toStrategy()) {
-                case Strategy.Default:
-                    ideology = { red: 158, green: 196, blue: 234 };
-                    break;
                 case Strategy.Suspicious:
                     ideology = { red: 248, green: 179, blue: 101 };
                     break;
