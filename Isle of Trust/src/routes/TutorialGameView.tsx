@@ -577,17 +577,37 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
     renderEndOfLevel = () => {
+
+
+        const checkResource = this.state.map.getVertices();
+
+       /* for (let i = 0; i <= checkResource.length; i++){
+            console.log(checkResource[i].resources, " for ", checkResource[i].name)
+        }
+        */
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
-            return <EndOfLevel level={this.props.level} />;
+            return <EndOfLevel level={this.props.level} success={true} />;
         }
         //Levels 1-5
         if (
             this.props.level >= 1 &&
             this.props.level <= 5 &&
-            this.state.turnCount === 10
+            this.state.turnCount === 2 // Needs to be set back to 10!!
         ) {
-            return <EndOfLevel level={this.props.level} />;
+        // Check to make sure users can pay mortgage
+        let payMortgage = 0;
+        for (let i = 0; i <= checkResource.length-1; i++){
+            if (checkResource[i].resources >= 5){payMortgage++}
+        }
+        // All players can pay mortgage
+        if (payMortgage == checkResource.length){
+            return <EndOfLevel level={this.props.level} success = {true}/>;
+        }
+        // Not all players can pay 5 ton mortgage
+        else {
+            return <EndOfLevel level={this.props.level} success = {false}/>;
+        }
         }
         return null;
     };
