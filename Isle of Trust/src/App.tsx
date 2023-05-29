@@ -439,10 +439,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         if(agent.ideology.toStrategy() == 1)
         {
             var otherHistory
-            var agentRelations
             var timesCooperate
             var temphist
-            agentRelations = this.state.map.getEdges(agent); 
+            var agentRelations = this.state.map.getEdges(agent); 
 
             if(agentRelations)
             {
