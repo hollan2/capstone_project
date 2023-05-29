@@ -124,6 +124,10 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
             return true;
         }
         //Tutorial Level 5
+        if (this.props.level === 5 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 6
         if (this.props.level === 5 && this.props.stageCount < 5) {
             return true;
         }
