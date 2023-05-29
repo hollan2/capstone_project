@@ -358,9 +358,6 @@ function AgentImage(props: AgentImageProps) {
     };
 
     switch (props.agent.ideology.toStrategy()) {
-        case Strategy.Default:
-            ideology = { red: 158, green: 196, blue: 234 };
-            break;
         case Strategy.Suspicious:
             ideology = { red: 248, green: 179, blue: 101 };
             break;

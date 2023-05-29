@@ -380,9 +380,6 @@ function AgentImage(props: AgentImageProps) {
     // Show personality color if 5 turns have passed or if displaying the user player
     if (props.turnCount >= 4 || props.agent.id == props.player.id) {
         switch (props.agent.ideology.toStrategy()) {
-            case Strategy.Default:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
             case Strategy.Suspicious:
                 ideology = { red: 248, green: 179, blue: 101 };
                 break;

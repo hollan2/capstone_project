@@ -415,8 +415,7 @@ export class Agent extends AttributeContainer {
     //updateInfluence() {}
 }
 
-// The internal ideological state of an agent which effectively determines the
-// strategy which the agent uses, and can change over time.
+//generosity and forgivness still need to be removed
 export class Ideology extends AttributeContainer {
     // how likely they are to give instead of cheat.
     private generosity: number;
@@ -427,6 +426,7 @@ export class Ideology extends AttributeContainer {
     private role: Strategy;
 
     constructor(generosity: number, forgiveness: number) {
+
         super();
         if (
             this.attributeInBounds(generosity) &&
@@ -439,7 +439,7 @@ export class Ideology extends AttributeContainer {
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
         }
-
+  
         if (generosity === 19) {
             this.role = 4;
         } else if (generosity === 15) {
