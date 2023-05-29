@@ -72,6 +72,7 @@ export const MAP_URL: { [key: string]: string } = {
     Dice: "url(../Maps/mapDice.png)",
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Cloud: "url(../Maps/mapCloud.png)",
+    Pencil: "url(../Maps/mapPencil.png)",
 };
 
 interface BoardProps {
@@ -134,7 +135,7 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
-        let year = this.props.turnCount + START_YEAR
+        let year = this.props.turnCount + START_YEAR;
 
         return (
             <div className="board">
@@ -304,12 +305,8 @@ export class Board extends React.Component<BoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
-                <YearCounter
-                    turnCount={year}
-                />
-                <ResourceCounter
-                    totalResources={this.props.totalResources}
-                />
+                <YearCounter turnCount={year} />
+                <ResourceCounter totalResources={this.props.totalResources} />
             </div>
         );
     }

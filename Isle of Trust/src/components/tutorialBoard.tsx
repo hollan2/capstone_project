@@ -35,6 +35,7 @@ export const MAP_URL: { [key: string]: string } = {
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Dice: "url(../Maps/mapDice.png)",
     Cloud: "url(../Maps/mapCloud.png)",
+    Pencil: "url(../Maps/mapPencil.png)",
 };
 
 interface TutorialBoardProps {
