@@ -384,6 +384,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     );
                 }
 
+                //checks if either players meet the conidtions to change from student to reciprocator
                 this.studentCheck(v1)
                 this.studentCheck(v2)
 
@@ -442,7 +443,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             var timesCooperate
             var temphist
             agentRelations = this.state.map.getEdges(agent); 
-            console.log(agentRelations)
 
             if(agentRelations)
             {
@@ -458,10 +458,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             //if the 3 cooperates aren't in succession, we set timeCooperate back to 0
                             else if(timesCooperate < 3) 
                                 timesCooperate = 0;
-                            console.log("COUNT: ", timesCooperate)
                         }
+
                         if(timesCooperate == 3){
-                            console.log("CHANGING STUDENT")
                             agent.ideology.setStrategy(3)
                         }
                     }
