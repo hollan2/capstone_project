@@ -385,8 +385,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 }
 
                 //checks if either players meet the conidtions to change from student to reciprocator
-                this.studentCheck(v1)
-                this.studentCheck(v2)
+                this.studentCheck(v1, v2)
+                this.studentCheck(v2, v1)
 
                 console.log(v1.name, v1Choice, v1Promise);
                 console.log(v2.name, v2Choice, v2Promise);
@@ -435,37 +435,31 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //converts students into recipricators if the critera is met
-    studentCheck(agent: Agent){
-        if(agent.ideology.toStrategy() == 1)
+    studentCheck(v1: Agent, v2: Agent){
+        if(v1.ideology.toStrategy() == 1)
         {
-            var otherHistory
-            var timesCooperate
+            var timesReciprocated
             var temphist
-            var agentRelations = this.state.map.getEdges(agent); 
-
-            if(agentRelations)
+            var agentRelation = this.state.map.getEdge(v1, v2); 
+            if(agentRelation)
             {
-                agentRelations.forEach((value: Relation, key: Agent) => {
-                    timesCooperate = 0
-                    otherHistory = this.state.map.getEdge(key, agent);
-                    if(otherHistory)
-                    {
-                        temphist = otherHistory.history.actions;
-                        for (var i = 0; i < otherHistory.history.length(); i++) {
-                            if (temphist[i].choice === 1)
-                                timesCooperate += 1;
-                            //if the 3 cooperates aren't in succession, we set timeCooperate back to 0
-                            else if(timesCooperate < 3) 
-                                timesCooperate = 0;
-                        }
+                console.log(agentRelation.history.actions)
+                timesReciprocated = 0
+                temphist = agentRelation.history.actions;
+                for (var i = 0; i < agentRelation.history.length(); i++) {
+                    if (temphist[i].commitment === 2)
+                    timesReciprocated += 1;
+                    //if the 2 reciprocations aren't in succession, we set timeCooperate back to 0
+                    else if(timesReciprocated < 2) 
+                        timesReciprocated = 0;
+                }
 
-                        if(timesCooperate == 3){
-                            agent.ideology.setStrategy(3)
-                        }
-                    }
-                });
+                if(timesReciprocated == 2){
+                    v1.ideology.setStrategy(3)
+                }
             }
         }
+        
 
     }
 
