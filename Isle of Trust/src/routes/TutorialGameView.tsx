@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -581,19 +581,19 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         const checkResource = this.state.map.getVertices();
 
-       /* for (let i = 0; i <= checkResource.length; i++){
-            console.log(checkResource[i].resources, " for ", checkResource[i].name)
-        }
-        */
+          
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
-            return <EndOfLevel level={this.props.level} success={true} />;
+
+                return <EndOfLevel level={this.props.level} 
+                success={true} 
+                mapAgents = {[]}/>;
         }
         //Levels 1-5
         if (
             this.props.level >= 1 &&
             this.props.level <= 5 &&
-            this.state.turnCount === 10 // Needs to be set back to 10!!
+            this.state.turnCount === 10
         ) {
         // Check to make sure users can pay mortgage
         let payMortgage = 0;
@@ -602,11 +602,15 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         }
         // All players can pay mortgage
         if (payMortgage == checkResource.length){
-            return <EndOfLevel level={this.props.level} success = {true}/>;
+            return <EndOfLevel level={this.props.level} 
+            success = {true}
+            mapAgents = {checkResource}/>;
         }
         // Not all players can pay 5 ton mortgage
         else {
-            return <EndOfLevel level={this.props.level} success = {false}/>;
+            return <EndOfLevel level={this.props.level} 
+            success = {false}
+            mapAgents = {checkResource}/>;
         }
         }
         return null;
