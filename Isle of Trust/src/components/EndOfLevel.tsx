@@ -5,9 +5,6 @@ import "../css/EndOfLevel.css"
 import Confetti from 'react-confetti'
 import { Agent } from "../models/agent";
 
-//Renders the pop up window that appears after the level has been completed
-//TODO: This is a basic set up of the pop up using the logic from the "History" pop up, it still needs content
-//TODO: Maybe add confetti in the background using https://www.npmjs.com/package/react-confetti
 interface EndOfLevelProps {
     level: number;
     success: boolean;
@@ -15,12 +12,12 @@ interface EndOfLevelProps {
 }
 export function EndOfLevel({ level, success, mapAgents }: EndOfLevelProps) {
     const width = 500;
-    const height = 600;
+    const height = 500;
     
     const [mounted, setMounted] = useState(false);
 
     useEffect(()=> {
-        setTimeout(()=> setMounted(true), 3000);
+        setTimeout(()=> setMounted(true), 5000);
     })
     function updateLevel() {
         level++;
