@@ -443,13 +443,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             var agentRelation = this.state.map.getEdge(v1, v2); 
             if(agentRelation)
             {
-                console.log(agentRelation.history.actions)
                 timesReciprocated = 0
                 temphist = agentRelation.history.actions;
                 for (var i = 0; i < agentRelation.history.length(); i++) {
                     if (temphist[i].commitment === 2)
                     timesReciprocated += 1;
-                    //if the 2 reciprocations aren't in succession, we set timeCooperate back to 0
+                    //if the 2 reciprocations aren't in succession, we set timesReciprocated back to 0
                     else if(timesReciprocated < 2) 
                         timesReciprocated = 0;
                 }
