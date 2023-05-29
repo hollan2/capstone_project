@@ -593,7 +593,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (
             this.props.level >= 1 &&
             this.props.level <= 5 &&
-            this.state.turnCount === 2 // Needs to be set back to 10!!
+            this.state.turnCount === 10 // Needs to be set back to 10!!
         ) {
         // Check to make sure users can pay mortgage
         let payMortgage = 0;

@@ -13,7 +13,7 @@ interface EndOfLevelProps {
 }
 export function EndOfLevel({ level, success }: EndOfLevelProps) {
     const width =500;
-    const height = 700;
+    const height = 600;
     function updateLevel() {
         level++;
     }
@@ -45,7 +45,7 @@ export function EndOfLevel({ level, success }: EndOfLevelProps) {
                     <div className="popup-content">
                         <h1 className="text-center">Oh No!</h1>
                         <h2 className="fail">Level {level} Failed</h2>
-                        <h2 className="text-center"> Some Players were unable to pay their mortgage!</h2>
+                        <h2 className="text-center"> some Players were unable to pay their mortgage!</h2>
                         <Link
                             reloadDocument
                             className="link"
@@ -63,3 +63,4 @@ export function EndOfLevel({ level, success }: EndOfLevelProps) {
         document.getElementById("portal")!
     );
 }
+
