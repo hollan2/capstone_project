@@ -73,6 +73,7 @@ export const MAP_URL: { [key: string]: string } = {
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Cloud: "url(../Maps/mapCloud.png)",
     Pencil: "url(../Maps/mapPencil.png)",
+    Crown: "url(../Maps/mapCrown.png)",
 };
 
 interface BoardProps {

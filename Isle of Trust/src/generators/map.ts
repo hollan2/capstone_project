@@ -12,6 +12,7 @@ import MagnifyingJson from "../data/mapMagnifying.json";
 import DiceJson from "../data/mapDice.json";
 import CloudJson from "../data/mapCloud.json";
 import PencilJson from "../data/mapPencil.json";
+import CrownJson from "../data/mapCrown.json";
 
 import * as genA from "./agent";
 
@@ -77,6 +78,9 @@ export class Map {
                 break;
             case "Pencil":
                 json = PencilJson;
+                break;
+            case "Crown":
+                json = CrownJson;
                 break;
         }
         this.jsonData = JSON.parse(JSON.stringify(json));

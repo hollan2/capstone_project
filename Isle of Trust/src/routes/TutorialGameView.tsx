@@ -77,6 +77,7 @@ export const MAP_URL: { [key: string]: string } = {
     Dice: "url(../Maps/mapDice.png)",
     Cloud: "url(../Maps/mapCloud.png)",
     Pencil: "url(../Maps/mapPencil.png)",
+    Crown: "url(../Maps/mapCrown.png)",
 };
 
 //export let MAP_INDEX = 0;
@@ -135,6 +136,8 @@ export function TutorialDisplay() {
             userState.mapImage = "Cloud";
         } else if (userState.level === 5) {
             userState.mapImage = "Pencil";
+        } else if (userState.level === 6) {
+            userState.mapImage = "Crown";
         }
     }
     //logs the values chosen for the player character
