@@ -19,7 +19,7 @@ export const MAX_SIDEBAR_AGENT_HEIGHT = 225;
 const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
 
-export const MAP_URL: { [key: string]: string } = {h
+export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
     Choke: "url(../Maps/mapChoke.png)",
     Ring: "url(../Maps/mapRing.png)",
