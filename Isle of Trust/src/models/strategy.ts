@@ -6,8 +6,6 @@ import { compileFunction } from "vm";
 
 // The associated taglines are used on the front-end to describe each strategy's philosophy.
 export enum Strategy {
-    // For testing
-    Default,
     //Always suspicious of others
     Suspicious,
     //suspicious but can learn
@@ -25,8 +23,6 @@ export enum Strategy {
 
 export const taglineFromStrategy = (strat: Strategy): string => {
     switch (strat) {
-        case Strategy.Default:
-            return "I'm just here to try things out.";
         case Strategy.Suspicious:
             return "You can't trust anyone.";
         case Strategy.Student:
@@ -65,8 +61,6 @@ export const generateChoice = (
     theirHistory: TurnLog
 ): Choice => {
     switch (strat) {
-        case Strategy.Default:
-            return Default(v1Promise, v2Promise);
         case Strategy.Suspicious:
             return Choice.Compete
         case Strategy.Student:
@@ -89,20 +83,10 @@ export const generateCommitment = (
     theirHistory: TurnLog
 ): Commitment => {
     switch (strat) {
-        case Strategy.Default:
-            {
-            //randomly chooses between Compete, Cooperate and Reciprocate
-            const randomNum = Math.random();
-            if (randomNum <= 0.3)
-                return Commitment.Compete;
-            if(randomNum > 0.3 && randomNum < 0.6) 
-                return Commitment.Reciprocate;
-            else
-                return Commitment.Cooperate
-            }
         //alwats returns compete
         case Strategy.Suspicious:
             return Commitment.Compete;
+
         case Strategy.Student:
             {
                 //if a streak of 3 cooperates has ever been peformed by a neighbour we want to reciprocate
@@ -121,6 +105,7 @@ export const generateCommitment = (
 
                 return Commitment.Compete
             }
+
         case Strategy.Random:
             {
                 //randomly chooses between Compete, Cooperate and Reciprocate
@@ -286,16 +271,6 @@ export class TurnLog {
 
 //THE AGENT CHOICE FUNCTIONS
 
-//Default has a 10% chance of lying
-const Default = function (v1Promise: Commitment, v2Promise: Commitment): Choice {
-    const lieChoice = getLie(v1Promise, v2Promise);
-    const truthChoice = getTruth(v1Promise, v2Promise);
-
-    if (Math.random() <= 0.1)
-        return lieChoice
-    return truthChoice;
-};
-
 const Suspicious = function(): Choice {
     return Choice.Compete;
 };
@@ -303,6 +278,8 @@ const Suspicious = function(): Choice {
 const Student = function(v1Promise: Commitment, v2Promise: Commitment, theirHistory: TurnLog): Choice {
     let temphist = theirHistory.actions;
     let timesCooperate = 0;
+    
+
     for (var i = 0; i < theirHistory.length(); i++) {
         if (temphist[i].choice === Choice.Cooperate)
             timesCooperate += 1;
