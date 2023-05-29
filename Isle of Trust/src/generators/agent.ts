@@ -85,6 +85,7 @@ export const genDefaultAgent = function (
 ): Agent {
     let chart = [19, 19, 15, 10, 5];
     if (level === 5) chart = [19, 13, 5, 15];
+    else if (level === 6) chart = [19, 19, 15, 10, 5, 5];
     let result = new Agent(
         genName(vID),
         new Ideology(chart[spot], chart[spot]),

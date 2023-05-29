@@ -73,6 +73,46 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
+    if (level === 6) {
+        return [
+            {
+                defName: "Tutor",
+                defFace: 4,
+                defHat: 4,
+                resources: 10,
+            },
+            {
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
+            },
+            {
+                defName: "Pessimo",
+                defFace: 3,
+                defHat: 0,
+                resources: 0,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+        ];
+    }
     return [];
 };
 
@@ -426,7 +466,6 @@ export class Ideology extends AttributeContainer {
     private role: Strategy;
 
     constructor(generosity: number, forgiveness: number) {
-
         super();
         if (
             this.attributeInBounds(generosity) &&
@@ -439,7 +478,7 @@ export class Ideology extends AttributeContainer {
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
         }
-  
+
         if (generosity === 19) {
             this.role = 4;
         } else if (generosity === 15) {
