@@ -35,6 +35,7 @@ export const MAP_URL: { [key: string]: string } = {
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Dice: "url(../Maps/mapDice.png)",
     Cloud: "url(../Maps/mapCloud.png)",
+    Pencil: "url(../Maps/mapPencil.png)",
 };
 
 interface TutorialBoardProps {
@@ -123,7 +124,11 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
             return true;
         }
         //Tutorial Level 5
-        if (this.props.level === 5 && this.props.stageCount < 5) {
+        if (this.props.level === 5 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 6
+        if (this.props.level === 6 && this.props.stageCount < 5) {
             return true;
         }
         return false;

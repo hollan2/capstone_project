@@ -55,7 +55,11 @@ export function TutorialGuide({
             return true;
         }
         //Tutorial Level 5
-        if (level === 5 && stageCount < 5) {
+        if (level === 5 && stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 6
+        if (level === 6 && stageCount < 5) {
             return true;
         }
 

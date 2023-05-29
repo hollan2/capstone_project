@@ -73,6 +73,11 @@ export const Maps = [
         value: "Cloud",
         location: "../Maps/mapCloud.png",
     },
+    {
+        name: "Pencil",
+        value: "Pencil",
+        location: "../Maps/mapPencil.png",
+    },
 ];
 
 export const Hats = [
@@ -190,6 +195,7 @@ class Main extends React.Component {
                         <Route path="level2" element={<TutorialDisplay />} />
                         <Route path="level3" element={<TutorialDisplay />} />
                         <Route path="level4" element={<TutorialDisplay />} />
+                        <Route path="level5" element={<TutorialDisplay />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
