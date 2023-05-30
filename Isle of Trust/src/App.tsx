@@ -40,6 +40,7 @@ import {
     Commitment,
     getTruth,
 } from "./models/strategy";
+import { ResetGame } from "./components/resetGame"
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
 */
@@ -91,6 +92,7 @@ interface GameViewState {
     selectCharacterDisplay: boolean;
     userPromise: number;
     promiseRelation: any;
+    reset: boolean;
 }
 
 export interface StartInfo {
@@ -106,10 +108,12 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
     //keeps track of the player's id for the round checks
     public player_id: number = 0;
+    private childRef;
     constructor(props: StartInfo) {
         super(props);
         // Here may be some kind of switch to generate map
         // type based on props, for now it's just the grid
+        this.childRef = React.createRef();
         const map = new Grid(
             props.mapImage,
             DIFFICULTY_VALUES[props.startingPoints]
@@ -158,11 +162,17 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             selectCharacterDisplay: false,
             userPromise: -1,
             promiseRelation: promiseRelation,
+            reset: false,
         };
 
         //Needed for setState function
         this.deselectCharacter = this.deselectCharacter.bind(this);
     }
+
+    resetState = () => {
+        this.setState((prevState) => ({ reset: !prevState.reset, turnCount: 0}));
+    };
+
 
     tallyChoicesForAllNeighbors(
         map: Graph<Agent, Relation>,
@@ -460,6 +470,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             countTotalInfluence={this.countTotalInfluence}
                             turnCount={this.state.turnCount}
                             promiseRelation={this.state.promiseRelation}
+                            resetState={this.resetState}
+                            reset={this.state.reset}
+                            
+
                         />
                         <SelectedSidebar
                             map={this.state.map}
@@ -469,6 +483,11 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             countTotalInfluence={this.countTotalInfluence}
                             deselectCharacter={this.deselectCharacter}
                             turnCount={this.state.turnCount}
+                        />
+                        <ResetGame 
+                            map={this.state.map}
+                            resetState={this.resetState}
+                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
                         />
                 </div>
             );
@@ -495,6 +514,13 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
+                        resetState={this.resetState}
+                        reset={this.state.reset}
+                    />
+                     <ResetGame 
+                            map={this.state.map}
+                            resetState={this.resetState}
+                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
                     />
                 </div>
             );

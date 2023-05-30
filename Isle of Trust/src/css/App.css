@@ -586,3 +586,10 @@
     margin-right: 5px;
     right: 20%;
 }
+
+
+.reset {
+    position: fixed;
+    right: 25%;
+    top: 70px;
+}

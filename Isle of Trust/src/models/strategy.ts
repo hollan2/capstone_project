@@ -244,6 +244,10 @@ export class TurnLog {
         this.actions = [];
     }
 
+    public resetTurns(){
+        this.actions = [];
+    }
+
     public addTurn(turn: Turn) {
         this.actions.push(turn);
     }
