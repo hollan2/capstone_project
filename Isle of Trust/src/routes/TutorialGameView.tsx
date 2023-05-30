@@ -587,10 +587,10 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         if (this.props.level === 0 && this.state.stageCount === 27) {
             return <EndOfLevel level={this.props.level} />;
         }
-        //Levels 1-5
+        //Levels 1-6
         if (
             this.props.level >= 1 &&
-            this.props.level <= 5 &&
+            this.props.level <= 6 &&
             this.state.turnCount === 10
         ) {
             return <EndOfLevel level={this.props.level} />;
