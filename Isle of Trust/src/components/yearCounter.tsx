@@ -32,8 +32,8 @@ interface YearCounterDisplayProps {
 class YearCounterDisplay extends React.Component<YearCounterDisplayProps> {
     render() {
         return (
-            <div className={"yearCounterDisplay"} >
-                <h4>Year:</h4>
+            <div className={"yearCounterDisplay text-center"} >
+                <h5>Year:</h5>
                 <p className="year mb-1">{this.props.turnCount}</p>
             </div>
         );
