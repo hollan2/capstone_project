@@ -289,6 +289,9 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
+                <div className="counters">
+                    hey there
+                </div>
             </div>
         );
     }
