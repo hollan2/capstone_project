@@ -1,0 +1,23 @@
+.popup-content {
+    display: inline;
+}
+h1 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+h2 {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+button {
+    margin-bottom: 0;
+}
+.fail {
+    color: red;
+}
+.success {
+    color: green;
+}
+.user {
+    padding-bottom:10px;
+}

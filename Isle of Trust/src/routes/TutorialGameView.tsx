@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -583,9 +583,17 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
     renderEndOfLevel = () => {
+
+
+        const checkResource = this.state.map.getVertices();
+
+          
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
-            return <EndOfLevel level={this.props.level} />;
+
+                return <EndOfLevel level={this.props.level} 
+                success={true} 
+                mapAgents = {[]}/>;
         }
         //Levels 1-6
         if (
@@ -593,7 +601,23 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             this.props.level <= 6 &&
             this.state.turnCount === 10
         ) {
-            return <EndOfLevel level={this.props.level} />;
+        // Check to make sure users can pay mortgage
+        let payMortgage = 0;
+        for (let i = 0; i <= checkResource.length-1; i++){
+            if (checkResource[i].resources >= 5){payMortgage++}
+        }
+        // All players can pay mortgage
+        if (payMortgage == checkResource.length){
+            return <EndOfLevel level={this.props.level} 
+            success = {true}
+            mapAgents = {checkResource}/>;
+        }
+        // Not all players can pay 5 ton mortgage
+        else {
+            return <EndOfLevel level={this.props.level} 
+            success = {false}
+            mapAgents = {checkResource}/>;
+        }
         }
         return null;
     };

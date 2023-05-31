@@ -449,9 +449,11 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                         <button className="start-btn" type="submit">
                             Start
                         </button>
-                        <div className="tutorial-btn">
-                            <TutorialOLD text="Tutorial (Recommended)" />
-                        </div>
+                        <Link className="link" to="/tutorial">
+                            <button className="tutorial-btn">
+                                <TutorialOLD text="Tutorial (Recommended)" />
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>
