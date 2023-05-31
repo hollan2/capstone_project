@@ -248,7 +248,7 @@ class Footer extends React.Component {
     render() {
         return (
             <footer className="footer fixed-bottom">
-                Copyright 2022 - PSU Capstone Team
+                Copyright 2023 - PSU Capstone Team
             </footer>
         );
     }
