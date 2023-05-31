@@ -73,6 +73,8 @@ export const MAP_URL: { [key: string]: string } = {
     Dice: "url(../Maps/mapDice.png)",
     Magnifying: "url(../Maps/mapMagnifying.png)",
     Cloud: "url(../Maps/mapCloud.png)",
+    Pencil: "url(../Maps/mapPencil.png)",
+    Crown: "url(../Maps/mapCrown.png)",
 };
 
 interface BoardProps {
@@ -135,7 +137,7 @@ export class Board extends React.Component<BoardProps> {
     }
 
     render() {
-        let year = this.props.turnCount + START_YEAR
+        let year = this.props.turnCount + START_YEAR;
 
         return (
             <div className="board">
@@ -305,13 +307,8 @@ export class Board extends React.Component<BoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
-                <YearCounter
-                    turnCount={year}
-                />
-                <ResourceCounter
-                    totalResources={this.props.totalResources}
-                />
-                
+                <YearCounter turnCount={year} />
+                <ResourceCounter totalResources={this.props.totalResources} />
             </div>
         );
     }
@@ -385,9 +382,6 @@ function AgentImage(props: AgentImageProps) {
     // Show personality color if 5 turns have passed or if displaying the user player
     if (props.turnCount >= 4 || props.agent.id == props.player.id) {
         switch (props.agent.ideology.toStrategy()) {
-            case Strategy.Default:
-                ideology = { red: 158, green: 196, blue: 234 };
-                break;
             case Strategy.Suspicious:
                 ideology = { red: 248, green: 179, blue: 101 };
                 break;

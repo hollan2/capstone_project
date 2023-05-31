@@ -3,39 +3,118 @@ import { Face, Hat } from "../generators/pawn";
 
 export const AGENT_RADIUS = 15;
 
-const defaultPawns = [
-    {
-        defName: "Tutor",
-        defFace: 4,
-        defHat: 4,
-        resources: 10,
-    },
-    {
-        defName: "Rec",
-        defFace: 2,
-        defHat: 3,
-        resources: 5,
-    },
-    {
-        defName: "Susi",
-        defFace: 5,
-        defHat: 1,
-        resources: 2,
-    },
-    {
-        defName: "Domran",
-        defFace: 6,
-        defHat: 2,
-        resources: 8,
-    },
-
-    {
-        defName: "Pessimo",
-        defFace: 3,
-        defHat: 0,
-        resources: 0,
-    },
-];
+//Set Default Pawn aesthetics based on level
+const getDefaultPawns = (level: number) => {
+    if (level >= 0 && level < 5) {
+        return [
+            {
+                defName: "Tutor",
+                defFace: 4,
+                defHat: 4,
+                resources: 10,
+            },
+            {
+                defName: "Rec",
+                defFace: 2,
+                defHat: 3,
+                resources: 5,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Domran",
+                defFace: 6,
+                defHat: 2,
+                resources: 8,
+            },
+            {
+                defName: "Pessimo",
+                defFace: 3,
+                defHat: 0,
+                resources: 0,
+            },
+            {
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
+            },
+        ];
+    }
+    if (level === 5) {
+        return [
+            {
+                defName: "Tutor",
+                defFace: 4,
+                defHat: 4,
+                resources: 10,
+            },
+            {
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
+            },
+            {
+                defName: "Pessimo",
+                defFace: 3,
+                defHat: 0,
+                resources: 0,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+        ];
+    }
+    if (level === 6) {
+        return [
+            {
+                defName: "Tutor",
+                defFace: 4,
+                defHat: 4,
+                resources: 10,
+            },
+            {
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
+            },
+            {
+                defName: "Pessimo",
+                defFace: 3,
+                defHat: 0,
+                resources: 0,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+        ];
+    }
+    return [];
+};
 
 // perhaps it would be better if attributes were their own classes that could
 // call methods to increment themselves, but this way is a lot lighter.
@@ -107,7 +186,7 @@ export class Agent extends AttributeContainer {
 
     public face: Face;
     public hat: Hat;
-    public level: number;
+    public spot: number;
 
     constructor(
         name: string,
@@ -117,6 +196,7 @@ export class Agent extends AttributeContainer {
         mood: number,
         id: number,
         coords: [number, number],
+        spot: number,
         level: number
     ) {
         super();
@@ -127,16 +207,17 @@ export class Agent extends AttributeContainer {
         this.mood = mood;
         this.id = id;
         this.coords = coords;
-        this.level = level;
+        this.spot = spot;
         // Create player based off current level
-        if (level >= 0) {
-            let defFace = Object.values(Face)[defaultPawns[this.level].defFace];
-            let defHat = Object.values(Hat)[defaultPawns[this.level].defHat];
+        let defaultPawns = getDefaultPawns(level);
+        if (spot >= 0) {
+            let defFace = Object.values(Face)[defaultPawns[this.spot].defFace];
+            let defHat = Object.values(Hat)[defaultPawns[this.spot].defHat];
 
             this.face = Face[defFace as keyof typeof Face];
             this.hat = Hat[defHat as keyof typeof Hat];
-            this.name = defaultPawns[this.level].defName;
-            this.resources = defaultPawns[this.level].resources;
+            this.name = defaultPawns[this.spot].defName;
+            this.resources = defaultPawns[this.spot].resources;
         }
         // Create Random players
         else {
@@ -383,8 +464,7 @@ export class Agent extends AttributeContainer {
     //updateInfluence() {}
 }
 
-// The internal ideological state of an agent which effectively determines the
-// strategy which the agent uses, and can change over time.
+//generosity and forgivness still need to be removed
 export class Ideology extends AttributeContainer {
     // how likely they are to give instead of cheat.
     private generosity: number;
@@ -408,14 +488,16 @@ export class Ideology extends AttributeContainer {
             );
         }
 
-        if (generosity == 19) {
+        if (generosity === 19) {
             this.role = 4;
-        } else if (generosity == 15) {
+        } else if (generosity === 15) {
             this.role = 2;
-        } else if (generosity == 10) {
+        } else if (generosity === 10) {
             this.role = 3;
-        } else if (generosity == 5) {
+        } else if (generosity === 5) {
             this.role = 1;
+        } else if (generosity === 13) {
+            this.role = 5;
         } else {
             this.role = Math.floor(Math.random() * 6);
         }
