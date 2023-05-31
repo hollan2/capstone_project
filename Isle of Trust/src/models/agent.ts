@@ -178,7 +178,7 @@ export class Agent extends AttributeContainer {
     public name: string;
     public resources: number;
     public ideology: Ideology;
-    public initialIdeology: Ideology;
+    public initialStrategy: Strategy;
     public personality: Personality;
     public mood: number;
     public promises: promises[] = [];
@@ -202,7 +202,7 @@ export class Agent extends AttributeContainer {
         super();
         this.name = name;
         this.ideology = ideology;
-        this.initialIdeology = ideology;
+        this.initialStrategy = ideology.toStrategy();
         this.personality = personality;
         this.mood = mood;
         this.id = id;

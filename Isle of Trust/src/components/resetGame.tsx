@@ -1,6 +1,6 @@
 import React from "react";
 import { Agent } from "../models/agent";
-import { TurnLog } from "../models/strategy";
+import { TurnLog, Strategy } from "../models/strategy";
 import { Graph } from "../models/graph";
 import { Relation } from "../models/agent";
 import { PlayerSidebar } from "./playerSideBar";
@@ -19,7 +19,7 @@ export class ResetGame extends React.Component<ResetGameProps>
         agents.forEach((agent) => {
             agent.resetResources(this.props.intialResources);
             //reset the ideologies of all agents to their initial ones
-            agent.ideology.setStrategy(agent.initialIdeology.toStrategy());
+            agent.ideology.setStrategy(agent.initialStrategy);
         });
         let relations = this.props.map.getAllEdges();
         relations.forEach(([v1, v2, e1]) => {
