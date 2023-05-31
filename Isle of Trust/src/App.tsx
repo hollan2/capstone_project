@@ -108,12 +108,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     private stageRef = React.createRef<Konva.Stage>();
     //keeps track of the player's id for the round checks
     public player_id: number = 0;
-    private childRef;
     constructor(props: StartInfo) {
         super(props);
         // Here may be some kind of switch to generate map
         // type based on props, for now it's just the grid
-        this.childRef = React.createRef();
         const map = new Grid(
             props.mapImage,
             DIFFICULTY_VALUES[props.startingPoints]
