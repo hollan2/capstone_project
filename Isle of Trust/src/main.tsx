@@ -271,7 +271,7 @@ function Splash() {
             <h1>
                 Isle of Trust
                 <br />
-                <span>how to spread an idea</span>
+                <span> How to spread an idea</span>
             </h1>
             <img src="images/splash_screen.png" alt="" />
 
