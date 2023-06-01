@@ -18,4 +18,4 @@ Supervisor.
 Winter+Spring 2023
 Team lead by Chloe Holland, with Naton Cai, Benjamin Lostheart,
 DJ Nghiem, Vinh Nguyen, Viktoriya Petrova, Caleb Podarelu,
-Adam Stagner as Development Engineers, Bruce Irvin as Supervisor.
+and Adam Stagner as Development Engineers, Bruce Irvin as Supervisor.
