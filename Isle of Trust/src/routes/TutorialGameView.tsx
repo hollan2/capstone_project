@@ -26,7 +26,6 @@ import {
     AGENT_RADIUS,
     Relation,
     Ideology,
-    Personality,
     SpendingContainer,
     DriftContainer,
 } from "../models/agent";
@@ -179,46 +178,6 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         const position = 0;
         const player = map.getVertices()[position];
 
-        //generates player with chosen face/hat/name/ideology
-        if (player instanceof Agent) {
-            player.face = Face[props.face as keyof typeof Face];
-            player.hat = Hat[props.hat as keyof typeof Hat];
-            player.name = props.name;
-
-            this.player_id = player.id;
-
-            switch (props.ideologyColor) {
-                case "9ec4ea":
-                    //Dove
-                    player.ideology = new Ideology(19, 19);
-                    break;
-                case "df7e68":
-                    //Hawk
-                    player.ideology = new Ideology(0, 0);
-                    break;
-                case "f8b365":
-                    //Grim
-                    player.ideology = new Ideology(19, 0);
-                    break;
-                case "ffda5c":
-                    //AntiGrim
-                    player.ideology = new Ideology(0, 19);
-                    break;
-                case "b4a6d8":
-                    //TitforTat
-                    player.ideology = new Ideology(14, 19);
-                    break;
-                case "b5d8a6":
-                    //Dum
-                    player.ideology = new Ideology(0, 5);
-                    break;
-                case "a1c4ca":
-                    //Dee
-                    player.ideology = new Ideology(19, 5);
-                    break;
-            }
-        }
-
         // Set selected to position 1 so user is first player selected on load in
         let selected = map.getVertices()[position + 1];
 
@@ -284,7 +243,6 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         const proportionalInfluence = totalInfluence / numberOfNeighbors;
 
-        const preachiness = agent.personality.getPreachiness();
         if (proportionalInfluence > 15) {
             return "revered";
         } else if (proportionalInfluence > 11) {

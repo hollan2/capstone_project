@@ -25,7 +25,6 @@ import {
     AGENT_RADIUS,
     Relation,
     Ideology,
-    Personality,
     SpendingContainer,
     DriftContainer,
 } from "../models/agent";

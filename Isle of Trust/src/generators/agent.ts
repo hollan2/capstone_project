@@ -1,4 +1,4 @@
-import { Agent, Ideology, Personality, Relation } from "../models/agent";
+import { Agent, Ideology, Relation } from "../models/agent";
 import { randomIntRange } from "../utilities";
 let name_iter = 1;
 const SEED = 102938123;
@@ -33,17 +33,12 @@ var randnames: string[] = names;
 export const genAgent = function (
     vID: number,
     newName: string,
-    newPersonality: [number, number],
-    newIdeology: [number, number],
+    newIdeology: [number],
     newResource: number,
     newMood: number,
     newCoord: [number, number],
     level: number
 ) {};
-
-const randomAttribute = function (): number {
-    return randomIntRange(0, 20);
-};
 
 export const genRandomAgent = function (
     vID: number,
@@ -54,8 +49,7 @@ export const genRandomAgent = function (
     const spot = -1;
     let result = new Agent(
         genName(vID),
-        new Ideology(randomAttribute(), randomAttribute()),
-        new Personality(randomAttribute(), randomAttribute()),
+        new Ideology(),
         resources,
         10,
         vID,
@@ -83,13 +77,12 @@ export const genDefaultAgent = function (
     spot: number,
     level: number
 ): Agent {
-    let chart = [19, 19, 15, 10, 5];
-    if (level === 5) chart = [19, 13, 5, 15];
-    else if (level === 6) chart = [19, 19, 15, 10, 5, 5];
+    let chart = [0, 0, 0, 0, 0, 0];
+    if (level === 5) chart = [14, 5, 1, 2];
+    else if (level === 6) chart = [4, 4, 2, 3, 1, 1];
     let result = new Agent(
         genName(vID),
-        new Ideology(chart[spot], chart[spot]),
-        new Personality(randomAttribute(), randomAttribute()),
+        new Ideology(chart[spot]),
         resources,
         10,
         vID,

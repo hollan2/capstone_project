@@ -178,7 +178,6 @@ export class Agent extends AttributeContainer {
     public name: string;
     public resources: number;
     public ideology: Ideology;
-    public personality: Personality;
     public mood: number;
     public promises: promises[] = [];
     public choices: choices[] = [];
@@ -190,7 +189,6 @@ export class Agent extends AttributeContainer {
     constructor(
         name: string,
         ideology: Ideology,
-        personality: Personality,
         resources: number,
         mood: number,
         id: number,
@@ -201,7 +199,6 @@ export class Agent extends AttributeContainer {
         super();
         this.name = name;
         this.ideology = ideology;
-        this.personality = personality;
         this.mood = mood;
         this.id = id;
         this.coords = coords;
@@ -235,14 +232,6 @@ export class Agent extends AttributeContainer {
             this.resources = resources;
         }
     }
-
-    /* These functions don't serve a purpose anymore, can be removed
-    // update the personality in response to how the agent was treated in the previous round.
-    updatePersonality() {}
-
-    // update the ideology to match the personality.
-    updateIdeology() {}
-    */
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {
@@ -309,37 +298,6 @@ export class Agent extends AttributeContainer {
             this.resources -= 1;
     }
 
-    /*This function doesn't serve a purpose anymore, can be removed
-    updateMood(myChoice: Choice, theirChoice: Choice) {
-        // consider that the average volatilityPct will be 0.50
-        const volatilityPct = this.getAttributeAsPercentage(
-            this.personality.getVolatility()
-        );
-        if (myChoice === Choice.Give && theirChoice === Choice.Give) {
-            // prettier-ignore
-            // on average, this will increase the mood by 1
-            this.mood = this.incrementAttributeBy(
-                0.5 + (1 * volatilityPct),
-                this.mood
-            );
-        } else if (myChoice === Choice.Give && theirChoice === Choice.Cheat) {
-            // prettier-ignore
-            // on average, this will decrease the mood by -2
-            this.mood = this.incrementAttributeBy(
-                -1 + (-2 * volatilityPct),
-                this.mood
-            );
-        } else if (myChoice === Choice.Cheat && theirChoice === Choice.Cheat) {
-            // prettier-ignore
-            // on average, this will decrease the mood by -1
-            this.mood = this.incrementAttributeBy(
-                -0.5 + (-1 * volatilityPct),
-                this.mood
-            );
-        }
-    }
-    */
-
     getMoodDescription(): string {
         if (this.mood > 15) {
             return "Joyful";
@@ -354,195 +312,34 @@ export class Agent extends AttributeContainer {
         }
     }
 
-    /*These functions dont serve a purpose anymore, can be removed
-    // Currently, the more volatile a neighbor is, the more resources an agent (you) will spend on them.
-    // Reasoning: a more volatile agent is more likely to change to your ideology,
-    // so it's best to focus your energies on them.
-    // Ideally, this would be some sort of curve, so agents wouldn't use, for example, 10 resources
-    // trying to sway a neighbor who would change ideologies for 3 resources.
-    autoDisperseInfluence(
-        neighbors: Map<Agent, Relation>
-    ): SpendingContainer {
-        const myPreachability = this.getAttributeAsPercentage(
-            this.personality.getPreachiness()
-        );
-        // an agent may spend up to 50% of their wealth influencing others,
-        // depending on their preachiness and random chance
-        const imWillingToSpendPct: number =
-            (myPreachability + Math.random()) / 4;
-        const imWillingToSpend: number = Math.round(
-            imWillingToSpendPct * this.resources
-        );
-
-        let spendingMap = new SpendingContainer();
-        let influencabilityMap: Map<Agent, number> = new Map();
-        let totalInfluenceability: number = 0;
-        neighbors.forEach((relation, neighbor) => {
-            const theirInfluenceablitity = neighbor.getInfluenceability();
-            influencabilityMap.set(neighbor, theirInfluenceablitity);
-            totalInfluenceability += theirInfluenceablitity;
-        });
-
-        influencabilityMap.forEach((theirInfluenceablitity, neighbor) => {
-            const neighborAllotment: number = Math.round(
-                imWillingToSpend *
-                    (theirInfluenceablitity / totalInfluenceability)
-            );
-            spendingMap.data.set(neighbor, neighborAllotment);
-        });
-
-        return spendingMap;
-    }
-    
-
-    // the more volatile the neighbor,
-    // and the unhappier they are,
-    // the higher their chance to be influenced.
-    getInfluenceability(): number {
-        const volatilityPct = this.getAttributeAsPercentage(
-            this.personality.getVolatility()
-        );
-        const moodPct = this.getAttributeAsPercentage(this.mood);
-        return (volatilityPct + (1 - moodPct)) / 2;
-    }
-   
-
-    acceptInfluenceDispersal(giver: Agent, dispersal: number) {
-        giver.resources -= dispersal;
-        this.resources += dispersal;
-    }
-
-    
-    driftIdeology(driftMap: DriftContainer) {
-        let totalGenerosityChange = 0;
-        let totalForgivenessChange = 0;
-        driftMap.data.forEach((pointsToDriftBy, targetIdeology) => {
-            const generosityChange =
-                (targetIdeology.getGenerosity() -
-                    this.ideology.getGenerosity()) *
-                pointsToDriftBy;
-            const forgivenessChange =
-                (targetIdeology.getForgiveness() -
-                    this.ideology.getForgiveness()) *
-                pointsToDriftBy;
-            totalForgivenessChange += forgivenessChange;
-            totalGenerosityChange += generosityChange;
-        });
-        const totalChange =
-            Math.abs(totalForgivenessChange) + Math.abs(totalGenerosityChange);
-        if (totalChange) {
-            this.ideology.setForgiveness(
-                this.ideology.incrementAttributeBy(
-                    totalForgivenessChange / totalChange,
-                    this.ideology.getForgiveness()
-                )
-            );
-            this.ideology.setGenerosity(
-                this.ideology.incrementAttributeBy(
-                    totalGenerosityChange / totalChange,
-                    this.ideology.getGenerosity()
-                )
-            );
-        }
-    }
-    */
-
     spendResources(cost: number) {
         this.resources -= cost;
     }
-
-    //This function doesn't serve a purpose anymore, can be removed
-    //updateInfluence() {}
 }
 
 //generosity and forgivness still need to be removed
 export class Ideology extends AttributeContainer {
-    // how likely they are to give instead of cheat.
-    private generosity: number;
-
-    // how likely they are to NOT hold a grudge.
-    private forgiveness: number;
-
     private role: Strategy;
 
-    constructor(generosity: number, forgiveness: number) {
+    constructor(role?: number) {
         super();
-        if (
-            this.attributeInBounds(generosity) &&
-            this.attributeInBounds(forgiveness)
-        ) {
-            this.generosity = generosity;
-            this.forgiveness = forgiveness;
-        } else {
-            throw new Error(
-                "generosity/forgiveness out of bounds: should be [0, 20)"
-            );
-        }
-
+        if (role) {
+            this.role = role
+        } 
         this.role =  Math.floor(Math.random() * 5);
-
-    // get the strategy associated with this ideology
-    toStrategy(): Strategy {
-        return this.role;
     }
 
-    setStrategy(newRole: Strategy) {
-        this.role = newRole;
-    }
+        // get the strategy associated with this ideology
+        toStrategy(): Strategy {
+            return this.role;
+        }
+    
+        setStrategy(newRole: Strategy) {
+            this.role = newRole;
+        }
 }
 
-//PERSONALITY IS NO LONGER IN USE
-// Immutable personality traits which affect how the agent influences others and
-// adapts their own ideology.
-export class Personality extends AttributeContainer {
-    // how quickly they change their personality based on their neighbors
-    // (e.g. misers becoming generous after being treated well.)
-    // an agent with a volatility of [insert lowest possible value here] will never change.
-    private volatility: number;
 
-    // how likely an agent is to try to spread their ideology on a given turn.
-    private preachiness: number;
-
-    getVolatility(): number {
-        return this.volatility;
-    }
-
-    setVolatility(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.volatility = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    getPreachiness(): number {
-        return this.preachiness;
-    }
-
-    setPreachiness(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.preachiness = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    // get the strategy associated with this ideology
-    constructor(volatility: number, preachiness: number) {
-        super();
-        if (
-            this.attributeInBounds(volatility) &&
-            this.attributeInBounds(preachiness)
-        ) {
-            this.volatility = volatility;
-            this.preachiness = preachiness;
-        } else {
-            throw new Error(
-                "volatility/preachiness out of bounds: should be [0, 20)"
-            );
-        }
-    }
-}
 
 export class Relation extends AttributeContainer {
     history: TurnLog;
@@ -606,16 +403,6 @@ export class Relation extends AttributeContainer {
             return "hates you";
         }
     }
-
-    /*This function doesn't serve a purpose anymore, can be removed
-    addInfluenceBasedOn(dispersal: number, theirVolatility: number) {
-        this.resourcesSpent += dispersal;
-        this.influence = this.incrementAttributeBy(
-            dispersal * this.getAttributeAsPercentage(theirVolatility),
-            this.influence
-        );
-    }
-    */
 }
 
 // Use this to keep track of which neighbors an Agent is planning on influencing.

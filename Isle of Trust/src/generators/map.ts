@@ -1,6 +1,6 @@
 import { Graph } from "../models/graph";
 import * as util from "../utilities";
-import { Agent, Ideology, Personality, Relation } from "../models/agent";
+import { Agent, Ideology, Relation } from "../models/agent";
 import ProngedJson from "../data/mapPronged.json";
 import ChokeJson from "../data/mapChoke.json";
 import CrescentJson from "../data/mapCrescent.json";
