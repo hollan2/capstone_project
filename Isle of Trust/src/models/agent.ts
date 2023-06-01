@@ -480,6 +480,7 @@ export class Ideology extends AttributeContainer {
         }
 
         this.role =  Math.floor(Math.random() * 5);
+    }
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
