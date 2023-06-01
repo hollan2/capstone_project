@@ -138,6 +138,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             this.player_id = player.id;
             console.log(this.player_id);
             player.ideology.setStrategy(Strategy.Player);
+            player.setInitialStrategy(Strategy.Player);
+            console.log("player strategy: " + player.ideology.toStrategy());
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected

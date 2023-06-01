@@ -246,6 +246,10 @@ export class Agent extends AttributeContainer {
     updateIdeology() {}
     */
 
+    setInitialStrategy(strategy: Strategy)
+    {
+        this.initialStrategy = strategy;
+    }
     //Reset the resources
     resetResources(initialResources: number)
     {
