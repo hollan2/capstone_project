@@ -221,7 +221,6 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         // Set selected to position 1 so user is first player selected on load in
         let selected = map.getVertices()[position + 1];
-
         let sidebarState = new SidebarState(map, player, selected, position);
 
         let select = (agent: Agent) => {
@@ -268,6 +267,18 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             });
         }
         return sumChoices;
+    }
+
+    countTotalResources(
+        map : Graph<Agent, Relation>,
+    ): number {
+        const agents = map.getVertices()
+
+        let totalResources = 0;
+        for (let i = 0; i < agents.length; ++i) {
+            totalResources += agents[i].resources
+        }
+        return totalResources;
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -638,6 +649,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                     current={currentMap}
                     stageCount={this.state.stageCount}
                     level={this.props.level}
+                    totalResources={this.countTotalResources(this.state.map)}
                 />
                 <TutorialPlayerSidebar
                     map={this.state.map}

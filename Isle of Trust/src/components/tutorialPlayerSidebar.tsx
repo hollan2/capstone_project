@@ -180,8 +180,11 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                                 this.props.sidebarState.player.resources > 0
                             ) {
                                 this.library_count += 1;
-                                this.props.sidebarState.player.resources -= 1;
-                                this.props.libraryrolechange();
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.libraryrolechange()
+                                //reapply the university changes in case the university was invested first
+                                if(this.university_count == 15)
+                                    this.props.universityrolechange()
                             }
                         }}
                     >
