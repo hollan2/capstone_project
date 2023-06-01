@@ -15,8 +15,6 @@ import {
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { Grid } from "./generators/map";
 import { PlayerSidebar } from "./components/playerSideBar";
-import { YearCounter } from "./components/yearCounter";
-import { ResourceCounter } from "./components/resourceCounter";
 import { SelectedSidebar } from "./components/selectedSideBar";
 import { SidebarState } from "./components/sideBarState";
 import { Board } from "./components/board";
