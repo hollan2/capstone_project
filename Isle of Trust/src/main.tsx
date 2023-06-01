@@ -78,6 +78,11 @@ export const Maps = [
         value: "Pencil",
         location: "../Maps/mapPencil.png",
     },
+    {
+        name: "Crown",
+        value: "Crown",
+        location: "../Maps/mapCrown.png",
+    },
 ];
 
 export const Hats = [
@@ -196,6 +201,7 @@ class Main extends React.Component {
                         <Route path="level3" element={<TutorialDisplay />} />
                         <Route path="level4" element={<TutorialDisplay />} />
                         <Route path="level5" element={<TutorialDisplay />} />
+                        <Route path="level6" element={<TutorialDisplay />} />
                     </Routes>
                     <Footer />
                 </BrowserRouter>
@@ -443,9 +449,11 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                         <button className="start-btn" type="submit">
                             Start
                         </button>
-                        <div className="tutorial-btn">
-                            <TutorialOLD text="Tutorial (Recommended)" />
-                        </div>
+                        <Link className="link" to="/tutorial">
+                            <button className="tutorial-btn">
+                                <TutorialOLD text="Tutorial (Recommended)" />
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

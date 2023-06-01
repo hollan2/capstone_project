@@ -73,6 +73,46 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
+    if (level === 6) {
+        return [
+            {
+                defName: "Tutor",
+                defFace: 4,
+                defHat: 4,
+                resources: 10,
+            },
+            {
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
+            },
+            {
+                defName: "Pessimo",
+                defFace: 3,
+                defHat: 0,
+                resources: 0,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+            {
+                defName: "Susi",
+                defFace: 5,
+                defHat: 1,
+                resources: 2,
+            },
+        ];
+    }
     return [];
 };
 
@@ -440,7 +480,6 @@ export class Ideology extends AttributeContainer {
         }
 
         this.role =  Math.floor(Math.random() * 5);
-    }
 
     // get the strategy associated with this ideology
     toStrategy(): Strategy {
