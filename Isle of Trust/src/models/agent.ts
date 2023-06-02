@@ -354,105 +354,11 @@ export class Agent extends AttributeContainer {
         }
     }
 
-    /*These functions dont serve a purpose anymore, can be removed
-    // Currently, the more volatile a neighbor is, the more resources an agent (you) will spend on them.
-    // Reasoning: a more volatile agent is more likely to change to your ideology,
-    // so it's best to focus your energies on them.
-    // Ideally, this would be some sort of curve, so agents wouldn't use, for example, 10 resources
-    // trying to sway a neighbor who would change ideologies for 3 resources.
-    autoDisperseInfluence(
-        neighbors: Map<Agent, Relation>
-    ): SpendingContainer {
-        const myPreachability = this.getAttributeAsPercentage(
-            this.personality.getPreachiness()
-        );
-        // an agent may spend up to 50% of their wealth influencing others,
-        // depending on their preachiness and random chance
-        const imWillingToSpendPct: number =
-            (myPreachability + Math.random()) / 4;
-        const imWillingToSpend: number = Math.round(
-            imWillingToSpendPct * this.resources
-        );
-
-        let spendingMap = new SpendingContainer();
-        let influencabilityMap: Map<Agent, number> = new Map();
-        let totalInfluenceability: number = 0;
-        neighbors.forEach((relation, neighbor) => {
-            const theirInfluenceablitity = neighbor.getInfluenceability();
-            influencabilityMap.set(neighbor, theirInfluenceablitity);
-            totalInfluenceability += theirInfluenceablitity;
-        });
-
-        influencabilityMap.forEach((theirInfluenceablitity, neighbor) => {
-            const neighborAllotment: number = Math.round(
-                imWillingToSpend *
-                    (theirInfluenceablitity / totalInfluenceability)
-            );
-            spendingMap.data.set(neighbor, neighborAllotment);
-        });
-
-        return spendingMap;
-    }
-    
-
-    // the more volatile the neighbor,
-    // and the unhappier they are,
-    // the higher their chance to be influenced.
-    getInfluenceability(): number {
-        const volatilityPct = this.getAttributeAsPercentage(
-            this.personality.getVolatility()
-        );
-        const moodPct = this.getAttributeAsPercentage(this.mood);
-        return (volatilityPct + (1 - moodPct)) / 2;
-    }
-   
-
-    acceptInfluenceDispersal(giver: Agent, dispersal: number) {
-        giver.resources -= dispersal;
-        this.resources += dispersal;
-    }
-
-    
-    driftIdeology(driftMap: DriftContainer) {
-        let totalGenerosityChange = 0;
-        let totalForgivenessChange = 0;
-        driftMap.data.forEach((pointsToDriftBy, targetIdeology) => {
-            const generosityChange =
-                (targetIdeology.getGenerosity() -
-                    this.ideology.getGenerosity()) *
-                pointsToDriftBy;
-            const forgivenessChange =
-                (targetIdeology.getForgiveness() -
-                    this.ideology.getForgiveness()) *
-                pointsToDriftBy;
-            totalForgivenessChange += forgivenessChange;
-            totalGenerosityChange += generosityChange;
-        });
-        const totalChange =
-            Math.abs(totalForgivenessChange) + Math.abs(totalGenerosityChange);
-        if (totalChange) {
-            this.ideology.setForgiveness(
-                this.ideology.incrementAttributeBy(
-                    totalForgivenessChange / totalChange,
-                    this.ideology.getForgiveness()
-                )
-            );
-            this.ideology.setGenerosity(
-                this.ideology.incrementAttributeBy(
-                    totalGenerosityChange / totalChange,
-                    this.ideology.getGenerosity()
-                )
-            );
-        }
-    }
-    */
 
     spendResources(cost: number) {
         this.resources -= cost;
     }
 
-    //This function doesn't serve a purpose anymore, can be removed
-    //updateInfluence() {}
 }
 
 //generosity and forgivness still need to be removed
@@ -478,8 +384,34 @@ export class Ideology extends AttributeContainer {
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
         }
-
-        this.role =  Math.floor(Math.random() * 5);
+        // Sets Strategy to Player type
+        if ( generosity === 12){
+            this.role = 5;
+        }
+        // Sets Strategy to Reciprocator type
+        else if (generosity === 19) {
+            this.role = 3;
+        } 
+        // Sets Strategy to Student type
+        else if (generosity === 15) {
+            this.role = 1;
+        } 
+        // Sets Strategy to Teacher type
+        else if (generosity === 13) {
+            this.role = 4;
+        }
+        // Sets Strategy to Random type
+        else if (generosity === 10) {
+            this.role = 2;
+        }
+        // Sets Strategy to Supicious type 
+        else if (generosity === 5) {
+            this.role = 0;
+        } 
+        // Randomly selects a Strategy
+        else {
+            this.role = Math.floor(Math.random() * 6);
+        }
     }
 
     // get the strategy associated with this ideology

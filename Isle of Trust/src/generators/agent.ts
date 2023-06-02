@@ -83,9 +83,10 @@ export const genDefaultAgent = function (
     spot: number,
     level: number
 ): Agent {
+    // Chart helps decide what is the right stategy for each generated default player
     let chart = [19, 19, 15, 10, 5];
     if (level === 5) chart = [19, 13, 5, 15];
-    else if (level === 6) chart = [19, 19, 15, 10, 5, 5];
+    else if (level === 6) chart = [19, 19, 15, 10, 7, 7];
     let result = new Agent(
         genName(vID),
         new Ideology(chart[spot], chart[spot]),

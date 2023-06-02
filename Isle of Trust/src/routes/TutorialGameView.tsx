@@ -190,7 +190,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             switch (props.ideologyColor) {
                 case "9ec4ea":
                     //Dove
-                    player.ideology = new Ideology(19, 19);
+                    player.ideology = new Ideology(12, 12);
                     break;
                 case "df7e68":
                     //Hawk
