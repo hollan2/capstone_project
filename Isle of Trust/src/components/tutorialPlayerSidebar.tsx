@@ -534,11 +534,11 @@ class InfluenceEntry extends React.Component<
         const commitment = promise?.promise;
         switch (commitment) {
             case 0:
-                return "compete";
+                return "solo";
             case 1:
-                return "cooperate";
+                return "together";
             case 2:
-                return "reciprocate";
+                return "match";
         }
     }
 
@@ -666,7 +666,7 @@ class InfluenceEntry extends React.Component<
             return (
                 <div className="choices-container">
                     <div className="neighbor-promise">
-                        {agent.name + " promised to " + aiCommitment}
+                        {agent.name + " promised " + aiCommitment}
                     </div>
                     <div className="influence-entry">
                         <div className="influence-agent">

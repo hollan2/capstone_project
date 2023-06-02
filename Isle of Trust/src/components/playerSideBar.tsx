@@ -458,9 +458,9 @@ class InfluenceEntry extends React.Component<
             case 0:
                 return "solo";
             case 1:
-                return "match";
-            case 2:
                 return "together";
+            case 2:
+                return "match";
         }
     }
 
