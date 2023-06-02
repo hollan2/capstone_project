@@ -48,9 +48,9 @@
 }
 
 .hintbtn {
-    position: fixed;
-    right: 22%;
-    top: 70px;
+    position: absolute;
+    right: 360px;
+    top: 10px;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
     transform: scale(1);
     animation: pulse 2s infinite;
@@ -599,3 +599,4 @@
     justify-content: center;
     align-self: center;
 }
+

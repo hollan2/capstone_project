@@ -193,7 +193,7 @@ class Hint extends React.Component<HintProps, HintState> {
         );
 
         return (
-            <div>
+            <div className="hint-container">
                 <OverlayTrigger
                     trigger="click"
                     placement="left"
