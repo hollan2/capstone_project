@@ -263,7 +263,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
                 sumChoices.together += tally.together;
+                sumChoices.solo += tally.solo;
                 sumChoices.cheated += tally.cheated;
+                sumChoices.honest += tally.honest;
             });
         }
         return sumChoices;
