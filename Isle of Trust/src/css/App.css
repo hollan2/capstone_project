@@ -586,3 +586,17 @@
     margin-right: 5px;
     right: 20%;
 }
+
+
+.reset {
+    position: fixed;
+    right: 70px;
+    top:  12px;
+    z-index: 1200;
+    background-color: white;
+    color: black;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 10px;
+}
+
