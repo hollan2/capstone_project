@@ -6,14 +6,14 @@ Stage 0 Hint Placeholder
 ~Stage 5 Hint Placeholder
 ~Stage 6 Hint Placeholder
 ~Stage 7 Hint Placeholder
-~Click on either Cooperate, Reciprocate, or Compete and then click on Confirm choices
-~Stage 9 Hint Placeholded
+~Click on either "Together", "Match", or "Solo" and then click on "Confirm Choices".
+~Stage 9 Hint Placeholder
 ~Stage 10 Hint Placeholder
 ~Stage 11 Hint Placeholder
-~Click on either Cooperate or Compete and then click on Confirm choices
+~Click on either "Together" or "Solo" and then click on "Confirm Choices".
 ~Stage 13 Hint Placeholder
 ~Stage 14 Hint Placeholder
-~Click on a player on the map
+~Click on a player on the map!
 ~Stage 16 Hint Placeholder
 ~Stage 17 Hint Placeholder
 ~Stage 18 Hint Placeholder

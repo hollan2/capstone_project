@@ -600,10 +600,10 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 success={true} 
                 mapAgents = {[]}/>;
         }
-        //Levels 1-5
+        //Levels 1-6
         if (
             this.props.level >= 1 &&
-            this.props.level <= 5 &&
+            this.props.level <= 6 &&
             this.state.turnCount === 10
         ) {
         // Check to make sure users can pay mortgage
