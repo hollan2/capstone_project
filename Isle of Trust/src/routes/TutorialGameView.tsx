@@ -6,7 +6,7 @@ import { TutorialGuide } from "../components/tutorialGuide";
 import { TutorialBoard } from "../components/tutorialBoard";
 import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
 import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
-import { EndOfLevel } from "../components/EndOfLevel";
+import { EndOfLevel, OutOfResources} from "../components/EndOfLevel";
 import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
@@ -587,7 +587,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         const checkResource = this.state.map.getVertices();
 
-          
+        
+        // If user runs out of resources user must restart level
+        if (checkResource[0].resources <= 0 ){
+            return <OutOfResources level={this.props.level}/>
+        }
+                                         
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
 
