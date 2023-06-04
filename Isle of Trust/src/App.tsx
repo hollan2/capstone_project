@@ -40,6 +40,7 @@ import {
     Commitment,
     getTruth,
 } from "./models/strategy";
+import { ResetGame } from "./components/resetGame"
 /*
 import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
 */
@@ -91,6 +92,7 @@ interface GameViewState {
     selectCharacterDisplay: boolean;
     userPromise: number;
     promiseRelation: any;
+    reset: boolean;
 }
 
 export interface StartInfo {
@@ -136,6 +138,8 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             this.player_id = player.id;
             console.log(this.player_id);
             player.ideology.setStrategy(Strategy.Player);
+            player.setInitialStrategy(Strategy.Player);
+            console.log("player strategy: " + player.ideology.toStrategy());
         }
 
         // Arbitrarily, the first Agent in the graph starts out selected
@@ -158,11 +162,17 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             selectCharacterDisplay: false,
             userPromise: -1,
             promiseRelation: promiseRelation,
+            reset: false,
         };
 
         //Needed for setState function
         this.deselectCharacter = this.deselectCharacter.bind(this);
     }
+
+    resetState = () => {
+        this.setState((prevState) => ({ reset: !prevState.reset, turnCount: 0}));
+    };
+
 
     tallyChoicesForAllNeighbors(
         map: Graph<Agent, Relation>,
@@ -384,6 +394,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     );
                 }
 
+                //checks if either players meet the conidtions to change from student to reciprocator
+                this.studentCheck(v1, v2)
+                this.studentCheck(v2, v1)
+
                 console.log(v1.name, v1Choice, v1Promise);
                 console.log(v2.name, v2Choice, v2Promise);
                 //rewards the agents resouces based on their resources
@@ -430,6 +444,34 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         });
     }
 
+    //converts students into recipricators if the critera is met
+    studentCheck(v1: Agent, v2: Agent){
+        if(v1.ideology.toStrategy() == 1)
+        {
+            var timesReciprocated
+            var temphist
+            var agentRelation = this.state.map.getEdge(v1, v2); 
+            if(agentRelation)
+            {
+                timesReciprocated = 0
+                temphist = agentRelation.history.actions;
+                for (var i = 0; i < agentRelation.history.length(); i++) {
+                    if (temphist[i].commitment === 2)
+                    timesReciprocated += 1;
+                    //if the 2 reciprocations aren't in succession, we set timesReciprocated back to 0
+                    else if(timesReciprocated < 2) 
+                        timesReciprocated = 0;
+                }
+
+                if(timesReciprocated == 2){
+                    v1.ideology.setStrategy(3)
+                }
+            }
+        }
+        
+
+    }
+
 
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
@@ -460,6 +502,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             countTotalInfluence={this.countTotalInfluence}
                             turnCount={this.state.turnCount}
                             promiseRelation={this.state.promiseRelation}
+                            resetState={this.resetState}
+                            reset={this.state.reset}
+                            
+
                         />
                         <SelectedSidebar
                             map={this.state.map}
@@ -469,6 +515,11 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                             countTotalInfluence={this.countTotalInfluence}
                             deselectCharacter={this.deselectCharacter}
                             turnCount={this.state.turnCount}
+                        />
+                        <ResetGame 
+                            map={this.state.map}
+                            resetState={this.resetState}
+                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
                         />
                 </div>
             );
@@ -495,6 +546,13 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         countTotalInfluence={this.countTotalInfluence}
                         turnCount={this.state.turnCount}
                         promiseRelation={this.state.promiseRelation}
+                        resetState={this.resetState}
+                        reset={this.state.reset}
+                    />
+                     <ResetGame 
+                            map={this.state.map}
+                            resetState={this.resetState}
+                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
                     />
                 </div>
             );
@@ -671,9 +729,6 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
             props.agent.ideology.toStrategy() == Strategy.Player
         ) {
             switch (props.agent.ideology.toStrategy()) {
-                case Strategy.Default:
-                    ideology = { red: 158, green: 196, blue: 234 };
-                    break;
                 case Strategy.Suspicious:
                     ideology = { red: 248, green: 179, blue: 101 };
                     break;

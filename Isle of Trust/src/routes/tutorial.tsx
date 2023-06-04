@@ -31,7 +31,7 @@ export default function Levels() {
                     <Link className="link" to="/level1">
                         <button> 1 </button>
                     </Link>
-                    <div className="divider"/>
+                    <div className="divider" />
                     <Link className="link" to="/level2">
                         <button> 2 </button>
                     </Link>
@@ -46,7 +46,7 @@ export default function Levels() {
                     <Link className="link" to="/level4">
                         <button> 4 </button>
                     </Link>
-                    <div className="divider"/>
+                    <div className="divider" />
                     <Link className="link" to="/level5">
                         <button> 5 </button>
                     </Link>
