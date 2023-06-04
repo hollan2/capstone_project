@@ -76,7 +76,7 @@ export function OutOfResources({ level }: OutOfResourcesProps) {
                 <div className="popup-content">
                             <h1 className="text-center">Oh No!</h1>
                             <h2 className="fail">Level {level} Failed</h2>
-                            <h2 className="text-center"> Your player ran out of resources!</h2>
+                            <h2 className="text-center"> You ran out of resources!</h2>
                             <Link
                                 reloadDocument
                                 className="link"
