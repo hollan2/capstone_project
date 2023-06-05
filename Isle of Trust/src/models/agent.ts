@@ -522,8 +522,7 @@ export class Ideology extends AttributeContainer {
         if (this.role == 3 || this.role == 4) {
             return true
         }
-        else 
-            return false
+        return false
     }
 }
 

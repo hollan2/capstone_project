@@ -195,11 +195,11 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     countTotalResources(map : Graph<Agent, Relation>): number {
         const agents = map.getVertices()
 
-        let totalResources = 0;
+        let totalResources = 0
         for (let i = 0; i < agents.length; ++i) {
             totalResources += agents[i].resources
         }
-        return totalResources;
+        return totalResources
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -263,16 +263,22 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.setState({})       
     }
 
-    getDonations(maxDonations : number): number {
-        const agents = this.state.map.getVertices()
+    getDonations(donationsMax : number): number {
+        let agents = this.state.map.getVertices()
         let donations = 0
 
-        for (let i = 0; donations <= maxDonations && i < agents.length; ++i) {
-            while (agents[i].canDonate()) {
-                donations += agents[i].donate(1)
+        for (let i = 0; donations < donationsMax && i < agents.length; ++i) {
+            while (agents[i].canDonate() && donations < donationsMax) {
+                // 2 should only be donated if we are 2 or more away from completing that donation goal
+                if ((donationsMax - donations) >= 2) {
+                    donations += agents[i].donate(2)
+                }
+                else {
+                    donations += agents[i].donate(1)
+                }
             }
         }
-        return donations;
+        return donations
     }
 
     drainResources(vertices: Agent[]) {

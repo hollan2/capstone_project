@@ -142,7 +142,7 @@ export class PlayerSidebar extends React.Component<
 interface PlayerDisplayProps {
     libraryRoleChange:() => void;
     universityRoleChange:() => void;
-    getDonations(maxDonations: number): number;
+    getDonations(donationsMax: number): number;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -194,34 +194,34 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         }
 
         // Get donations from appropriate non-player agents if library and/or university aren't funded
-        if (this.libraryCount < 14 || this.universityCount < 14) {
-            let maxDonationsLibrary = 15 - this.libraryCount
-            let maxDonationsUniversity = 15 - this.universityCount
+        if (this.libraryCount < 15) {
+            let donationsMax = 15 - this.libraryCount;
             let donations = 0
 
-            donations = this.props.getDonations(maxDonationsLibrary + maxDonationsUniversity)
-
-            if (donations > 0 && maxDonationsLibrary > 0) {
+            donations = this.props.getDonations(donationsMax);
+            if (donations > 0)
                 this.libraryCount += donations
-                if(this.libraryCount > 15) {
-                    this.libraryCount = 15
-                    donations = this.libraryCount - 15
-                }
-                else {
-                    donations = 0
-                }
-            }
-            if (donations > 0 && maxDonationsUniversity> 0) {
-                this.universityCount += donations
-                if(this.universityCount > 15) {
-                    this.universityCount = 15
-                    donations = this.universityCount - 15
-                }
-                else {
-                    donations = 0
-                }
+            
+
+            if (this.libraryCount == 15) {
+                this.props.libraryRoleChange()
+                // Reapply the university changes in case the university was invested first
+                if(this.universityCount == 15)
+                    this.props.universityRoleChange()
             }
         }
+        if (this.libraryCount == 15 && this.universityCount < 15) {
+            let donationsMax = 15 - this.universityCount;
+            let donations = 0
+
+            donations = this.props.getDonations(donationsMax)
+            if (donations > 0) 
+                this.universityCount += donations
+            
+            if (this.universityCount == 15)
+                this.props.universityRoleChange()
+        }
+   
         
         if(this.props.reset)
         {
