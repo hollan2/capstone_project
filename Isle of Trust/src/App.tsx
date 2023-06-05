@@ -270,6 +270,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             v1.resources -= RESOURCE_LOST_PER_TURN;
         });
     }
+
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
         var Promise_relation: [
@@ -365,6 +366,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         v1Strat,
                         e2.history
                     );
+
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
@@ -401,6 +403,16 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 //rewards the agents resouces based on their resources
                 v1.rewardResources(v1Choice, v2Choice);
                 v2.rewardResources(v2Choice, v1Choice);
+
+                //allow ai to donate
+                if (v1.id != this.player_id && v1.canDonate()) {
+                    let donate = 0
+                    donate = v1.
+                }
+                if (v2.id != this.player_id && v2.canDonate()) {
+                    let donate = 0
+                    donate = v2
+                }
 
                 //a reward trust function will be need when trust implmented
 

@@ -322,6 +322,18 @@ export class Agent extends AttributeContainer {
             this.resources -= 1;
     }
 
+    canDonate(): boolean {
+        // If an agent has at least 20 resources and has an ideology that can donate return true
+        if (this.resources >= 20 && this.ideology.canDonate()) {
+            return true
+        }
+        return false
+    }
+
+    donate(donate: number) {
+        this.resources -= donate
+    }
+
     /*This function doesn't serve a purpose anymore, can be removed
     updateMood(myChoice: Choice, theirChoice: Choice) {
         // consider that the average volatilityPct will be 0.50
@@ -502,6 +514,15 @@ export class Ideology extends AttributeContainer {
 
     setStrategy(newRole: Strategy) {
         this.role = newRole;
+    }
+
+    canDonate(): boolean {
+        // Returns true for reciprocators and teachers since they can to donate. All others can't
+        if (this.role == 3 || this.role == 4) {
+            return true
+        }
+        else 
+            return false
     }
 }
 

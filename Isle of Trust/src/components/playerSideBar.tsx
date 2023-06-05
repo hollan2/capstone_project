@@ -183,6 +183,28 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         }
     }
 
+    aiDonate(): number {
+        let donate = 0
+
+        if (this.library_count < 13) {
+            this.library_count += 2
+            return 2
+        }
+        if(this.library_count < 14 && donate < 2) {
+            this.library_count += 1
+            donate += 1
+        }
+        else if (this.university_count < 13 && donate < 2) {
+            this.university_count += 2
+            donate += 2
+        }
+        else if (this.university_count < 14 && donate < 2) {
+            this.university_count += 1
+            donate += 1
+        }
+        return donate
+    }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
