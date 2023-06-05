@@ -248,7 +248,7 @@ class Footer extends React.Component {
     render() {
         return (
             <footer className="footer fixed-bottom">
-                Copyright 2022 - PSU Capstone Team
+                Copyright 2023 - PSU Capstone Team
             </footer>
         );
     }
@@ -271,7 +271,7 @@ function Splash() {
             <h1>
                 Isle of Trust
                 <br />
-                <span>how to spread an idea</span>
+                <span> How to spread an idea</span>
             </h1>
             <img src="images/splash_screen.png" alt="" />
 

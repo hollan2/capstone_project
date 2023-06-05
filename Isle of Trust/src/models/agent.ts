@@ -178,6 +178,7 @@ export class Agent extends AttributeContainer {
     public name: string;
     public resources: number;
     public ideology: Ideology;
+    public initialStrategy: Strategy;
     public personality: Personality;
     public mood: number;
     public promises: promises[] = [];
@@ -201,6 +202,7 @@ export class Agent extends AttributeContainer {
         super();
         this.name = name;
         this.ideology = ideology;
+        this.initialStrategy = ideology.toStrategy();
         this.personality = personality;
         this.mood = mood;
         this.id = id;
@@ -243,6 +245,17 @@ export class Agent extends AttributeContainer {
     // update the ideology to match the personality.
     updateIdeology() {}
     */
+
+    setInitialStrategy(strategy: Strategy)
+    {
+        this.initialStrategy = strategy;
+    }
+    //Reset the resources
+    resetResources(initialResources: number)
+    {
+        this.resources = initialResources;
+    }
+
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {

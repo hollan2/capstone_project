@@ -50,6 +50,10 @@ export default function Levels() {
                     <Link className="link" to="/level5">
                         <button> 5 </button>
                     </Link>
+                    <div className="divider" />
+                    <Link className="link" to="/level6">
+                        <button> 6 </button>
+                    </Link>
                 </article>
             </span>
         </article>

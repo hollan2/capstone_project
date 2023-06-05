@@ -79,4 +79,32 @@ export function EndOfLevel({ level, success, mapAgents }: EndOfLevelProps) {
 }
 
 
+interface OutOfResourcesProps {
+    level: number;
+};
+export function OutOfResources({ level }: OutOfResourcesProps) {
+
+    return ReactDom.createPortal( 
+        <div className="popup-container">
+            <div className="overlay"></div>
+            <div className="popup"> 
+                <div className="popup-content">
+                            <h1 className="text-center">Oh No!</h1>
+                            <h2 className="fail">Level {level} Failed</h2>
+                            <h2 className="text-center"> You ran out of resources!</h2>
+                            <Link
+                                reloadDocument
+                                className="link"
+                                to={"/level" + (level)}
+                            >
+                                <button> Replay Level</button>
+                            </Link>
+                        </div>
+
+                </div>
+        </div>,
+        document.getElementById("portal")!  
+    );
+}
+
 
