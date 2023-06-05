@@ -26,7 +26,7 @@ export const taglineFromStrategy = (strat: Strategy): string => {
         case Strategy.Suspicious:
             return "You can't trust anyone.";
         case Strategy.Student:
-            return "I need guidance";
+            return "I need guidance.";
         case Strategy.Random:
             return "Let chaos reign!";
         case Strategy.Reciprocators:
