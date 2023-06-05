@@ -123,6 +123,7 @@ export class SelectedSidebar extends React.Component<
                     selected={this.props.sidebarState.selected}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
+                    tutorial={false}
                 />
             </div>
         );
@@ -284,6 +285,7 @@ interface HistoryProps {
     selected: Agent;
     map: Graph<Agent, Relation>;
     turnCount: number;
+    tutorial: boolean;
 }
 
 export class History extends React.Component<HistoryProps> {
@@ -304,6 +306,7 @@ export class History extends React.Component<HistoryProps> {
                 relation={entry[1]}
                 turnCount={this.props.turnCount}
                 map={this.props.map}
+                tutorial={this.props.tutorial}
             />);
             
         };
@@ -330,6 +333,7 @@ interface HistoryNeighborsProps{
     relation: Relation;
     turnCount: number;
     map: Graph<Agent, Relation>;
+    tutorial: boolean;
 }
 
 interface HistoryNeighborsState {
@@ -368,12 +372,13 @@ class HistoryNeighbors extends React.Component<
                                 canvasWidth={this.canvasWidth}
                                 agent={this.props.neighbor}
                                 turnCount={this.props.turnCount}
+                                tutorial={this.props.tutorial}
                             />
                         </RK.Layer>
                     </RK.Stage>
                     <div className="history-view">
                         <button onClick={this.changeState}>View</button>
-                        {this.state.show && (<HistoryPopUp selected={this.props.selected} neighbor={this.props.neighbor} history={this.props.relation.history} changeState={this.changeState} turnCount={this.props.turnCount} map={this.props.map}/>)}
+                        {this.state.show && (<HistoryPopUp selected={this.props.selected} neighbor={this.props.neighbor} history={this.props.relation.history} changeState={this.changeState} turnCount={this.props.turnCount} map={this.props.map} tutorial={this.props.tutorial} />)}
                     </div>
             </div>
         );
@@ -388,6 +393,7 @@ interface HistoryPopUpProps {
     turnCount: number;
     changeState: (show: boolean) => void;
     map: Graph<Agent, Relation>;
+    tutorial: boolean;
 }
 
 class HistoryPopUp extends React.Component<HistoryPopUpProps> {
@@ -447,6 +453,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps> {
                                             canvasWidth={this.canvasWidth}
                                             agent={this.props.selected}
                                             turnCount={this.props.turnCount}
+                                            tutorial={this.props.tutorial}
                                         />
                                     
                                     </RK.Layer>
@@ -471,6 +478,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps> {
                                             canvasWidth={this.canvasWidth}
                                             agent={this.props.neighbor}
                                             turnCount={this.props.turnCount}
+                                            tutorial={this.props.tutorial}
                                         />
                                     
                                     </RK.Layer>

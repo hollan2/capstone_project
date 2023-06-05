@@ -645,6 +645,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                                 canvasWidth={this.currentCanvasWidth}
                                 agent={this.props.agent}
                                 turnCount={this.props.turnCount}
+                                tutorial={this.props.tutorial}
                             />
                         </RK.Layer>
                     </RK.Stage>
@@ -711,6 +712,7 @@ interface SidebarAgentImageType {
     canvasWidth: number;
     agent: Agent;
     turnCount: number;
+    tutorial: boolean;
 }
 
 export function SidebarAgentImage(props: SidebarAgentImageType) {
@@ -725,6 +727,7 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
         hat = props.agent.hat;
         // Show personality color if 5 turns have passed or if displaying the user player
         if (
+            props.tutorial ||
             props.turnCount >= 4 ||
             props.agent.ideology.toStrategy() == Strategy.Player
         ) {

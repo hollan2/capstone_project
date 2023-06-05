@@ -317,6 +317,7 @@ class HistoryNeighbors extends React.Component<HistoryNeighborsProps, HistoryNei
                                 canvasWidth={this.canvasWidth}
                                 agent={this.props.neighbor}
                                 turnCount={this.props.turnCount}
+                                tutorial={true}
                             />
                         </RK.Layer>
                     </RK.Stage>
@@ -398,6 +399,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                                             canvasWidth={this.canvasWidth}
                                             agent={this.props.selected}
                                             turnCount={this.props.turnCount}
+                                            tutorial={true}
                                         />
                                     
                                     </RK.Layer>
@@ -422,6 +424,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                                             canvasWidth={this.canvasWidth}
                                             agent={this.props.neighbor}
                                             turnCount={this.props.turnCount}
+                                            tutorial={true}
                                         />
                                     
                                     </RK.Layer>
