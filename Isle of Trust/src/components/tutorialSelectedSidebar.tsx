@@ -221,20 +221,19 @@ class Stats extends React.Component<StatsProps, unknown> {
         }
         return (
             <div className="stats-container">
-                <div className="stats text-nowrap">
-                    <p>
-                        You worked together {yourChoices.together} times
-                    </p>
+                <div className="stats">
                     <p>
                         They've spent {theySpent} tons of cheries trying to influence
                         you, while you've spent {youSpent} tons of cherries trying to
                         influence them.
                     </p>
                     <p>
-                        you've cheated them {yourChoices.cheated} times
+                        They've given to you {theirChoices.together} times, while
+                        you've given to them {yourChoices.together} times.
                     </p>
                     <p>
-                        {selectedName} cheated you {theirChoices.cheated} times
+                        They've cheated you {theirChoices.cheated} times, while
+                        you've cheated them {yourChoices.cheated} times.
                     </p>
                 </div>
             </div>
