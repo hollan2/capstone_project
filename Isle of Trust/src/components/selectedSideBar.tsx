@@ -181,6 +181,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    tutorial={false}
                 />
             </div>
         );
