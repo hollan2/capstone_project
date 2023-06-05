@@ -167,7 +167,7 @@ export class GridDefault extends Map {
                 ++vID;
                 console.log("here is spot:", { spot });
                 if (this.level != 0) {
-                    ++spot;
+                    spot++;
                 }
                 this.graph.insertVertex(v);
             });
