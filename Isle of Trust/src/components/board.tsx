@@ -58,6 +58,8 @@ const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
 const MOOD_IMAGE_SIDE_LENGTH = 511;
 
+const RESOURCE_LOST_PER_TURN = 3;
+const BASE_INFLUENCE_LOST_PER_TURN = 2;
 const START_YEAR = 1950;
 
 export const MAP_URL: { [key: string]: string } = {

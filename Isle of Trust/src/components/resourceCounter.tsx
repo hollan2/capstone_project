@@ -33,7 +33,7 @@ class ResourceCounterDisplay extends React.Component<ResourceCounterDisplayProps
     render() {
         return (
             <div className={"resourceCounterDisplay text-center"}>
-                <h5 className="text-nowrap">Total Resources:</h5>
+                <h5 className="text-nowrap">Total Tons of Cherries:</h5>
                 <p className="resources mb-1">{this.props.totalResources}</p>
             </div>
         );

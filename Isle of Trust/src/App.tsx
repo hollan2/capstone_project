@@ -15,8 +15,6 @@ import {
 import { Face, Hat, GeneratePawn } from "./generators/pawn";
 import { Grid } from "./generators/map";
 import { PlayerSidebar } from "./components/playerSideBar";
-import { YearCounter } from "./components/yearCounter";
-import { ResourceCounter } from "./components/resourceCounter";
 import { SelectedSidebar } from "./components/selectedSideBar";
 import { SidebarState } from "./components/sideBarState";
 import { Board } from "./components/board";
@@ -472,7 +470,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
     }
 
-
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
     }  
@@ -570,6 +567,7 @@ interface DisplayProps {
     agentChoices: choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     turnCount: number;
+    tutorial: boolean;
 }
 
 export class Display extends React.Component<DisplayProps, DisplayState> {
@@ -619,8 +617,8 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
 
     render() {
         let agentPoints: number = 0;
-        let agentStrat: string = "No strategy";
-        let agentGoal: string = "Avenge me...";
+        let agentStrat: string = "Unknown";
+        let agentGoal: string = "Get to know me.";
         let neighbors: Map<Agent, Relation> = this.props.map.getEdges(
             this.props.agent
         )!;
@@ -632,8 +630,16 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
         if (this.props.agent instanceof Agent) {
             const agent = this.props.agent as Agent;
             let strat = agent.ideology.toStrategy();
-            agentStrat = Strategy[strat];
-            agentGoal = taglineFromStrategy(strat);
+            // Show strategy and it's corresponding quote if
+            // if 5 turns have passed or if displaying the user player
+            if (
+                this.props.tutorial ||
+                this.props.turnCount >= 4 ||
+                this.props.agent.ideology.toStrategy() == Strategy.Player
+            ) {
+                agentStrat = Strategy[strat];
+                agentGoal = taglineFromStrategy(strat);
+            }
             agentPoints = agent.resources;
         }
         return (
@@ -655,7 +661,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                     </p>
                 </div>
                 <div className="stats text-nowrap">
-                    <p className="end">{agentPoints} resources</p>
+                    <p className="end">{agentPoints} tons of cherries</p>
                     <p className="end">
                         Together {this.props.agentChoices.together} /{" "}
                         {numOfActions}

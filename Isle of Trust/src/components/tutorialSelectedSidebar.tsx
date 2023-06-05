@@ -141,6 +141,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    tutorial={true}
                 />
             </div>
         );
@@ -225,7 +226,9 @@ class Stats extends React.Component<StatsProps, unknown> {
                         You worked together {yourChoices.together} times
                     </p>
                     <p>
-                        {selectedName} worked together {theirChoices.together} times
+                        They've spent {theySpent} tons of cheries trying to influence
+                        you, while you've spent {youSpent} tons of cherries trying to
+                        influence them.
                     </p>
                     <p>
                         you've cheated them {yourChoices.cheated} times
