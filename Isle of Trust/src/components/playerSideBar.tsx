@@ -92,8 +92,9 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
-    libraryrolechange:() => void;
-    universityrolechange:() => void;
+    libraryRoleChange:() => void;
+    universityRoleChange:() => void;
+    getDonations(maxDonations: number): number;
     turnCount: number;
     promiseRelation: any;
     resetState: () => void;
@@ -109,8 +110,9 @@ export class PlayerSidebar extends React.Component<
         return (
             <div className="sidebar playerSidebar">
                 <PlayerDisplay
-                    libraryrolechange={this.props.libraryrolechange}
-                    universityrolechange={this.props.universityrolechange}
+                    libraryRoleChange={this.props.libraryRoleChange}
+                    universityRoleChange={this.props.universityRoleChange}
+                    getDonations={this.props.getDonations}
                     map={this.props.map}
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
@@ -138,8 +140,9 @@ export class PlayerSidebar extends React.Component<
 }
 
 interface PlayerDisplayProps {
-    libraryrolechange:() => void;
-    universityrolechange:() => void;
+    libraryRoleChange:() => void;
+    universityRoleChange:() => void;
+    getDonations(maxDonations: number): number;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
     tallyChoicesNeighbors: (
@@ -153,15 +156,13 @@ interface PlayerDisplayProps {
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
-    private library_count = 0;
-    private university_count = 0;
+    private libraryCount = 0;
+    private universityCount = 0;
     hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
 
-
-
     resetInvestments() {
-        this.library_count = 0;
-        this.university_count = 0;
+        this.libraryCount = 0;
+        this.universityCount = 0;
     }
     //set the text to the hint if the players hover over the invest button
     setText(newText: string){
@@ -183,28 +184,6 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         }
     }
 
-    aiDonate(): number {
-        let donate = 0
-
-        if (this.library_count < 13) {
-            this.library_count += 2
-            return 2
-        }
-        if(this.library_count < 14 && donate < 2) {
-            this.library_count += 1
-            donate += 1
-        }
-        else if (this.university_count < 13 && donate < 2) {
-            this.university_count += 2
-            donate += 2
-        }
-        else if (this.university_count < 14 && donate < 2) {
-            this.university_count += 1
-            donate += 1
-        }
-        return donate
-    }
-
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -212,6 +191,36 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             const you = this.props.sidebarState.player as Agent;
             choices = this.props.tallyChoicesNeighbors(this.props.map, you);
             name = you.name;
+        }
+
+        // Get donations from appropriate non-player agents if library and/or university aren't funded
+        if (this.libraryCount < 14 || this.universityCount < 14) {
+            let maxDonationsLibrary = 15 - this.libraryCount
+            let maxDonationsUniversity = 15 - this.universityCount
+            let donations = 0
+
+            donations = this.props.getDonations(maxDonationsLibrary + maxDonationsUniversity)
+
+            if (donations > 0 && maxDonationsLibrary > 0) {
+                this.libraryCount += donations
+                if(this.libraryCount > 15) {
+                    this.libraryCount = 15
+                    donations = this.libraryCount - 15
+                }
+                else {
+                    donations = 0
+                }
+            }
+            if (donations > 0 && maxDonationsUniversity> 0) {
+                this.universityCount += donations
+                if(this.universityCount > 15) {
+                    this.universityCount = 15
+                    donations = this.universityCount - 15
+                }
+                else {
+                    donations = 0
+                }
+            }
         }
         
         if(this.props.reset)
@@ -242,25 +251,25 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
-                        if(this.library_count < 14 && this.props.sidebarState.player.resources > 0){
-                            this.library_count += 1
+                        if(this.libraryCount < 14 && this.props.sidebarState.player.resources > 0){
+                            this.libraryCount += 1
                             this.props.sidebarState.player.resources -= 1
                             this.setState({PlayerDisplay: this})
                         }
                         //if the count is equal to 14, add to the count and change the personas
-                        else if(this.library_count == 14 && this.props.sidebarState.player.resources > 0)
+                        else if(this.libraryCount == 14 && this.props.sidebarState.player.resources > 0)
                         {
-                            this.library_count += 1
+                            this.libraryCount += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.props.libraryrolechange()
+                            this.props.libraryRoleChange()
                             //reapply the university changes in case the university was invested first
-                            if(this.university_count == 15)
-                                this.props.universityrolechange()
+                            if(this.universityCount == 15)
+                                this.props.universityRoleChange()
                         }
                     }}
                 >
                     {" "}
-                    Library: {this.library_count}
+                    Library: {this.libraryCount}
                 </button>
 
                 <button
@@ -270,23 +279,23 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     onMouseLeave= {() =>this.setEmpty()}
                     onClick={() => {
                         //if the invested amount is less than 14 keep adding to the count
-                        if(this.university_count < 14 && this.props.sidebarState.player.resources > 0){
-                            this.university_count += 1
+                        if(this.universityCount < 14 && this.props.sidebarState.player.resources > 0){
+                            this.universityCount += 1
                             this.props.sidebarState.player.resources -= 1
                             this.setState({PlayerDisplay: this})
                         }
 
                         //if the count is equal to 14, add to the count and change the personas
-                        else if(this.university_count == 14 && this.props.sidebarState.player.resources > 0)
+                        else if(this.universityCount == 14 && this.props.sidebarState.player.resources > 0)
                         {
-                            this.university_count += 1
+                            this.universityCount += 1
                             this.props.sidebarState.player.resources -= 1
-                            this.props.universityrolechange()
+                            this.props.universityRoleChange()
                         }
                     }}
                 >
                     {" "}
-                    University: {this.university_count}
+                    University: {this.universityCount}
                 </button>
               </div>
             </div>

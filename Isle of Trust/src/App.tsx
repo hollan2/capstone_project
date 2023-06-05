@@ -192,9 +192,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
-    countTotalResources(
-        map : Graph<Agent, Relation>,
-    ): number {
+    countTotalResources(map : Graph<Agent, Relation>): number {
         const agents = map.getVertices()
 
         let totalResources = 0;
@@ -244,7 +242,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //changes all suspicious agents into students
-    libraryroleChange(){
+    libraryRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Suspicious)
                 v1.ideology.setStrategy(Strategy.Student)
@@ -255,7 +253,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //changes all student agents in reciprocators
-    universityroleChange(){
+    universityRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Student)
                 v1.ideology.setStrategy(Strategy.Reciprocators)
@@ -263,6 +261,18 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 v2.ideology.setStrategy(Strategy.Reciprocators)
         });
         this.setState({})       
+    }
+
+    getDonations(maxDonations : number): number {
+        const agents = this.state.map.getVertices()
+        let donations = 0
+
+        for (let i = 0; donations <= maxDonations && i < agents.length; ++i) {
+            while (agents[i].canDonate()) {
+                donations += agents[i].donate(1)
+            }
+        }
+        return donations;
     }
 
     drainResources(vertices: Agent[]) {
@@ -404,16 +414,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                 v1.rewardResources(v1Choice, v2Choice);
                 v2.rewardResources(v2Choice, v1Choice);
 
-                //allow ai to donate
-                if (v1.id != this.player_id && v1.canDonate()) {
-                    let donate = 0
-                    donate = v1.
-                }
-                if (v2.id != this.player_id && v2.canDonate()) {
-                    let donate = 0
-                    donate = v2
-                }
-
                 //a reward trust function will be need when trust implmented
 
                 //Checks if the choice each v1 v2 makes is a truth or lie
@@ -504,8 +504,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         <PlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
-                            libraryrolechange={this.libraryroleChange.bind(this)}
-                            universityrolechange={this.universityroleChange.bind(this)}
+                            libraryRoleChange={this.libraryRoleChange.bind(this)}
+                            universityRoleChange={this.universityRoleChange.bind(this)}
+                            getDonations={this.getDonations.bind(this)}
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
@@ -548,8 +549,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     <PlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
-                        libraryrolechange={this.libraryroleChange.bind(this)}
-                        universityrolechange={this.universityroleChange.bind(this)}
+                        libraryRoleChange={this.libraryRoleChange.bind(this)}
+                        universityRoleChange={this.universityRoleChange.bind(this)}
+                        getDonations={this.getDonations.bind(this)}
                         sidebarState={this.state.sidebarState}
                         tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                         countTotalInfluence={this.countTotalInfluence}

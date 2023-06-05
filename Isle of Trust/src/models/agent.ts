@@ -330,8 +330,9 @@ export class Agent extends AttributeContainer {
         return false
     }
 
-    donate(donate: number) {
+    donate(donate: number): number {
         this.resources -= donate
+        return donate
     }
 
     /*This function doesn't serve a purpose anymore, can be removed
