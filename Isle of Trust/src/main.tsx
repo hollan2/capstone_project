@@ -379,7 +379,6 @@ class Start extends React.Component<StartProps, StartState> {
                         selectedMap={this.state.selectedMap}
                     />
                 </div>
-                <StartInformation />
             </form>
         );
     }
@@ -770,36 +769,6 @@ class MapSelector extends React.Component<MapSelectorProps, {}> {
             </div>
         );
     }
-}
-
-function StartInformation() {
-    return (
-        <div className="start-information">
-            <h2>Start Information:</h2>
-            <div>
-                How Ideology affects play:
-                <ul>
-                    <li>Hawk is selfish and always cheats.</li>
-                    <li>Dove is altruistic and always gives.</li>
-                    <li>
-                        Grim is altruistic, but responds poorly to selfishness.
-                    </li>
-                    <li>
-                        Anti-Grim is selfish, but responds well to altruism.
-                    </li>
-                    <li>Tit-for-Tat copies the behavior shown to them.</li>
-                    <li>
-                        Tweedle-Dum is selfish, but switches strategies every
-                        three times it's been cheated.
-                    </li>
-                    <li>
-                        Tweedle-Dee is altruistic, but switches strategies every
-                        three times it's been cheated.
-                    </li>
-                </ul>
-            </div>
-        </div>
-    );
 }
 
 /* 
