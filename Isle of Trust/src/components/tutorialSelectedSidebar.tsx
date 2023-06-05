@@ -196,8 +196,8 @@ class Stats extends React.Component<StatsProps, unknown> {
             <div className="stats-container">
                 <div className="stats">
                     <p>
-                        They've spent {theySpent} resources trying to influence
-                        you, while you've spent {youSpent} resources trying to
+                        They've spent {theySpent} tons of cheries trying to influence
+                        you, while you've spent {youSpent} tons of cherries trying to
                         influence them.
                     </p>
                     <p>
