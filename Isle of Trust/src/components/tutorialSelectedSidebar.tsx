@@ -67,6 +67,9 @@ export class TutorialSelectedSidebar extends React.Component<
                 <Stats
                     sidebarState={this.props.sidebarState}
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
+                    neighbors={this.props.map.getEdges(
+                        this.props.sidebarState.selected
+                    )!}
                 />
                 <History
                     selected={this.props.sidebarState.selected}
@@ -103,6 +106,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
     render() {
         let choices = new choiceTally();
         let name = "";
+        const userPosition = this.props.sidebarState.position;
         if (this.props.sidebarState.selected instanceof Agent) {
             const them = this.props.sidebarState.selected as Agent;
             choices = this.props.tallyChoicesNeighbors(this.props.map, them);
@@ -124,6 +128,8 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                         className="deselect"
                         onClick={() => {
                             this.deselectCharacter(false);
+                            this.props.sidebarState.selected =
+                                this.props.map.getVertices()[userPosition];
                         }}
                     >
                         &#9746;
@@ -137,7 +143,6 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
                     turnCount={this.props.turnCount}
                     tutorial={true}
                 />
-                <Judgement sidebarState={this.props.sidebarState} />
             </div>
         );
     }
@@ -170,6 +175,7 @@ class Judgement extends React.Component<JudgementProps> {
 
 interface StatsProps {
     sidebarState: SidebarState;
+    neighbors: Map<Agent, Relation>;
     tallyChoicesNeighbors: (
         map: Graph<Agent, Relation>,
         agent: Agent
@@ -181,6 +187,26 @@ class Stats extends React.Component<StatsProps, unknown> {
         const yourChoices = new choiceTally();
         let theySpent = 0;
         let youSpent = 0;
+        let isPlayerNeighbor = false;
+        let selectedName = this.props.sidebarState.selected.name;
+
+        // Check if players are neighbors:
+        for (const entry of this.props.neighbors.entries()) {
+            if(entry[0].id == this.props.sidebarState.player.id)
+                isPlayerNeighbor = true;
+        }
+
+        if (isPlayerNeighbor == false) {
+            return (
+                <div className="stats-container">
+                    <div className="stats">
+                        <p>
+                            You and {selectedName} haven't interacted yet!
+                        </p>
+                    </div>
+                </div>
+            );
+        }
         if (this.props.sidebarState.selectedToPlayer) {
             theirChoices.tallyChoices(
                 this.props.sidebarState.selectedToPlayer.history!
@@ -195,19 +221,20 @@ class Stats extends React.Component<StatsProps, unknown> {
         }
         return (
             <div className="stats-container">
-                <div className="stats">
+                <div className="stats text-nowrap">
+                    <p>
+                        You worked together {yourChoices.together} times
+                    </p>
                     <p>
                         They've spent {theySpent} tons of cheries trying to influence
                         you, while you've spent {youSpent} tons of cherries trying to
                         influence them.
                     </p>
                     <p>
-                        They've given to you {theirChoices.together} times, while
-                        you've given to them {yourChoices.together} times.
+                        you've cheated them {yourChoices.cheated} times
                     </p>
                     <p>
-                        They've cheated you {theirChoices.cheated} times, while
-                        you've cheated them {yourChoices.cheated} times.
+                        {selectedName} cheated you {theirChoices.cheated} times
                     </p>
                 </div>
             </div>

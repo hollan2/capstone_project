@@ -16,6 +16,9 @@ import { Agent, AGENT_RADIUS, Relation } from "../models/agent";
 import { Graph } from "../models/graph";
 import { Strategy } from "../models/strategy";
 import { KonvaEventObject } from "konva/lib/Node";
+import { YearCounter } from "./yearCounter";
+import { ResourceCounter } from "./resourceCounter";
+
 export const RESIZE_TIMEOUT = 500;
 export const SCENE_WIDTH = 800;
 export const SCENE_HEIGHT = 600;
@@ -23,6 +26,7 @@ export const MAX_SIDEBAR_AGENT_WIDTH = 150;
 export const MAX_SIDEBAR_AGENT_HEIGHT = 225;
 const AGENT_IMAGE_WIDTH = 400;
 const AGENT_IMAGE_HEIGHT = 594;
+const START_YEAR = 1950;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
@@ -49,6 +53,7 @@ interface TutorialBoardProps {
     deselectCharacter: (value: boolean) => void;
     current: string;
     level: number;
+    totalResources: number;
 }
 
 export class TutorialBoard extends React.Component<TutorialBoardProps> {
@@ -61,6 +66,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.resizeEvent = this.resizeEvent.bind(this);
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
+        this.select(this.props.selected);
+        this.deselectCharacter(true);
     }
 
     componentWillUnmount() {
@@ -136,6 +143,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
     }
 
     render() {
+        let year = this.props.turnCount + START_YEAR;
+
         return (
             <div
                 className="board"
@@ -289,6 +298,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
+                <YearCounter turnCount={year} />
+                <ResourceCounter totalResources={this.props.totalResources} />
             </div>
         );
     }

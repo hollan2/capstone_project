@@ -171,61 +171,65 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     turnCount={this.props.turnCount}
                     tutorial={true}
                 />
-                <div className={ this.displaySpotlight() && this.props.level === 6 ? "player-display spotlight" : "investmentSidebar" }>
-                    <div className="investmentSidebar">
-                        <div className="influence-title">{this.hintText}</div>
-                        <button
-                            id="library"
-                            className="investmentButton"
-                            onMouseEnter={() =>
-                                this.setText(
-                                    "Hint: Invest 15 to change Suspicous to Students"
-                                )
-                            }
-                            onMouseLeave={() => this.setEmpty()}
-                            onClick={() => {
-                                //if the invested amount is less than 14 keep adding to the count
-                                if (
-                                    this.library_count < 14 &&
-                                    this.props.sidebarState.player.resources > 0
-                                ) {
-                                    this.library_count += 1;
-                                    this.props.sidebarState.player.resources -= 1;
-                                    this.setState({ PlayerDisplay: this });
-                                }
-                                //if the count is equal to 14, add to the count and change the personas
-                                else if (
-                                    this.library_count === 14 &&
-                                    this.props.sidebarState.player.resources > 0
-                                ) {
-                                    this.library_count += 1;
-                                    this.props.sidebarState.player.resources -= 1;
-                                    this.props.libraryrolechange();
-                                }
-                            }}
-                        >
-                            {" "}
-                            Library: {this.library_count}
-                        </button>
 
-                        <button
-                            id="university"
-                            className="investmentButton"
-                            onMouseEnter={() =>
-                                this.setText(
-                                    "Hint: Invest 15 to change Students to Reciprocators"
-                                )
+                <div className={ this.displaySpotlight() && this.props.level === 6 ? "player-display spotlight" : "investmentSidebar" }>
+                <div className="investmentSidebar">
+                    <div className="influence-title">{this.hintText}</div>
+                    <button
+                        id="library"
+                        className="investmentButton"
+                        onMouseEnter={() =>
+                            this.setText(
+                                "Hint: Invest 15 to change Suspicous to Students"
+                            )
+                        }
+                        onMouseLeave={() => this.setEmpty()}
+                        onClick={() => {
+                            //if the invested amount is less than 14 keep adding to the count
+                            if (
+                                this.library_count < 14 &&
+                                this.props.sidebarState.player.resources > 0
+                            ) {
+                                this.library_count += 1;
+                                this.props.sidebarState.player.resources -= 1;
+                                this.setState({ PlayerDisplay: this });
                             }
-                            onMouseLeave={() => this.setEmpty()}
-                            onClick={() => {
-                                //if the invested amount is less than 14 keep adding to the count
-                                if (
-                                    this.university_count < 14 &&
-                                    this.props.sidebarState.player.resources > 0
-                                ) {
-                                    this.university_count += 1;
-                                    this.props.sidebarState.player.resources -= 1;
-                                    this.setState({ PlayerDisplay: this });
+                            //if the count is equal to 14, add to the count and change the personas
+                            else if (
+                                this.library_count == 14 &&
+                                this.props.sidebarState.player.resources > 0
+                            ) {
+                                this.library_count += 1;
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.libraryrolechange()
+                                //reapply the university changes in case the university was invested first
+                                if(this.university_count == 15)
+                                    this.props.universityrolechange()
+                            }
+                        }}
+                    >
+                        {" "}
+                        Library: {this.library_count}
+                    </button>
+
+                    <button
+                        id="university"
+                        className="investmentButton"
+                        onMouseEnter={() =>
+                            this.setText(
+                                "Hint: Invest 15 to change Students to Reciprocators"
+                            )
+                        }
+                        onMouseLeave={() => this.setEmpty()}
+                        onClick={() => {
+                            //if the invested amount is less than 14 keep adding to the count
+                            if (
+                                this.university_count < 14 &&
+                                this.props.sidebarState.player.resources > 0
+                            ) {
+                                this.university_count += 1;
+                                this.props.sidebarState.player.resources -= 1;
+                                this.setState({ PlayerDisplay: this });
                                 }
 
                                 //if the count is equal to 14, add to the count and change the personas
