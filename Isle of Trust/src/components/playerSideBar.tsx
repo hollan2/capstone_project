@@ -96,6 +96,9 @@ interface PlayerSidebarProps {
     universityrolechange:() => void;
     turnCount: number;
     promiseRelation: any;
+    resetState: () => void;
+    reset: boolean;
+
 }
 
 export class PlayerSidebar extends React.Component<
@@ -113,6 +116,9 @@ export class PlayerSidebar extends React.Component<
                     tallyChoicesNeighbors={this.props.tallyChoicesNeighbors}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    resetState={this.props.resetState}
+                    reset={this.props.reset}
+
                 />
                 <InfluenceMenu
                     round={this.props.round}
@@ -142,6 +148,8 @@ interface PlayerDisplayProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     turnCount: number;
+    resetState: () => void;
+    reset: boolean;
 }
 
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
@@ -150,6 +158,11 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
 
 
+
+    resetInvestments() {
+        this.library_count = 0;
+        this.university_count = 0;
+    }
     //set the text to the hint if the players hover over the invest button
     setText(newText: string){
         this.hintText = <div className="hint-text">{newText}</div>
@@ -162,6 +175,14 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         this.setState({PlayerDisplay: this})       
     }
 
+    //After the component is finished rendering, check if the reset is true, if it is, set it to false since we're done resetting
+    componentDidUpdate(prevProps: Readonly<PlayerDisplayProps>, prevState: Readonly<{}>, snapshot?: any): void {
+        if(this.props.reset)
+        {
+            this.props.resetState();
+        }
+    }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -169,6 +190,11 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             const you = this.props.sidebarState.player as Agent;
             choices = this.props.tallyChoicesNeighbors(this.props.map, you);
             name = you.name;
+        }
+        
+        if(this.props.reset)
+        {
+            this.resetInvestments();
         }
         return (
             <div className={"player-display"}>
@@ -181,6 +207,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    tutorial={false}
                 />
             <div className="investmentSidebar">
                 <div className="influence-title">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as RK from "react-konva";
 import "../css/App.css";
 import Konva from "konva";
@@ -6,7 +6,7 @@ import { TutorialGuide } from "../components/tutorialGuide";
 import { TutorialBoard } from "../components/tutorialBoard";
 import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
 import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
-import { EndOfLevel } from "../components/EndOfLevel";
+import { EndOfLevel, OutOfResources} from "../components/EndOfLevel";
 import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
@@ -190,7 +190,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             switch (props.ideologyColor) {
                 case "9ec4ea":
                     //Dove
-                    player.ideology = new Ideology(19, 19);
+                    player.ideology = new Ideology(12, 12);
                     break;
                 case "df7e68":
                     //Hawk
@@ -221,7 +221,6 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         // Set selected to position 1 so user is first player selected on load in
         let selected = map.getVertices()[position + 1];
-
         let sidebarState = new SidebarState(map, player, selected, position);
 
         let select = (agent: Agent) => {
@@ -264,10 +263,24 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                 tally = new choiceTally();
                 tally.tallyChoices(relation.history);
                 sumChoices.together += tally.together;
+                sumChoices.solo += tally.solo;
                 sumChoices.cheated += tally.cheated;
+                sumChoices.honest += tally.honest;
             });
         }
         return sumChoices;
+    }
+
+    countTotalResources(
+        map : Graph<Agent, Relation>,
+    ): number {
+        const agents = map.getVertices()
+
+        let totalResources = 0;
+        for (let i = 0; i < agents.length; ++i) {
+            totalResources += agents[i].resources
+        }
+        return totalResources;
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -583,17 +596,46 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
     renderEndOfLevel = () => {
+
+
+        const checkResource = this.state.map.getVertices();
+
+        
+        // If user runs out of resources user must restart level
+        if (checkResource[0].resources <= 0 ){
+            return <OutOfResources level={this.props.level}/>
+        }
+                                         
         //Level 0
         if (this.props.level === 0 && this.state.stageCount === 27) {
-            return <EndOfLevel level={this.props.level} />;
+
+                return <EndOfLevel level={this.props.level} 
+                success={true} 
+                mapAgents = {[]}/>;
         }
-        //Levels 1-5
+        //Levels 1-6
         if (
             this.props.level >= 1 &&
-            this.props.level <= 5 &&
+            this.props.level <= 6 &&
             this.state.turnCount === 10
         ) {
-            return <EndOfLevel level={this.props.level} />;
+        // Check to make sure users can pay mortgage
+        let payMortgage = 0;
+        for (let i = 0; i <= checkResource.length-1; i++){
+            if (checkResource[i].resources >= 5){payMortgage++}
+        }
+        // All players can pay mortgage
+        if (payMortgage == checkResource.length){
+            return <EndOfLevel level={this.props.level} 
+            success = {true}
+            mapAgents = {checkResource}/>;
+        }
+        // Not all players can pay 5 ton mortgage
+        else {
+            return <EndOfLevel level={this.props.level} 
+            success = {false}
+            mapAgents = {checkResource}/>;
+        }
         }
         return null;
     };
@@ -614,6 +656,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
                     current={currentMap}
                     stageCount={this.state.stageCount}
                     level={this.props.level}
+                    totalResources={this.countTotalResources(this.state.map)}
                 />
                 <TutorialPlayerSidebar
                     map={this.state.map}

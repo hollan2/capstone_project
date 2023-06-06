@@ -248,7 +248,7 @@ class Footer extends React.Component {
     render() {
         return (
             <footer className="footer fixed-bottom">
-                Copyright 2022 - PSU Capstone Team
+                Copyright 2023 - PSU Capstone Team
             </footer>
         );
     }
@@ -271,7 +271,7 @@ function Splash() {
             <h1>
                 Isle of Trust
                 <br />
-                <span>how to spread an idea</span>
+                <span> How to spread an idea</span>
             </h1>
             <img src="images/splash_screen.png" alt="" />
 
@@ -449,9 +449,11 @@ class PlayerSelection extends React.Component<PlayerSelectionProps, {}> {
                         <button className="start-btn" type="submit">
                             Start
                         </button>
-                        <div className="tutorial-btn">
-                            <TutorialOLD text="Tutorial (Recommended)" />
-                        </div>
+                        <Link className="link" to="/tutorial">
+                            <button className="tutorial-btn">
+                                <TutorialOLD text="Tutorial (Recommended)" />
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

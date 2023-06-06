@@ -44,6 +44,7 @@ import { timingSafeEqual } from "crypto";
 import { allowedNodeEnvironmentFlags } from "process";
 import { YearCounter } from "./yearCounter";
 import { ResourceCounter } from "./resourceCounter";
+import { ResetGame } from "./resetGame"
 /*
 import { timeStamp } from "console";
 */
@@ -59,7 +60,7 @@ const MOOD_IMAGE_SIDE_LENGTH = 511;
 
 const RESOURCE_LOST_PER_TURN = 3;
 const BASE_INFLUENCE_LOST_PER_TURN = 2;
-const START_YEAR = 1951;
+const START_YEAR = 1950;
 
 export const MAP_URL: { [key: string]: string } = {
     Pronged: "url(../Maps/mapPronged.png)",
