@@ -31,10 +31,10 @@ export function TutorialGuide({
         //Tutorial Level 0
         if (
             level === 0 &&
-            stageCount !== 8 &&
-            stageCount !== 12 &&
-            stageCount !== 15 &&
-            stageCount < 21
+            stageCount !== 7 &&
+            stageCount !== 11 &&
+            stageCount !== 14 &&
+            stageCount < 20
         ) {
             return true;
         }
@@ -51,11 +51,14 @@ export function TutorialGuide({
             return true;
         }
         //Tutorial Level 4
-        if (level === 4 && stageCount < 3) {
+        if (
+            (level === 4 && stageCount < 3) ||
+            (level === 4 && stageCount === 11)
+        ) {
             return true;
         }
-        //Tutorial Level 5
         if (level === 5 && stageCount < 4) {
+            //Tutorial Level 5
             return true;
         }
         //Tutorial Level 6

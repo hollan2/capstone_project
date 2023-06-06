@@ -19,3 +19,9 @@ Stage 4 Hint Placeholder
 ~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
 ~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
 ~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.

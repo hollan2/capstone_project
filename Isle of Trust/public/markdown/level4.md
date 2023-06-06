@@ -8,6 +8,6 @@
 ~Stage 8 filler
 ~Stage 9 filler
 ~Stage 10 filler
-~Stage 11 filler
+~If you invest 15 tons (over as many rounds as you need) into the library, you can turn all suspicious personalities (like Pessimo) into students (like Susi)! It looks like somebody already invested the first 12 tons for you so there's only 3 remaining.
 ~Stage 12 filler
 ~Stage 13 filler

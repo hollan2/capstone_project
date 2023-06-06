@@ -109,8 +109,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         //Tutorial Level 0
         if (
             this.props.level === 0 &&
-            this.props.stageCount !== 15 &&
-            this.props.stageCount < 21
+            this.props.stageCount !== 14 &&
+            this.props.stageCount < 20
         ) {
             return true;
         }
@@ -157,7 +157,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 </article>
                 <div
                     className={
-                        this.props.stageCount === 14 && this.props.level === 0
+                        this.props.stageCount === 13 && this.props.level === 0
                             ? "map spotlight"
                             : "map"
                     }
