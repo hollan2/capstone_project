@@ -170,6 +170,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    tutorial={true}
                 />
                 <div className={ this.displaySpotlight() && this.props.level === 6 ? "player-display spotlight" : "investmentSidebar" }>
                     <div className="investmentSidebar">
