@@ -298,8 +298,10 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
-                <YearCounter turnCount={year} />
-                <ResourceCounter totalResources={this.props.totalResources} />
+                <div className="counters">
+                    <YearCounter turnCount={year} />
+                    <ResourceCounter totalResources={this.props.totalResources} />
+                </div>
             </div>
         );
     }

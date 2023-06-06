@@ -583,7 +583,7 @@
     border: 2px solid var(--dark-blue);
     border-radius: 5px;
     background-color: white;
-    min-width: 145px;
+    min-width: 195px;
     justify-content: center;
     align-items: center;
     right: 20%;
@@ -601,9 +601,6 @@
     align-self: center;
     z-index:0;
 }
-
-
-
 
 .reset {
     position: fixed;
