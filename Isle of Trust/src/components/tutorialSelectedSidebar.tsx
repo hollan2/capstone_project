@@ -466,7 +466,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                                 <tr>
                                 <th>Promise {'->'}</th>
                                 <th>Action {'->'}</th>
-                                <th>Round</th>
+                                <th>Year</th>
                                 <th>{'<-'} Promise</th>
                                 <th>{'<-'} Action</th>
                                 </tr>
@@ -480,7 +480,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps>
                                         <td>
                                             <span style={{backgroundColor: this.getChoiceDotColor(turn.choice)}} className="dot"></span>
                                         </td>
-                                        <td>{i+1}</td>
+                                        <td>{i+1950}</td>
                                         <td>
                                             <span style={{backgroundColor: this.getComDotColor(neighborToSelected[i].commitment)}} className="dot"></span>
                                         </td>
