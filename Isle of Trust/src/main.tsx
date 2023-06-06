@@ -313,7 +313,7 @@ class Start extends React.Component<StartProps, StartState> {
             selectedName: "",
             selectedHat: "",
             selectedFace: "",
-            selectedIdeology: "",
+            selectedIdeology: "9ec4ea",
             selectedPoints: "easy",
             selectedMap: "Choke",
         };
