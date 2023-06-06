@@ -192,16 +192,14 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
-    countTotalResources(
-        map : Graph<Agent, Relation>,
-    ): number {
+    countTotalResources(map : Graph<Agent, Relation>): number {
         const agents = map.getVertices()
 
-        let totalResources = 0;
+        let totalResources = 0
         for (let i = 0; i < agents.length; ++i) {
             totalResources += agents[i].resources
         }
-        return totalResources;
+        return totalResources
     }
 
     //Should be removed but too many lines of code rely on this to do it yet
@@ -244,7 +242,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //changes all suspicious agents into students
-    libraryroleChange(){
+    libraryRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Suspicious)
                 v1.ideology.setStrategy(Strategy.Student)
@@ -255,7 +253,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //changes all student agents in reciprocators
-    universityroleChange(){
+    universityRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Student)
                 v1.ideology.setStrategy(Strategy.Reciprocator)
@@ -265,11 +263,30 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         this.setState({})       
     }
 
+    getDonations(donationsMax : number): number {
+        let agents = this.state.map.getVertices()
+        let donations = 0
+
+        for (let i = 0; donations < donationsMax && i < agents.length; ++i) {
+            while (agents[i].canDonate() && donations < donationsMax) {
+                // 2 should only be donated if we are 2 or more away from completing that donation goal
+                if ((donationsMax - donations) >= 2) {
+                    donations += agents[i].donate(2)
+                }
+                else {
+                    donations += agents[i].donate(1)
+                }
+            }
+        }
+        return donations
+    }
+
     drainResources(vertices: Agent[]) {
         vertices.forEach((v1) => {
             v1.resources -= RESOURCE_LOST_PER_TURN;
         });
     }
+
     //generates the promises for each agent and returns them as a part of an array that indludes the agents and relation
     generatePromiseRound(edges: [Agent, Agent, Relation][]) {
         var Promise_relation: [
@@ -365,6 +382,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         v1Strat,
                         e2.history
                     );
+
                 }
 
                 //checks if agent2 is the player agent if so we get the player selected choice
@@ -492,8 +510,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         <PlayerSidebar
                             map={this.state.map}
                             round={this.tempTurn.bind(this)}
-                            libraryrolechange={this.libraryroleChange.bind(this)}
-                            universityrolechange={this.universityroleChange.bind(this)}
+                            libraryRoleChange={this.libraryRoleChange.bind(this)}
+                            universityRoleChange={this.universityRoleChange.bind(this)}
+                            getDonations={this.getDonations.bind(this)}
                             sidebarState={this.state.sidebarState}
                             tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                             countTotalInfluence={this.countTotalInfluence}
@@ -536,8 +555,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                     <PlayerSidebar
                         map={this.state.map}
                         round={this.tempTurn.bind(this)}
-                        libraryrolechange={this.libraryroleChange.bind(this)}
-                        universityrolechange={this.universityroleChange.bind(this)}
+                        libraryRoleChange={this.libraryRoleChange.bind(this)}
+                        universityRoleChange={this.universityRoleChange.bind(this)}
+                        getDonations={this.getDonations.bind(this)}
                         sidebarState={this.state.sidebarState}
                         tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
                         countTotalInfluence={this.countTotalInfluence}
@@ -663,6 +683,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 </div>
                 <div className="stats text-nowrap">
                     <p className="end">{agentPoints} tons of cherries</p>
+                    { this.props.tutorial ? null : <p className="end">{this.props.agent.donated} tons donated</p> }
                     <p className="end">
                         Together {this.props.agentChoices.together} /{" "}
                         {numOfActions}

@@ -177,6 +177,7 @@ export class Agent extends AttributeContainer {
     public coords: [number, number];
     public name: string;
     public resources: number;
+    public donated: number;
     public ideology: Ideology;
     public initialStrategy: Strategy;
     public personality: Personality;
@@ -193,6 +194,7 @@ export class Agent extends AttributeContainer {
         ideology: Ideology,
         personality: Personality,
         resources: number,
+        donated: number,
         mood: number,
         id: number,
         coords: [number, number],
@@ -218,6 +220,7 @@ export class Agent extends AttributeContainer {
             this.hat = Hat[defHat as keyof typeof Hat];
             this.name = defaultPawns[this.spot].defName;
             this.resources = defaultPawns[this.spot].resources;
+            this.donated = 0;
         }
         // Create Random players
         else {
@@ -235,6 +238,7 @@ export class Agent extends AttributeContainer {
             this.face = Face[randface as keyof typeof Face];
             this.hat = Hat[randhat as keyof typeof Hat];
             this.resources = resources;
+            this.donated = donated;
         }
     }
 
@@ -320,6 +324,20 @@ export class Agent extends AttributeContainer {
             this.resources += 3;
         else if (myChoice === Choice.Compete && theirChoice === Choice.Compete)
             this.resources -= 1;
+    }
+
+    canDonate(): boolean {
+        // If an agent has at least 20 resources and has an ideology that can donate return true
+        if (this.resources >= 20 && this.ideology.canDonate()) {
+            return true
+        }
+        return false
+    }
+
+    donate(donate: number): number {
+        this.resources -= donate
+        this.donated += donate
+        return donate
     }
 
     /*This function doesn't serve a purpose anymore, can be removed
@@ -434,6 +452,14 @@ export class Ideology extends AttributeContainer {
 
     setStrategy(newRole: Strategy) {
         this.role = newRole;
+    }
+
+    canDonate(): boolean {
+        // Returns true for reciprocators and teachers since they can to donate. All others can't
+        if (this.role == 3 || this.role == 4) {
+            return true
+        }
+        return false
     }
 }
 
