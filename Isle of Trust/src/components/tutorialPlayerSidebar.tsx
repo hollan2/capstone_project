@@ -105,7 +105,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             return true;
         } else if (this.props.level === 6 && this.props.stageCount === 2) {
             return true;
-        } else if (this.props.level === 4 && this.props.stageCount === 11) {
+        } else if (this.props.level === 4 && this.props.stageCount === 12) {
             return true;
         }
         return false;
@@ -336,7 +336,12 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
             return true;
         }
         //Tutorial Level 4
-        if (this.props.level === 4 && this.props.stageCount < 3) {
+        if (
+            (this.props.level === 4 && this.props.stageCount) < 3 ||
+            (this.props.level === 4 &&
+                this.props.stageCount >= 11 &&
+                this.props.stageCount <= 12)
+        ) {
             return true;
         }
         //Tutorial Level 5
