@@ -98,7 +98,6 @@ interface PlayerSidebarProps {
     promiseRelation: any;
     resetState: () => void;
     reset: boolean;
-
 }
 
 export class PlayerSidebar extends React.Component<
@@ -131,6 +130,7 @@ export class PlayerSidebar extends React.Component<
                     selected={this.props.sidebarState.player}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
+                    tutorial={false}
                 />
             </div>
         );
@@ -548,6 +548,7 @@ class InfluenceEntry extends React.Component<
                                     canvasWidth={this.canvasWidth}
                                     agent={this.props.agent}
                                     turnCount={this.props.turnCount}
+                                    tutorial={false}
                                 />
                             </RK.Layer>
                         </RK.Stage>
@@ -610,6 +611,7 @@ class InfluenceEntry extends React.Component<
                                         canvasWidth={this.canvasWidth}
                                         agent={this.props.agent}
                                         turnCount={this.props.turnCount}
+                                        tutorial={false}
                                     />
                                 </RK.Layer>
                             </RK.Stage>

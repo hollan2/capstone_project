@@ -343,9 +343,9 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
     universityroleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if (v1.ideology.toStrategy() == Strategy.Student)
-                v1.ideology.setStrategy(Strategy.Reciprocators);
+                v1.ideology.setStrategy(Strategy.Reciprocator);
             if (v2.ideology.toStrategy() == Strategy.Student)
-                v2.ideology.setStrategy(Strategy.Reciprocators);
+                v2.ideology.setStrategy(Strategy.Reciprocator);
         });
         this.setState({});
     }

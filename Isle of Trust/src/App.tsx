@@ -258,9 +258,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     universityroleChange(){
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Student)
-                v1.ideology.setStrategy(Strategy.Reciprocators)
+                v1.ideology.setStrategy(Strategy.Reciprocator)
             if(v2.ideology.toStrategy() == Strategy.Student)
-                v2.ideology.setStrategy(Strategy.Reciprocators)
+                v2.ideology.setStrategy(Strategy.Reciprocator)
         });
         this.setState({})       
     }
@@ -651,6 +651,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                                 canvasWidth={this.currentCanvasWidth}
                                 agent={this.props.agent}
                                 turnCount={this.props.turnCount}
+                                tutorial={this.props.tutorial}
                             />
                         </RK.Layer>
                     </RK.Stage>
@@ -717,6 +718,7 @@ interface SidebarAgentImageType {
     canvasWidth: number;
     agent: Agent;
     turnCount: number;
+    tutorial: boolean;
 }
 
 export function SidebarAgentImage(props: SidebarAgentImageType) {
@@ -731,6 +733,7 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
         hat = props.agent.hat;
         // Show personality color if 5 turns have passed or if displaying the user player
         if (
+            props.tutorial ||
             props.turnCount >= 4 ||
             props.agent.ideology.toStrategy() == Strategy.Player
         ) {
@@ -744,7 +747,7 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
                 case Strategy.Random:
                     ideology = { red: 255, green: 218, blue: 92 };
                     break;
-                case Strategy.Reciprocators:
+                case Strategy.Reciprocator:
                     ideology = { red: 180, green: 166, blue: 216 };
                     break;
                 case Strategy.Teacher:
