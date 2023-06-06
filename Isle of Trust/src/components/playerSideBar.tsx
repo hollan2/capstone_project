@@ -458,9 +458,9 @@ class InfluenceEntry extends React.Component<
             case 0:
                 return "solo";
             case 1:
-                return "together";
-            case 2:
                 return "match";
+            case 2:
+                return "together";
         }
     }
 
@@ -472,13 +472,13 @@ class InfluenceEntry extends React.Component<
         if (commitment == playerCommitment) return "honest";
         //if both agents are reciprocate, then their commmitments are cooperate
         else if (
-            playerCommitment == "reciprocate" &&
-            neighborCommitment == "reciprocate" &&
-            commitment == "cooperate"
+            playerCommitment == "match" &&
+            neighborCommitment == "match" &&
+            commitment == "together"
         )
             return "honest";
         else if (
-            playerCommitment == "reciprocate" &&
+            playerCommitment == "match" &&
             commitment == neighborCommitment
         )
             return "honest";
@@ -601,7 +601,7 @@ class InfluenceEntry extends React.Component<
                                     <div>Together</div>
                                     <div>
                                         {this.isTruth(
-                                            "cooperate",
+                                            "together",
                                             playerCommitment,
                                             aiCommitment
                                         )}
@@ -621,7 +621,7 @@ class InfluenceEntry extends React.Component<
                                     <div>Solo</div>
                                     <div>
                                         {this.isTruth(
-                                            "compete",
+                                            "solo",
                                             playerCommitment,
                                             aiCommitment
                                         )}
