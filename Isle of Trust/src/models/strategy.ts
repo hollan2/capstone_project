@@ -13,7 +13,7 @@ export enum Strategy {
     //compeletly random on what it wants to do
     Random,
     //Will match you
-    Reciprocators,
+    Reciprocator,
     //Wants others to do cooperate
     Teacher,
     //player
@@ -29,7 +29,7 @@ export const taglineFromStrategy = (strat: Strategy): string => {
             return "I need guidance";
         case Strategy.Random:
             return "Let chaos reign!";
-        case Strategy.Reciprocators:
+        case Strategy.Reciprocator:
             return "I'll match what you promise.";
         case Strategy.Teacher:
             return "I am here to guide others.";
@@ -67,7 +67,7 @@ export const generateChoice = (
             return Student(v1Promise, v2Promise, theirHistory)
         case Strategy.Random:
             return Random(v1Promise, v2Promise)
-        case Strategy.Reciprocators:
+        case Strategy.Reciprocator:
             return getTruth(v1Promise, v2Promise);
         case Strategy.Teacher:
             return getTruth(v1Promise, v2Promise);
@@ -117,7 +117,7 @@ export const generateCommitment = (
                 else
                     return Commitment.Cooperate
             }
-        case Strategy.Reciprocators:
+        case Strategy.Reciprocator:
             return Commitment.Reciprocate;
         case Strategy.Teacher:
             {

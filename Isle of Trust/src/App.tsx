@@ -260,9 +260,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     universityroleChange(){
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
             if(v1.ideology.toStrategy() == Strategy.Student)
-                v1.ideology.setStrategy(Strategy.Reciprocators)
+                v1.ideology.setStrategy(Strategy.Reciprocator)
             if(v2.ideology.toStrategy() == Strategy.Student)
-                v2.ideology.setStrategy(Strategy.Reciprocators)
+                v2.ideology.setStrategy(Strategy.Reciprocator)
         });
         this.setState({})       
     }
@@ -742,7 +742,7 @@ export function SidebarAgentImage(props: SidebarAgentImageType) {
                 case Strategy.Random:
                     ideology = { red: 255, green: 218, blue: 92 };
                     break;
-                case Strategy.Reciprocators:
+                case Strategy.Reciprocator:
                     ideology = { red: 180, green: 166, blue: 216 };
                     break;
                 case Strategy.Teacher:
