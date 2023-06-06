@@ -207,6 +207,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     agentChoices={choices}
                     countTotalInfluence={this.props.countTotalInfluence}
                     turnCount={this.props.turnCount}
+                    tutorial={false}
                 />
             <div className="investmentSidebar">
                 <div className="influence-title">

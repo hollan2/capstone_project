@@ -570,6 +570,7 @@ interface DisplayProps {
     agentChoices: choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     turnCount: number;
+    tutorial: boolean;
 }
 
 export class Display extends React.Component<DisplayProps, DisplayState> {
