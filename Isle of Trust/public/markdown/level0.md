@@ -1,7 +1,5 @@
-Welcome to Isle of Trust! Let's go over some fundamental game mechanics.
-~The goal of the game is to.....
-~**Explain the Prisoner's dilemma - what cooperate, reciprocate, compete means**
-~This is you. Here you can find information about yourself such as how many resourses you have, how many times you've cooperated, how many times you've cheated, etc.
+~Welcome to Isle of Trust! This is a game about competition and cooperation and about making or breaking promises. Let's go over some fundamental game mechanics.
+~This is you. Here you can find information about yourself such as how many resources you have, how many times you were honest, how many times you've cheated, etc.
 ~This is the action panel, where all game decisions are made.
 ~Note the "Promise Phase" label. Each turn has 3 phases: Promise, Action, and Resource Allocation.
 ~The Promise phase is exactly what it sounds like, you make a promise to your neighbors that you will either cooperate (together), reciprocate (match), or compete(solo).
@@ -17,5 +15,5 @@ Welcome to Isle of Trust! Let's go over some fundamental game mechanics.
 ~This is the selected player sidebar.
 ~You can see how many resources they have, how many times they've cooperated, and so on.
 ~If you scroll down to the bottom, you can view a log of all the moves made by that player.
-~Lastly, if you get stuck and would like a quck summary of how the game works, you can find it in the NavBar under "How To Play".
+~Lastly, if you get stuck and would like a quick summary of how the game works, you can find it in the NavBar under "How To Play".
 ~Congratulations on finishing Level 0! Play a few rounds to get used to the buttons.
