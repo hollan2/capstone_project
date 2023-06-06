@@ -254,6 +254,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         if(this.libraryCount < 14 && this.props.sidebarState.player.resources > 0){
                             this.libraryCount += 1
                             this.props.sidebarState.player.resources -= 1
+                            this.props.sidebarState.player.donated +=1
                             this.setState({PlayerDisplay: this})
                         }
                         //if the count is equal to 14, add to the count and change the personas
@@ -261,6 +262,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         {
                             this.libraryCount += 1
                             this.props.sidebarState.player.resources -= 1
+                            this.props.sidebarState.player.donated +=1
                             this.props.libraryRoleChange()
                             //reapply the university changes in case the university was invested first
                             if(this.universityCount == 15)
@@ -282,6 +284,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         if(this.universityCount < 14 && this.props.sidebarState.player.resources > 0){
                             this.universityCount += 1
                             this.props.sidebarState.player.resources -= 1
+                            this.props.sidebarState.player.donated +=1
                             this.setState({PlayerDisplay: this})
                         }
 
@@ -290,6 +293,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                         {
                             this.universityCount += 1
                             this.props.sidebarState.player.resources -= 1
+                            this.props.sidebarState.player.donated +=1
                             this.props.universityRoleChange()
                         }
                     }}

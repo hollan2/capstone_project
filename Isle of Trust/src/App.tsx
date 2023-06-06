@@ -682,6 +682,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 </div>
                 <div className="stats text-nowrap">
                     <p className="end">{agentPoints} tons of cherries</p>
+                    { this.props.tutorial ? null : <p className="end">{this.props.agent.donated} tons donated</p> }
                     <p className="end">
                         Together {this.props.agentChoices.together} /{" "}
                         {numOfActions}

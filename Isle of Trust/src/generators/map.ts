@@ -110,7 +110,8 @@ export class Grid extends Map {
                 const v = genA.genRandomAgent(
                     vID,
                     [point.x, point.y],
-                    this.startingResources
+                    this.startingResources,
+                    0
                 );
                 ++vID;
                 this.graph.insertVertex(v);
@@ -161,6 +162,7 @@ export class GridDefault extends Map {
                     vID,
                     [point.x, point.y],
                     this.startingResources,
+                    0,
                     spot,
                     this.level
                 );

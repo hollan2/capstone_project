@@ -177,6 +177,7 @@ export class Agent extends AttributeContainer {
     public coords: [number, number];
     public name: string;
     public resources: number;
+    public donated: number;
     public ideology: Ideology;
     public initialStrategy: Strategy;
     public personality: Personality;
@@ -193,6 +194,7 @@ export class Agent extends AttributeContainer {
         ideology: Ideology,
         personality: Personality,
         resources: number,
+        donated: number,
         mood: number,
         id: number,
         coords: [number, number],
@@ -218,6 +220,7 @@ export class Agent extends AttributeContainer {
             this.hat = Hat[defHat as keyof typeof Hat];
             this.name = defaultPawns[this.spot].defName;
             this.resources = defaultPawns[this.spot].resources;
+            this.donated = 0;
         }
         // Create Random players
         else {
@@ -235,6 +238,7 @@ export class Agent extends AttributeContainer {
             this.face = Face[randface as keyof typeof Face];
             this.hat = Hat[randhat as keyof typeof Hat];
             this.resources = resources;
+            this.donated = donated;
         }
     }
 
@@ -332,6 +336,7 @@ export class Agent extends AttributeContainer {
 
     donate(donate: number): number {
         this.resources -= donate
+        this.donated += donate
         return donate
     }
 
