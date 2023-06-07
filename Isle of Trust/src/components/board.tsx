@@ -391,7 +391,7 @@ function AgentImage(props: AgentImageProps) {
             case Strategy.Random:
                 ideology = { red: 255, green: 218, blue: 92 };
                 break;
-            case Strategy.Reciprocators:
+            case Strategy.Reciprocator:
                 ideology = { red: 180, green: 166, blue: 216 };
                 break;
             case Strategy.Teacher:

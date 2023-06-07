@@ -36,6 +36,7 @@ export const genAgent = function (
     newPersonality: [number, number],
     newIdeology: [number, number],
     newResource: number,
+    newDonated: number,
     newMood: number,
     newCoord: [number, number],
     level: number
@@ -48,7 +49,8 @@ const randomAttribute = function (): number {
 export const genRandomAgent = function (
     vID: number,
     coords: [number, number],
-    resources: number = 10
+    resources: number = 10,
+    donated: number
 ): Agent {
     const level = -1;
     const spot = -1;
@@ -57,6 +59,7 @@ export const genRandomAgent = function (
         new Ideology(randomAttribute(), randomAttribute()),
         new Personality(randomAttribute(), randomAttribute()),
         resources,
+        donated,
         10,
         vID,
         coords,
@@ -80,6 +83,7 @@ export const genDefaultAgent = function (
     vID: number,
     coords: [number, number],
     resources: number = 10,
+    donated: number,
     spot: number,
     level: number
 ): Agent {
@@ -92,6 +96,7 @@ export const genDefaultAgent = function (
         new Ideology(chart[spot], chart[spot]),
         new Personality(randomAttribute(), randomAttribute()),
         resources,
+        donated,
         10,
         vID,
         coords,
