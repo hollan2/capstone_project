@@ -1,10 +1,9 @@
-~A new person, Susi has come onto the island! Susi only has 2 tons of cherries, and you two also share a cherry orchard, separate from that of Rec.
-~You attempt to offer a similar deal you had with Rec to Susi, but Susi refuses, saying they “don’t trust you.”
-~Instead, you offer to let Susi win for five years, in which case she says “we’ll see.”
-~Susi here will learn to trust you if you cooperate with them for the specified three years. Once that is done, Susi will be more open to other offers!
-~To beat this level: Make sure that the three of you don’t run out of resources in 10 years. Once those 10 years have passed, each person needs to pay 5 tons of cherries as mortgage.
-~Note that if you have more than others, feel free to help them to keep the group sustainable!
-
+~Welcome to your very first isle! Here, you’re with Rec, where the two of you share a cherry orchard.
+~Rec is a person who believes in the idea of reciprocity. In other words, Rec will treat you the way you treat them.
+~It is 1950, and both of you have 5 tons of cherries. If you cooperate, both of you will obtain two tons of cherries for the year. If you cheat, you will get three tons, and they will lose two. But remember, Rec believes in reciprocity.
+~At the end of 1960 (10 turns), you are expected to pay 5 tons of cherries for the mortgage.
+~To beat this level: use what you learned about reciprocity, cheating, and cooperation to never go below 1 ton of cherries in your storage and have enough to pay for the mortgage.
+~Stage 6 filler
 ~Stage 7 filler
 ~Stage 8 filler
 ~Stage 9 filler
@@ -14,4 +13,3 @@
 ~Stage 13 filler
 ~Stage 14 filler
 ~Stage 15 filler
-~Stage 16 filler

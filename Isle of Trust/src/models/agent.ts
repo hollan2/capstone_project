@@ -5,7 +5,7 @@ export const AGENT_RADIUS = 15;
 
 //Set Default Pawn aesthetics based on level
 const getDefaultPawns = (level: number) => {
-    if (level >= 0 && level < 5) {
+    if (level >= 1 && level < 6) {
         return [
             {
                 defName: "Tutor",
@@ -45,7 +45,7 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
-    if (level === 5) {
+    if (level === 6) {
         return [
             {
                 defName: "Tutor",
@@ -73,7 +73,7 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
-    if (level === 6) {
+    if (level === 7) {
         return [
             {
                 defName: "Tutor",
@@ -246,16 +246,13 @@ export class Agent extends AttributeContainer {
     updateIdeology() {}
     */
 
-    setInitialStrategy(strategy: Strategy)
-    {
+    setInitialStrategy(strategy: Strategy) {
         this.initialStrategy = strategy;
     }
     //Reset the resources
-    resetResources(initialResources: number)
-    {
+    resetResources(initialResources: number) {
         this.resources = initialResources;
     }
-
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {
@@ -367,11 +364,9 @@ export class Agent extends AttributeContainer {
         }
     }
 
-
     spendResources(cost: number) {
         this.resources -= cost;
     }
-
 }
 
 //generosity and forgivness still need to be removed
@@ -398,17 +393,17 @@ export class Ideology extends AttributeContainer {
             );
         }
         // Sets Strategy to Player type
-        if ( generosity === 12){
+        if (generosity === 12) {
             this.role = 5;
         }
         // Sets Strategy to Reciprocator type
         else if (generosity === 19) {
             this.role = 3;
-        } 
+        }
         // Sets Strategy to Student type
         else if (generosity === 15) {
             this.role = 1;
-        } 
+        }
         // Sets Strategy to Teacher type
         else if (generosity === 13) {
             this.role = 4;
@@ -417,10 +412,10 @@ export class Ideology extends AttributeContainer {
         else if (generosity === 10) {
             this.role = 2;
         }
-        // Sets Strategy to Supicious type 
+        // Sets Strategy to Supicious type
         else if (generosity === 5) {
             this.role = 0;
-        } 
+        }
         // Randomly selects a Strategy
         else {
             this.role = Math.floor(Math.random() * 6);

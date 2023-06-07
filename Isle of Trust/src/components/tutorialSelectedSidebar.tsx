@@ -49,7 +49,7 @@ export class TutorialSelectedSidebar extends React.Component<
         return (
             <div
                 className={
-                    this.props.level === 0 && this.props.stageCount === 15
+                    this.props.level === 1 && this.props.stageCount === 15
                         ? "sidebar selectedSidebar spotlight"
                         : "sidebar selectedSidebar"
                 }
@@ -117,7 +117,7 @@ class SelectedDisplay extends React.Component<SelectedDisplayProps> {
         return (
             <div
                 className={
-                    this.props.stageCount === 16 && this.props.level === 0
+                    this.props.stageCount === 16 && this.props.level === 1
                         ? "selected-display spotlight"
                         : "selected-display"
                 }
@@ -271,19 +271,19 @@ class History extends React.Component<HistoryProps> {
         }
     };
 
-    //Scrolls to the History panel on the screen. Used for Tutorial level 0.
+    //Scrolls to the History panel on the screen. Used for Tutorial level 1.
     scrollToElement = () => {
         if (this.historyRef.current) this.historyRef.current.scrollIntoView();
     };
 
     render() {
         this.renderNeighbors();
-        if (this.props.stageCount === 17 && this.props.level === 0)
+        if (this.props.stageCount === 17 && this.props.level === 1)
             this.scrollToElement();
         return (
             <div
                 className={
-                    this.props.stageCount === 17 && this.props.level === 0
+                    this.props.stageCount === 17 && this.props.level === 1
                         ? "history-container spotlight"
                         : "history-container"
                 }

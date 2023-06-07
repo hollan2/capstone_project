@@ -1,0 +1,4 @@
+~I think you’re really starting to get the hang of this! In fact, why don’t you take over?
+~Just like with the library, if you invest 15 tons into the university, you can change all students (like Susi) to be like reciprocators (like Rec). Remember that you and teachers also have the power to manually convert nearby members from students into reciprocators!
+~To beat the game: There can be three results. If, by the end of 10 years, you can change everyone to be like Rec, you’ll get a gold medal! If you can change at least Susi to be like Rec, you’ll be rewarded with a silver medal. If you are able to simply survive, with the group as a whole accumulating at least 30 tons, then you’ll get a bronze medal.
+~Good luck! Once that is done, feel free to experiment with the free-play, where you’ll meet many different people with varying personalities just like the ones you’ve seen here.

@@ -100,24 +100,24 @@ interface PlayerDisplayProps {
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
-        //Tutorial Level 0 and 6.
-        if (this.props.level === 0 && this.props.stageCount === 2) {
+        //Tutorial Level 1, 5, and 7.
+        if (this.props.level === 1 && this.props.stageCount === 2) {
             return true;
-        } else if (this.props.level === 6 && this.props.stageCount === 2) {
+        } else if (this.props.level === 7 && this.props.stageCount === 2) {
             return true;
-        } else if (this.props.level === 4 && this.props.stageCount === 12) {
+        } else if (this.props.level === 5 && this.props.stageCount === 12) {
             return true;
         }
         return false;
     }
     //Decides whether or not to apply the highlightText CSS class based on level and stageCount
     displayTextHighlight(): boolean {
-        //Tutorial Level 0.
+        //Tutorial Level 1.
         if (
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 5 &&
                 this.props.stageCount <= 6) ||
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 10 &&
                 this.props.stageCount <= 11)
         ) {
@@ -130,7 +130,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     private university_count = 0;
 
     componentDidUpdate(): void {
-        if (this.props.level === 4 && this.props.stageCount === 10) {
+        if (this.props.level === 5 && this.props.stageCount === 10) {
             this.library_count = 12;
         }
     }
@@ -282,12 +282,12 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
     public spendingMap = new SpendingContainer();
     //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 3 &&
                 this.props.stageCount <= 6) ||
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 9 &&
                 this.props.stageCount <= 10)
         ) {
@@ -298,12 +298,12 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
 
     //Decides wheter or not to apply the highlightText CSS class based on level and stageCount
     displayTextHighlight(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 4 &&
                 this.props.stageCount <= 5) ||
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 9 &&
                 this.props.stageCount <= 10)
         ) {
@@ -314,17 +314,13 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
 
     //Decides wheter or not to disable the InfluenceMenu based on level and stageCount
     disableScreen(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            this.props.level === 0 &&
+            this.props.level === 1 &&
             this.props.stageCount !== 7 &&
             this.props.stageCount !== 11 &&
             this.props.stageCount < 20
         ) {
-            return true;
-        }
-        //Tutorial Level 1
-        if (this.props.level === 1 && this.props.stageCount < 5) {
             return true;
         }
         //Tutorial Level 2
@@ -332,24 +328,28 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
             return true;
         }
         //Tutorial Level 3
-        if (this.props.level === 3 && this.props.stageCount < 4) {
+        if (this.props.level === 3 && this.props.stageCount < 5) {
             return true;
         }
         //Tutorial Level 4
+        if (this.props.level === 4 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 5
         if (
-            (this.props.level === 4 && this.props.stageCount < 3) ||
-            (this.props.level === 4 &&
+            (this.props.level === 5 && this.props.stageCount < 3) ||
+            (this.props.level === 5 &&
                 this.props.stageCount >= 11 &&
                 this.props.stageCount <= 12)
         ) {
             return true;
         }
-        //Tutorial Level 5
-        if (this.props.level === 5 && this.props.stageCount < 4) {
+        //Tutorial Level 6
+        if (this.props.level === 6 && this.props.stageCount < 4) {
             return true;
         }
-        //Tutorial Level 6
-        if (this.props.level === 6 && this.props.stageCount < 5) {
+        //Tutorial Level 7
+        if (this.props.level === 7 && this.props.stageCount < 5) {
             return true;
         }
 

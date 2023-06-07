@@ -67,7 +67,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
         this.select(this.props.selected);
-        if (this.props.level === 0) this.deselectCharacter(false);
+        if (this.props.level === 1) this.deselectCharacter(false);
         else this.deselectCharacter(true);
     }
 
@@ -107,42 +107,42 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
 
     //Decides wheter or not disable the board based on level and stageCount
     disableScreen(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            this.props.level === 0 &&
+            this.props.level === 1 &&
             this.props.stageCount !== 14 &&
             this.props.stageCount < 20
         ) {
             return true;
         }
 
-        //Tutorial Level 1
-        if (this.props.level === 1 && this.props.stageCount < 5) {
-            return true;
-        }
         //Tutorial Level 2
         if (this.props.level === 2 && this.props.stageCount < 5) {
             return true;
         }
         //Tutorial Level 3
-        if (this.props.level === 3 && this.props.stageCount < 4) {
+        if (this.props.level === 3 && this.props.stageCount < 5) {
             return true;
         }
         //Tutorial Level 4
+        if (this.props.level === 4 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 5
         if (
-            (this.props.level === 4 && this.props.stageCount < 3) ||
-            (this.props.level === 4 &&
+            (this.props.level === 5 && this.props.stageCount < 3) ||
+            (this.props.level === 5 &&
                 this.props.stageCount >= 11 &&
                 this.props.stageCount <= 12)
         ) {
             return true;
         }
-        //Tutorial Level 5
-        if (this.props.level === 5 && this.props.stageCount < 4) {
+        //Tutorial Level 6
+        if (this.props.level === 6 && this.props.stageCount < 4) {
             return true;
         }
-        //Tutorial Level 6
-        if (this.props.level === 6 && this.props.stageCount < 5) {
+        //Tutorial Level 7
+        if (this.props.level === 7 && this.props.stageCount < 5) {
             return true;
         }
         return false;
@@ -163,7 +163,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 </article>
                 <div
                     className={
-                        this.props.stageCount === 13 && this.props.level === 0
+                        this.props.stageCount === 13 && this.props.level === 1
                             ? "map spotlight"
                             : "map"
                     }

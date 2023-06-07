@@ -6,7 +6,7 @@ import { TutorialGuide } from "../components/tutorialGuide";
 import { TutorialBoard } from "../components/tutorialBoard";
 import { TutorialPlayerSidebar } from "../components/tutorialPlayerSidebar";
 import { TutorialSelectedSidebar } from "../components/tutorialSelectedSidebar";
-import { EndOfLevel, OutOfResources} from "../components/EndOfLevel";
+import { EndOfLevel, OutOfResources } from "../components/EndOfLevel";
 import { useLocation } from "react-router-dom";
 import useImage from "use-image";
 import * as util from "../utilities";
@@ -124,19 +124,19 @@ export function TutorialDisplay() {
         mapImage: " ",
     };
     function determineMap() {
-        if (userState.level === 0) {
+        if (userState.level === 1) {
             userState.mapImage = "Cruz";
-        } else if (userState.level === 1) {
-            userState.mapImage = "Symmetrical";
         } else if (userState.level === 2) {
-            userState.mapImage = "Magnifying";
+            userState.mapImage = "Symmetrical";
         } else if (userState.level === 3) {
-            userState.mapImage = "Dice";
+            userState.mapImage = "Magnifying";
         } else if (userState.level === 4) {
-            userState.mapImage = "Cloud";
+            userState.mapImage = "Dice";
         } else if (userState.level === 5) {
-            userState.mapImage = "Pencil";
+            userState.mapImage = "Cloud";
         } else if (userState.level === 6) {
+            userState.mapImage = "Pencil";
+        } else if (userState.level === 7) {
             userState.mapImage = "Crown";
         }
     }
@@ -271,14 +271,12 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
-    countTotalResources(
-        map : Graph<Agent, Relation>,
-    ): number {
-        const agents = map.getVertices()
+    countTotalResources(map: Graph<Agent, Relation>): number {
+        const agents = map.getVertices();
 
         let totalResources = 0;
         for (let i = 0; i < agents.length; ++i) {
-            totalResources += agents[i].resources
+            totalResources += agents[i].resources;
         }
         return totalResources;
     }
@@ -596,46 +594,56 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
     //Determines when to render the EndOfLevel component based on the level's stageCount or turnCount
     renderEndOfLevel = () => {
-
-
         const checkResource = this.state.map.getVertices();
 
-        
         // If user runs out of resources user must restart level
-        if (checkResource[0].resources <= 0 ){
-            return <OutOfResources level={this.props.level}/>
+        if (checkResource[0].resources <= 0) {
+            return <OutOfResources level={this.props.level} />;
         }
-                                         
-        //Level 0
-        if (this.props.level === 0 && this.state.stageCount === 27) {
 
-                return <EndOfLevel level={this.props.level} 
-                success={true} 
-                mapAgents = {[]}/>;
+        //Level 1
+        if (this.props.level === 1 && this.state.stageCount === 27) {
+            return (
+                <EndOfLevel
+                    level={this.props.level}
+                    success={true}
+                    mapAgents={[]}
+                />
+            );
         }
-        //Levels 1-6
+        //Levels 2-7
         if (
-            this.props.level >= 1 &&
-            this.props.level <= 6 &&
+            this.props.level >= 2 &&
+            this.props.level <= 7 &&
             this.state.turnCount === 10
         ) {
-        // Check to make sure users can pay mortgage
-        let payMortgage = 0;
-        for (let i = 0; i <= checkResource.length-1; i++){
-            if (checkResource[i].resources >= 5){payMortgage++}
-        }
-        // All players can pay mortgage
-        if (payMortgage == checkResource.length){
-            return <EndOfLevel level={this.props.level} 
-            success = {true}
-            mapAgents = {checkResource}/>;
-        }
-        // Not all players can pay 5 ton mortgage
-        else {
-            return <EndOfLevel level={this.props.level} 
-            success = {false}
-            mapAgents = {checkResource}/>;
-        }
+            // Check to make sure users can pay mortgage
+            let payMortgage = 0;
+            for (let i = 0; i <= checkResource.length - 1; i++) {
+                if (checkResource[i].resources >= 5) {
+                    payMortgage++;
+                }
+            }
+            // All players can pay mortgage
+            if (payMortgage == checkResource.length) {
+                return (
+                    <EndOfLevel
+                        level={this.props.level}
+                        success={true}
+                        mapAgents={checkResource}
+                    />
+                );
+            }
+            // Not all players can pay 5 ton mortgage
+            else {
+                return (
+                    <EndOfLevel
+                        level={this.props.level}
+                        success={false}
+                        mapAgents={checkResource}
+                    />
+                );
+            }
         }
         return null;
     };

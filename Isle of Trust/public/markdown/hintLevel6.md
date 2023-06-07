@@ -1,27 +1,24 @@
-Stage 4 Hint Placeholder
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
-~Goals: Look to make everyone like Rec by investing your tons in the public services! You'll earn medals according to how successful you are.
+Stage 0 Hint Placeholder
+~Stage 1 Hint Placeholder
+~Stage 2 Hint Placeholder
+~Stage 3 Hint Placeholder
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
+~Goals: Like all other levels, make sure everyone stays afloat and is able to pay their 5 tons of cherry mortgage in 10 years. Keep an eye on Susi to make sure Profe is helping her reach her goal.
