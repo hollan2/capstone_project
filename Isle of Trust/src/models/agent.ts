@@ -82,9 +82,9 @@ const getDefaultPawns = (level: number) => {
                 resources: 10,
             },
             {
-                defName: "Profe",
-                defFace: 1,
-                defHat: 5,
+                defName: "Rec",
+                defFace: 2,
+                defHat: 3,
                 resources: 5,
             },
             {
@@ -94,16 +94,16 @@ const getDefaultPawns = (level: number) => {
                 resources: 0,
             },
             {
-                defName: "Susi",
-                defFace: 5,
-                defHat: 1,
-                resources: 2,
+                defName: "Domran",
+                defFace: 6,
+                defHat: 2,
+                resources: 8,
             },
             {
-                defName: "Susi",
-                defFace: 5,
-                defHat: 1,
-                resources: 2,
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 5,
             },
             {
                 defName: "Susi",
@@ -326,15 +326,15 @@ export class Agent extends AttributeContainer {
     canDonate(): boolean {
         // If an agent has at least 20 resources and has an ideology that can donate return true
         if (this.resources >= 20 && this.ideology.canDonate()) {
-            return true
+            return true;
         }
-        return false
+        return false;
     }
 
     donate(donate: number): number {
-        this.resources -= donate
-        this.donated += donate
-        return donate
+        this.resources -= donate;
+        this.donated += donate;
+        return donate;
     }
 
     /*This function doesn't serve a purpose anymore, can be removed
@@ -452,9 +452,9 @@ export class Ideology extends AttributeContainer {
     canDonate(): boolean {
         // Returns true for reciprocators and teachers since they can to donate. All others can't
         if (this.role == 3 || this.role == 4) {
-            return true
+            return true;
         }
-        return false
+        return false;
     }
 }
 
