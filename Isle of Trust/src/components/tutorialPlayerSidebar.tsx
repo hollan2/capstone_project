@@ -76,6 +76,7 @@ export class TutorialPlayerSidebar extends React.Component<
                     selected={this.props.sidebarState.player}
                     map={this.props.map}
                     turnCount={this.props.turnCount}
+                    tutorial={true}
                 />
             </div>
         );
@@ -624,6 +625,7 @@ class InfluenceEntry extends React.Component<
                                     canvasWidth={this.canvasWidth}
                                     agent={this.props.agent}
                                     turnCount={this.props.turnCount}
+                                    tutorial={true}
                                 />
                             </RK.Layer>
                         </RK.Stage>
@@ -704,6 +706,7 @@ class InfluenceEntry extends React.Component<
                                         canvasWidth={this.canvasWidth}
                                         agent={this.props.agent}
                                         turnCount={this.props.turnCount}
+                                        tutorial={true}
                                     />
                                 </RK.Layer>
                             </RK.Stage>
