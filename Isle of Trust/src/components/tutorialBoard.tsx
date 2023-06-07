@@ -67,7 +67,8 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         this.resizeEvent();
         window.addEventListener("resize", this.resizeEvent);
         this.select(this.props.selected);
-        this.deselectCharacter(true);
+        if (this.props.level === 0) this.deselectCharacter(false);
+        else this.deselectCharacter(true);
     }
 
     componentWillUnmount() {
@@ -129,7 +130,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
         }
         //Tutorial Level 4
         if (
-            (this.props.level === 4 && this.props.stageCount) < 3 ||
+            (this.props.level === 4 && this.props.stageCount < 3) ||
             (this.props.level === 4 &&
                 this.props.stageCount >= 11 &&
                 this.props.stageCount <= 12)

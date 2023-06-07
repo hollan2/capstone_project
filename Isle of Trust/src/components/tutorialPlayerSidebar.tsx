@@ -337,7 +337,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         }
         //Tutorial Level 4
         if (
-            (this.props.level === 4 && this.props.stageCount) < 3 ||
+            (this.props.level === 4 && this.props.stageCount < 3) ||
             (this.props.level === 4 &&
                 this.props.stageCount >= 11 &&
                 this.props.stageCount <= 12)
