@@ -333,24 +333,33 @@ class HistoryNeighbors extends React.Component<
     render() {
         return (
             <div className="history-display">
-                    <RK.Stage
-                        ref={this.stageRef}
-                        width={this.canvasWidth}
-                        height={this.canvasHeight}
-                    >
-                        <RK.Layer>
-                            <SidebarAgentImage
-                                canvasWidth={this.canvasWidth}
-                                agent={this.props.neighbor}
-                                turnCount={this.props.turnCount}
-                                tutorial={true}
-                            />
-                        </RK.Layer>
-                    </RK.Stage>
-                    <div className="history-view">
-                        <button onClick={this.changeState}>View</button>
-                        {this.state.show && (<HistoryPopUp selected={this.props.selected} neighbor={this.props.neighbor} history={this.props.relation.history} changeState={this.changeState} turnCount={this.props.turnCount} map={this.props.map}/>)}
-                    </div>
+                <RK.Stage
+                    ref={this.stageRef}
+                    width={this.canvasWidth}
+                    height={this.canvasHeight}
+                >
+                    <RK.Layer>
+                        <SidebarAgentImage
+                            canvasWidth={this.canvasWidth}
+                            agent={this.props.neighbor}
+                            turnCount={this.props.turnCount}
+                            tutorial={true}
+                        />
+                    </RK.Layer>
+                </RK.Stage>
+                <div className="history-view">
+                    <button onClick={this.changeState}>View</button>
+                    {this.state.show && (
+                        <HistoryPopUp
+                            selected={this.props.selected}
+                            neighbor={this.props.neighbor}
+                            history={this.props.relation.history}
+                            changeState={this.changeState}
+                            turnCount={this.props.turnCount}
+                            map={this.props.map}
+                        />
+                    )}
+                </div>
             </div>
         );
     }
@@ -413,49 +422,27 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps> {
                         <button onClick={this.handleCloseClick}>X</button>
                     </div>
                     <div className="history-header">
-                        <div className="selected-agent">        
-                                <RK.Stage
-                                    ref={this.stageRef}
-                                    width={this.canvasWidth}
-                                    height={this.canvasHeight}
-                                >
-                                    <RK.Layer>
-                                        <SidebarAgentImage
-                                            canvasWidth={this.canvasWidth}
-                                            agent={this.props.selected}
-                                            turnCount={this.props.turnCount}
-                                            tutorial={true}
-                                        />
-                                    
-                                    </RK.Layer>
-                                </RK.Stage>
-                                <h5>{this.props.selected.name}</h5>
-                            </div>
-                            <div>
-                                <h1>History:</h1>
-                                <div className="arrow">
-                                    <h4>{'<' + '—'.repeat(4) + '>'}</h4>
-                                </div>
-                            </div>
-                            <div className="neighbor-agent">
-    
-                                <RK.Stage
-                                    ref={this.stageRef}
-                                    width={this.canvasWidth}
-                                    height={this.canvasHeight}
-                                >
-                                    <RK.Layer>
-                                        <SidebarAgentImage
-                                            canvasWidth={this.canvasWidth}
-                                            agent={this.props.neighbor}
-                                            turnCount={this.props.turnCount}
-                                            tutorial={true}
-                                        />
-                                    
-                                    </RK.Layer>
-                                    
-                                </RK.Stage>
-                                <h5>{this.props.neighbor.name}</h5>
+                        <div className="selected-agent">
+                            <RK.Stage
+                                ref={this.stageRef}
+                                width={this.canvasWidth}
+                                height={this.canvasHeight}
+                            >
+                                <RK.Layer>
+                                    <SidebarAgentImage
+                                        canvasWidth={this.canvasWidth}
+                                        agent={this.props.selected}
+                                        turnCount={this.props.turnCount}
+                                        tutorial={true}
+                                    />
+                                </RK.Layer>
+                            </RK.Stage>
+                            <h5>{this.props.selected.name}</h5>
+                        </div>
+                        <div>
+                            <h1>History:</h1>
+                            <div className="arrow">
+                                <h4>{"<" + "—".repeat(4) + ">"}</h4>
                             </div>
                         </div>
                         <div className="neighbor-agent">
@@ -469,6 +456,7 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps> {
                                         canvasWidth={this.canvasWidth}
                                         agent={this.props.neighbor}
                                         turnCount={this.props.turnCount}
+                                        tutorial={true}
                                     />
                                 </RK.Layer>
                             </RK.Stage>
@@ -479,31 +467,69 @@ class HistoryPopUp extends React.Component<HistoryPopUpProps> {
                         <table className="history-table">
                             <thead>
                                 <tr>
-                                <th>Promise {'->'}</th>
-                                <th>Action {'->'}</th>
-                                <th>Year</th>
-                                <th>{'<-'} Promise</th>
-                                <th>{'<-'} Action</th>
+                                    <th>Promise {"->"}</th>
+                                    <th>Action {"->"}</th>
+                                    <th>Year</th>
+                                    <th>{"<-"} Promise</th>
+                                    <th>{"<-"} Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.History.actions.map((turn, i) => (
-                                    <tr key={i}>
-                                        <td>
-                                            <span style={{backgroundColor: this.getComDotColor(turn.commitment)}} className="dot"></span>
-                                        </td>
-                                        <td>
-                                            <span style={{backgroundColor: this.getChoiceDotColor(turn.choice)}} className="dot"></span>
-                                        </td>
-                                        <td>{i+1950}</td>
-                                        <td>
-                                            <span style={{backgroundColor: this.getComDotColor(neighborToSelected[i].commitment)}} className="dot"></span>
-                                        </td>
-                                        <td>
-                                            <span style={{backgroundColor: this.getChoiceDotColor(neighborToSelected[i].choice)}} className="dot"></span>
-                                        </td>
-                                    </tr>
-                                )).reverse()}
+                                {this.History.actions
+                                    .map((turn, i) => (
+                                        <tr key={i}>
+                                            <td>
+                                                <span
+                                                    style={{
+                                                        backgroundColor:
+                                                            this.getComDotColor(
+                                                                turn.commitment
+                                                            ),
+                                                    }}
+                                                    className="dot"
+                                                ></span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    style={{
+                                                        backgroundColor:
+                                                            this.getChoiceDotColor(
+                                                                turn.choice
+                                                            ),
+                                                    }}
+                                                    className="dot"
+                                                ></span>
+                                            </td>
+                                            <td>{i + 1950}</td>
+                                            <td>
+                                                <span
+                                                    style={{
+                                                        backgroundColor:
+                                                            this.getComDotColor(
+                                                                neighborToSelected[
+                                                                    i
+                                                                ].commitment
+                                                            ),
+                                                    }}
+                                                    className="dot"
+                                                ></span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    style={{
+                                                        backgroundColor:
+                                                            this.getChoiceDotColor(
+                                                                neighborToSelected[
+                                                                    i
+                                                                ].choice
+                                                            ),
+                                                    }}
+                                                    className="dot"
+                                                ></span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                    .reverse()}
                             </tbody>
                         </table>
                     </div>
