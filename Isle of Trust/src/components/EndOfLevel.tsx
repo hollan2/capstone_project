@@ -12,7 +12,7 @@ interface EndOfLevelProps {
 }
 export function EndOfLevel({ level, success, mapAgents }: EndOfLevelProps) {
     const width = 500;
-    const height = 500;
+    const height = 700;
 
     const [mounted, setMounted] = useState(false);
 
@@ -48,16 +48,42 @@ export function EndOfLevel({ level, success, mapAgents }: EndOfLevelProps) {
                                     tons of cherries
                                 </div>
                             ))}
-                            <Link
-                                reloadDocument
-                                className="link"
-                                to={"/level" + (level + 1)}
-                            >
-                                <button onClick={updateLevel}>
-                                    {" "}
-                                    Next Level
-                                </button>
-                            </Link>
+                            {level !== 7 ? (
+                                <Link
+                                    reloadDocument
+                                    className="link"
+                                    to={"/level" + (level + 1)}
+                                >
+                                    <button onClick={updateLevel}>
+                                        {" "}
+                                        Next Level
+                                    </button>
+                                </Link>
+                            ) : (
+                                <>
+                                    <p>
+                                        That was fun! In the standard game,
+                                        everyone is grey to start out with so
+                                        you'll have to learn your neighbors
+                                        through their actions. Are you up for
+                                        the challenge?
+                                    </p>
+                                    <Link
+                                        reloadDocument
+                                        className="link"
+                                        to={"/start"}
+                                    >
+                                        <button className="m-2"> Yes</button>
+                                    </Link>
+                                    <Link
+                                        reloadDocument
+                                        className="link"
+                                        to={"/"}
+                                    >
+                                        <button> No</button>
+                                    </Link>
+                                </>
+                            )}
                             <Confetti width={width} height={height} />
                         </div>
                     ) : (
