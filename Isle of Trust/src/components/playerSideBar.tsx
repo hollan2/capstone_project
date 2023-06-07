@@ -518,11 +518,11 @@ class InfluenceEntry extends React.Component<
         const commitment = promise?.promise;
         switch (commitment) {
             case 0:
-                return "compete";
+                return "solo";
             case 1:
-                return "cooperate";
+                return "match";
             case 2:
-                return "reciprocate";
+                return "together";
         }
     }
 
@@ -534,13 +534,13 @@ class InfluenceEntry extends React.Component<
         if (commitment == playerCommitment) return "honest";
         //if both agents are reciprocate, then their commmitments are cooperate
         else if (
-            playerCommitment == "reciprocate" &&
-            neighborCommitment == "reciprocate" &&
-            commitment == "cooperate"
+            playerCommitment == "match" &&
+            neighborCommitment == "match" &&
+            commitment == "together"
         )
             return "honest";
         else if (
-            playerCommitment == "reciprocate" &&
+            playerCommitment == "match" &&
             commitment == neighborCommitment
         )
             return "honest";
@@ -589,7 +589,6 @@ class InfluenceEntry extends React.Component<
                         </RK.Stage>
                     </div>
                     <div className="sidebar-agent-info">
-                        
                         <button
                             className={`phase-buttons ${buttonClicked === "cooperate" ? "selected-buttons" : ""}`}
                             id="cooperate"
@@ -633,7 +632,7 @@ class InfluenceEntry extends React.Component<
         else {
             return (
                 <div className="choices-container">
-                    <div className="neighbor-promise">{agent.name + ' promised to ' + aiCommitment}</div>
+                    <div className="neighbor-promise">{agent.name + ' promised ' + aiCommitment}</div>
                     <div className="influence-entry">
                         <div className="influence-agent">
                             <RK.Stage
@@ -666,7 +665,7 @@ class InfluenceEntry extends React.Component<
                                     <div>Together</div>
                                     <div>
                                         {this.isTruth(
-                                            "cooperate",
+                                            "together",
                                             playerCommitment,
                                             aiCommitment
                                         )}
@@ -686,7 +685,7 @@ class InfluenceEntry extends React.Component<
                                     <div>Solo</div>
                                     <div>
                                         {this.isTruth(
-                                            "compete",
+                                            "solo",
                                             playerCommitment,
                                             aiCommitment
                                         )}
