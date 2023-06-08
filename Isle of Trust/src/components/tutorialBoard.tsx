@@ -157,7 +157,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1 id="tutorialHeader">
+                    <h1>
                         Tutorial Level {this.props.level}
                     </h1>
                 </article>
@@ -304,8 +304,10 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                         </RK.Layer>
                     </RK.Stage>
                 </div>
-                <YearCounter turnCount={year} />
-                <ResourceCounter totalResources={this.props.totalResources} />
+                <div className="counters">
+                    <YearCounter turnCount={year} />
+                    <ResourceCounter totalResources={this.props.totalResources} />
+                </div>
             </div>
         );
     }
