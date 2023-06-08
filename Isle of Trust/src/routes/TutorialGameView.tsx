@@ -229,7 +229,7 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             sidebarState.selectedToPlayer = map.getEdge(agent, player)!;
             sidebarState.influenceChoices = new SpendingContainer();
             this.setState({ sidebarState: sidebarState });
-            this.updateStageCount();
+            if (this.props.level === 1) this.updateStageCount();
         };
 
         this.state = {

@@ -28,6 +28,7 @@ export function TutorialGuide({
     level,
 }: TutorialGuideProps) {
     function displayProfessor(): boolean {
+        console.log("Tutorial Stage: " + stageCount);
         //Tutorial Level 1
         if (
             level === 1 &&
@@ -60,7 +61,7 @@ export function TutorialGuide({
         //Tutorial Level 6
         if (
             (level === 6 && stageCount < 4) ||
-            (level === 6 && stageCount === 14)
+            (level === 6 && stageCount === 16)
         ) {
             return true;
         }
