@@ -180,7 +180,6 @@ export class Agent extends AttributeContainer {
     public donated: number;
     public ideology: Ideology;
     public initialStrategy: Strategy;
-    public personality: Personality;
     public mood: number;
     public promises: promises[] = [];
     public choices: choices[] = [];
@@ -192,7 +191,6 @@ export class Agent extends AttributeContainer {
     constructor(
         name: string,
         ideology: Ideology,
-        personality: Personality,
         resources: number,
         donated: number,
         mood: number,
@@ -205,7 +203,6 @@ export class Agent extends AttributeContainer {
         this.name = name;
         this.ideology = ideology;
         this.initialStrategy = ideology.toStrategy();
-        this.personality = personality;
         this.mood = mood;
         this.id = id;
         this.coords = coords;
@@ -394,54 +391,17 @@ export class Agent extends AttributeContainer {
 
 //generosity and forgivness still need to be removed
 export class Ideology extends AttributeContainer {
-    // how likely they are to give instead of cheat.
-    private generosity: number;
-
-    // how likely they are to NOT hold a grudge.
-    private forgiveness: number;
-
     private role: Strategy;
 
-    constructor(generosity: number, forgiveness: number) {
+    constructor(role ?: number) {
         super();
-        if (
-            this.attributeInBounds(generosity) &&
-            this.attributeInBounds(forgiveness)
-        ) {
-            this.generosity = generosity;
-            this.forgiveness = forgiveness;
-        } else {
-            throw new Error(
-                "generosity/forgiveness out of bounds: should be [0, 20)"
-            );
-        }
-        // Sets Strategy to Player type
-        if ( generosity === 12){
-            this.role = 5;
-        }
-        // Sets Strategy to Reciprocator type
-        else if (generosity === 19) {
-            this.role = 3;
+        
+        // If role was given set it otherwise randomly select a Strategy
+        if (role) {
+            this.role = role
         } 
-        // Sets Strategy to Student type
-        else if (generosity === 15) {
-            this.role = 1;
-        } 
-        // Sets Strategy to Teacher type
-        else if (generosity === 13) {
-            this.role = 4;
-        }
-        // Sets Strategy to Random type
-        else if (generosity === 10) {
-            this.role = 2;
-        }
-        // Sets Strategy to Supicious type 
-        else if (generosity === 5) {
-            this.role = 0;
-        } 
-        // Randomly selects a Strategy
         else {
-            this.role = Math.floor(Math.random() * 6);
+            this.role = Math.floor(Math.random() * 5);
         }
     }
 
@@ -460,59 +420,6 @@ export class Ideology extends AttributeContainer {
             return true
         }
         return false
-    }
-}
-
-//PERSONALITY IS NO LONGER IN USE
-// Immutable personality traits which affect how the agent influences others and
-// adapts their own ideology.
-export class Personality extends AttributeContainer {
-    // how quickly they change their personality based on their neighbors
-    // (e.g. misers becoming generous after being treated well.)
-    // an agent with a volatility of [insert lowest possible value here] will never change.
-    private volatility: number;
-
-    // how likely an agent is to try to spread their ideology on a given turn.
-    private preachiness: number;
-
-    getVolatility(): number {
-        return this.volatility;
-    }
-
-    setVolatility(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.volatility = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    getPreachiness(): number {
-        return this.preachiness;
-    }
-
-    setPreachiness(set: number) {
-        if (this.attributeInBounds(set)) {
-            this.preachiness = set;
-        } else {
-            throw new Error("attribute out of bounds: should be [0, 20)");
-        }
-    }
-
-    // get the strategy associated with this ideology
-    constructor(volatility: number, preachiness: number) {
-        super();
-        if (
-            this.attributeInBounds(volatility) &&
-            this.attributeInBounds(preachiness)
-        ) {
-            this.volatility = volatility;
-            this.preachiness = preachiness;
-        } else {
-            throw new Error(
-                "volatility/preachiness out of bounds: should be [0, 20)"
-            );
-        }
     }
 }
 

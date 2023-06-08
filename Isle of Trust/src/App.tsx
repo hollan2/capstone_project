@@ -23,7 +23,6 @@ import {
     AGENT_RADIUS,
     Relation,
     Ideology,
-    Personality,
     SpendingContainer,
     DriftContainer,
 } from "./models/agent";
@@ -216,7 +215,6 @@ class GameView extends React.Component<StartInfo, GameViewState> {
 
         const proportionalInfluence = totalInfluence / numberOfNeighbors;
 
-        const preachiness = agent.personality.getPreachiness();
         if (proportionalInfluence > 15) {
             return "revered";
         } else if (proportionalInfluence > 11) {

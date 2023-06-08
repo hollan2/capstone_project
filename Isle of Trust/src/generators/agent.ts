@@ -1,4 +1,4 @@
-import { Agent, Ideology, Personality, Relation } from "../models/agent";
+import { Agent, Ideology, Relation } from "../models/agent";
 import { randomIntRange } from "../utilities";
 let name_iter = 1;
 const SEED = 102938123;
@@ -33,8 +33,7 @@ var randnames: string[] = names;
 export const genAgent = function (
     vID: number,
     newName: string,
-    newPersonality: [number, number],
-    newIdeology: [number, number],
+    newIdeology: number,
     newResource: number,
     newDonated: number,
     newMood: number,
@@ -56,8 +55,7 @@ export const genRandomAgent = function (
     const spot = -1;
     let result = new Agent(
         genName(vID),
-        new Ideology(randomAttribute(), randomAttribute()),
-        new Personality(randomAttribute(), randomAttribute()),
+        new Ideology(),
         resources,
         donated,
         10,
@@ -88,13 +86,12 @@ export const genDefaultAgent = function (
     level: number
 ): Agent {
     // Chart helps decide what is the right stategy for each generated default player
-    let chart = [19, 19, 15, 10, 5];
-    if (level === 5) chart = [19, 13, 5, 15];
-    else if (level === 6) chart = [19, 19, 15, 10, 7, 7];
+    let chart = [3, 3, 1, 2, 5];
+    if (level === 5) chart = [3, 4, 0, 1];
+    else if (level === 6) chart = [3, 3, 1, 2, -1, -1];
     let result = new Agent(
         genName(vID),
-        new Ideology(chart[spot], chart[spot]),
-        new Personality(randomAttribute(), randomAttribute()),
+        new Ideology(chart[spot]),
         resources,
         donated,
         10,

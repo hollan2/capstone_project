@@ -26,7 +26,6 @@ import {
     AGENT_RADIUS,
     Relation,
     Ideology,
-    Personality,
     SpendingContainer,
     DriftContainer,
 } from "../models/agent";
@@ -190,31 +189,31 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
             switch (props.ideologyColor) {
                 case "9ec4ea":
                     //Dove
-                    player.ideology = new Ideology(12, 12);
+                    player.ideology = new Ideology(12);
                     break;
                 case "df7e68":
                     //Hawk
-                    player.ideology = new Ideology(0, 0);
+                    player.ideology = new Ideology(0);
                     break;
                 case "f8b365":
                     //Grim
-                    player.ideology = new Ideology(19, 0);
+                    player.ideology = new Ideology(19);
                     break;
                 case "ffda5c":
                     //AntiGrim
-                    player.ideology = new Ideology(0, 19);
+                    player.ideology = new Ideology(0);
                     break;
                 case "b4a6d8":
                     //TitforTat
-                    player.ideology = new Ideology(14, 19);
+                    player.ideology = new Ideology(14);
                     break;
                 case "b5d8a6":
                     //Dum
-                    player.ideology = new Ideology(0, 5);
+                    player.ideology = new Ideology(0);
                     break;
                 case "a1c4ca":
                     //Dee
-                    player.ideology = new Ideology(19, 5);
+                    player.ideology = new Ideology(19);
                     break;
             }
         }
@@ -297,7 +296,6 @@ class TutorialView extends React.Component<StartInfo, GameViewState> {
 
         const proportionalInfluence = totalInfluence / numberOfNeighbors;
 
-        const preachiness = agent.personality.getPreachiness();
         if (proportionalInfluence > 15) {
             return "revered";
         } else if (proportionalInfluence > 11) {
