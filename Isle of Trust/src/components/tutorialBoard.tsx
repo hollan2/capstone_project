@@ -142,7 +142,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
             return true;
         }
         //Tutorial Level 7
-        if (this.props.level === 7 && this.props.stageCount < 5) {
+        if (this.props.level === 7 && this.props.stageCount < 4) {
             return true;
         }
         return false;
@@ -157,9 +157,7 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 style={this.disableScreen() ? { pointerEvents: "none" } : {}}
             >
                 <article id="tutorialHeader">
-                    <h1>
-                        Tutorial Level {this.props.level}
-                    </h1>
+                    <h1>Tutorial Level {this.props.level}</h1>
                 </article>
                 <div
                     className={
@@ -306,7 +304,9 @@ export class TutorialBoard extends React.Component<TutorialBoardProps> {
                 </div>
                 <div className="counters">
                     <YearCounter turnCount={year} />
-                    <ResourceCounter totalResources={this.props.totalResources} />
+                    <ResourceCounter
+                        totalResources={this.props.totalResources}
+                    />
                 </div>
             </div>
         );
