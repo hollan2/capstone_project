@@ -103,7 +103,7 @@ const getDefaultPawns = (level: number) => {
                 defName: "Profe",
                 defFace: 1,
                 defHat: 5,
-                resources: 5,
+                resources: 15,
             },
             {
                 defName: "Susi",
