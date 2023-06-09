@@ -395,9 +395,11 @@ export class Ideology extends AttributeContainer {
     // how likely they are to NOT hold a grudge.
     private forgiveness: number;
 
+    private isTutorial: boolean;
+    
     private role: Strategy;
 
-    constructor(generosity: number, forgiveness: number) {
+    constructor(generosity: number, forgiveness: number, isTutorial: boolean) {
         super();
         if (
             this.attributeInBounds(generosity) &&
@@ -405,38 +407,39 @@ export class Ideology extends AttributeContainer {
         ) {
             this.generosity = generosity;
             this.forgiveness = forgiveness;
+            this.isTutorial = isTutorial;
         } else {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
         }
         // Sets Strategy to Player type
-        if (generosity === 12) {
+        if (generosity === 12 && isTutorial == true) {
             this.role = 5;
         }
         // Sets Strategy to Reciprocator type
-        else if (generosity === 19) {
+        else if (generosity === 19 && isTutorial == true) {
             this.role = 3;
         }
         // Sets Strategy to Student type
-        else if (generosity === 15) {
+        else if (generosity === 15 && isTutorial == true) {
             this.role = 1;
         }
         // Sets Strategy to Teacher type
-        else if (generosity === 13) {
+        else if (generosity === 13 && isTutorial == true) {
             this.role = 4;
         }
         // Sets Strategy to Random type
-        else if (generosity === 10) {
+        else if (generosity === 10 && isTutorial == true) {
             this.role = 2;
         }
         // Sets Strategy to Supicious type
-        else if (generosity === 5) {
+        else if (generosity === 5 && isTutorial == true) {
             this.role = 0;
         }
         // Randomly selects a Strategy
         else {
-            this.role = Math.floor(Math.random() * 6);
+            this.role = Math.floor(Math.random() * 5);
         }
     }
 

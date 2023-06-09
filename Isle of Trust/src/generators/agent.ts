@@ -56,7 +56,7 @@ export const genRandomAgent = function (
     const spot = -1;
     let result = new Agent(
         genName(vID),
-        new Ideology(randomAttribute(), randomAttribute()),
+        new Ideology(randomAttribute(), randomAttribute(), false),
         new Personality(randomAttribute(), randomAttribute()),
         resources,
         donated,
@@ -93,7 +93,7 @@ export const genDefaultAgent = function (
     else if (level === 7) chart = [19, 19, 5, 10, 13, 15];
     let result = new Agent(
         genName(vID),
-        new Ideology(chart[spot], chart[spot]),
+        new Ideology(chart[spot], chart[spot], true),
         new Personality(randomAttribute(), randomAttribute()),
         resources,
         donated,
