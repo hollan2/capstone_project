@@ -258,6 +258,7 @@ export class Agent extends AttributeContainer {
     resetResources(initialResources: number)
     {
         this.resources = initialResources;
+        this.donated = 0;
     }
 
 
