@@ -17,8 +17,6 @@ export class ResetGame extends React.Component<ResetGameProps>
     {
         let agents = this.props.map.getVertices();
         agents.forEach((agent) => {
-            if(agent.ideology.toStrategy() == 5)
-                console.log(agent.ideology.toStrategy());
             agent.resetResources(this.props.intialResources);
             //reset the ideologies of all agents to their initial ones
             agent.ideology.setStrategy(agent.initialStrategy);
