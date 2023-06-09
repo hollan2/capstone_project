@@ -76,7 +76,7 @@ export const MAP_URL: { [key: string]: string } = {
 let currentMap = "Pronged";
 
 const DIFFICULTY_VALUES: { [key: string]: number } = {
-    easy: 19,
+    easy: 20,
     medium: 15,
     hard: 10,
     extreme: 5,
@@ -130,7 +130,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
             player.face = Face[props.face as keyof typeof Face];
             player.hat = Hat[props.hat as keyof typeof Hat];
             player.name = props.name;
-            
+
             console.log("ID");
             console.log(player.id);
             this.player_id = player.id;
@@ -168,7 +168,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     resetState = () => {
-        this.setState((prevState) => ({ reset: !prevState.reset, turnCount: 0}));
+        this.setState((prevState) => ({ reset: !prevState.reset, turnCount: 0 }));
     };
 
 
@@ -192,7 +192,7 @@ class GameView extends React.Component<StartInfo, GameViewState> {
         return sumChoices;
     }
 
-    countTotalResources(map : Graph<Agent, Relation>): number {
+    countTotalResources(map: Graph<Agent, Relation>): number {
         const agents = map.getVertices()
 
         let totalResources = 0
@@ -244,9 +244,9 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     //changes all suspicious agents into students
     libraryRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
-            if(v1.ideology.toStrategy() == Strategy.Suspicious)
+            if (v1.ideology.toStrategy() == Strategy.Suspicious)
                 v1.ideology.setStrategy(Strategy.Student)
-            if(v2.ideology.toStrategy() == Strategy.Suspicious)
+            if (v2.ideology.toStrategy() == Strategy.Suspicious)
                 v2.ideology.setStrategy(Strategy.Student)
         });
         this.setState({})
@@ -255,15 +255,15 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     //changes all student agents in reciprocators
     universityRoleChange() {
         this.state.map.getAllEdges().forEach(([v1, v2, e1]) => {
-            if(v1.ideology.toStrategy() == Strategy.Student)
+            if (v1.ideology.toStrategy() == Strategy.Student)
                 v1.ideology.setStrategy(Strategy.Reciprocator)
-            if(v2.ideology.toStrategy() == Strategy.Student)
+            if (v2.ideology.toStrategy() == Strategy.Student)
                 v2.ideology.setStrategy(Strategy.Reciprocator)
         });
-        this.setState({})       
+        this.setState({})
     }
 
-    getDonations(donationsMax : number): number {
+    getDonations(donationsMax: number): number {
         let agents = this.state.map.getVertices()
         let donations = 0
 
@@ -461,82 +461,80 @@ class GameView extends React.Component<StartInfo, GameViewState> {
     }
 
     //converts students into recipricators if the critera is met
-    studentCheck(v1: Agent, v2: Agent){
-        if(v1.ideology.toStrategy() == 1)
-        {
+    studentCheck(v1: Agent, v2: Agent) {
+        if (v1.ideology.toStrategy() == 1) {
             var timesReciprocated
             var temphist
-            var agentRelation = this.state.map.getEdge(v1, v2); 
-            if(agentRelation)
-            {
+            var agentRelation = this.state.map.getEdge(v1, v2);
+            if (agentRelation) {
                 timesReciprocated = 0
                 temphist = agentRelation.history.actions;
                 for (var i = 0; i < agentRelation.history.length(); i++) {
                     if (temphist[i].commitment === 2)
-                    timesReciprocated += 1;
+                        timesReciprocated += 1;
                     //if the 2 reciprocations aren't in succession, we set timesReciprocated back to 0
-                    else if(timesReciprocated < 2) 
+                    else if (timesReciprocated < 2)
                         timesReciprocated = 0;
                 }
 
-                if(timesReciprocated == 2){
+                if (timesReciprocated == 2) {
                     v1.ideology.setStrategy(3)
                 }
             }
         }
-        
+
 
     }
 
     deselectCharacter(value: boolean) {
         this.setState({ selectCharacterDisplay: value });
-    }  
+    }
 
     render() {
         //if there is a selected player display right sidebar
         if (this.state.selectCharacterDisplay) {
             return (
                 <div className="game">
-                        <Board
-                            map={this.state.map}
-                            turnCount={this.state.turnCount}
-                            selected={this.state.sidebarState.selected}
-                            select={this.state.select.bind(this)}
-                            player = {this.state.sidebarState.player}
-                            deselectCharacter={this.deselectCharacter}
-                            current = {currentMap}
-                            totalResources={this.countTotalResources(this.state.map)}
-                        />
-                        <PlayerSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            libraryRoleChange={this.libraryRoleChange.bind(this)}
-                            universityRoleChange={this.universityRoleChange.bind(this)}
-                            getDonations={this.getDonations.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            turnCount={this.state.turnCount}
-                            promiseRelation={this.state.promiseRelation}
-                            resetState={this.resetState}
-                            reset={this.state.reset}
-                            
+                    <Board
+                        map={this.state.map}
+                        turnCount={this.state.turnCount}
+                        selected={this.state.sidebarState.selected}
+                        select={this.state.select.bind(this)}
+                        player={this.state.sidebarState.player}
+                        deselectCharacter={this.deselectCharacter}
+                        current={currentMap}
+                        totalResources={this.countTotalResources(this.state.map)}
+                    />
+                    <PlayerSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        libraryRoleChange={this.libraryRoleChange.bind(this)}
+                        universityRoleChange={this.universityRoleChange.bind(this)}
+                        getDonations={this.getDonations.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        turnCount={this.state.turnCount}
+                        promiseRelation={this.state.promiseRelation}
+                        resetState={this.resetState}
+                        reset={this.state.reset}
 
-                        />
-                        <SelectedSidebar
-                            map={this.state.map}
-                            round={this.tempTurn.bind(this)}
-                            sidebarState={this.state.sidebarState}
-                            tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
-                            countTotalInfluence={this.countTotalInfluence}
-                            deselectCharacter={this.deselectCharacter}
-                            turnCount={this.state.turnCount}
-                        />
-                        <ResetGame 
-                            map={this.state.map}
-                            resetState={this.resetState}
-                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
-                        />
+
+                    />
+                    <SelectedSidebar
+                        map={this.state.map}
+                        round={this.tempTurn.bind(this)}
+                        sidebarState={this.state.sidebarState}
+                        tallyChoicesNeighbors={this.tallyChoicesForAllNeighbors}
+                        countTotalInfluence={this.countTotalInfluence}
+                        deselectCharacter={this.deselectCharacter}
+                        turnCount={this.state.turnCount}
+                    />
+                    <ResetGame
+                        map={this.state.map}
+                        resetState={this.resetState}
+                        intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
+                    />
                 </div>
             );
         } else {
@@ -566,10 +564,10 @@ class GameView extends React.Component<StartInfo, GameViewState> {
                         resetState={this.resetState}
                         reset={this.state.reset}
                     />
-                     <ResetGame 
-                            map={this.state.map}
-                            resetState={this.resetState}
-                            intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
+                    <ResetGame
+                        map={this.state.map}
+                        resetState={this.resetState}
+                        intialResources={DIFFICULTY_VALUES[this.props.startingPoints]}
                     />
                 </div>
             );
@@ -683,7 +681,7 @@ export class Display extends React.Component<DisplayProps, DisplayState> {
                 </div>
                 <div className="stats text-nowrap">
                     <p className="end">{agentPoints} tons of cherries</p>
-                    { this.props.tutorial ? null : <p className="end">{this.props.agent.donated} tons donated</p> }
+                    {this.props.tutorial ? null : <p className="end">{this.props.agent.donated} tons donated</p>}
                     <p className="end">
                         Together {this.props.agentChoices.together} /{" "}
                         {numOfActions}
