@@ -187,18 +187,16 @@ class Stats extends React.Component<StatsProps, unknown> {
     render() {
         const theirChoices = new choiceTally();
         const yourChoices = new choiceTally();
-        let theySpent = 0;
-        let youSpent = 0;
         let isPlayerNeighbor = false;
         let selectedName = this.props.sidebarState.selected.name;
 
         // Check if players are neighbors:
         for (const entry of this.props.neighbors.entries()) {
-            if (entry[0].id == this.props.sidebarState.player.id)
+            if (entry[0].id === this.props.sidebarState.player.id)
                 isPlayerNeighbor = true;
         }
 
-        if (isPlayerNeighbor == false) {
+        if (isPlayerNeighbor === false) {
             return (
                 <div className="stats-container">
                     <div className="stats">
@@ -207,33 +205,32 @@ class Stats extends React.Component<StatsProps, unknown> {
                 </div>
             );
         }
+
         if (this.props.sidebarState.selectedToPlayer) {
             theirChoices.tallyChoices(
                 this.props.sidebarState.selectedToPlayer.history!
             );
-            theySpent = this.props.sidebarState.selectedToPlayer.resourcesSpent;
         }
         if (this.props.sidebarState.playerToSelected) {
             yourChoices.tallyChoices(
                 this.props.sidebarState.playerToSelected.history!
             );
-            youSpent = this.props.sidebarState.playerToSelected.resourcesSpent;
         }
+
         return (
             <div className="stats-container">
-                <div className="stats">
+                <div className="stats text-nowrap">
                     <p>
-                        They've spent {theySpent} tons of cheries trying to
-                        influence you, while you've spent {youSpent} tons of
-                        cherries trying to influence them.
+                        You worked together {yourChoices.together} times
                     </p>
                     <p>
-                        They've given to you {theirChoices.together} times,
-                        while you've given to them {yourChoices.together} times.
+                        you've cheated them {yourChoices.cheated} times
                     </p>
                     <p>
-                        They've cheated you {theirChoices.cheated} times, while
-                        you've cheated them {yourChoices.cheated} times.
+                        {selectedName} worked together {theirChoices.together} times
+                    </p>
+                    <p>
+                        {selectedName} cheated you {theirChoices.cheated} times
                     </p>
                 </div>
             </div>

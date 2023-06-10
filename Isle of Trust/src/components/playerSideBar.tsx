@@ -77,7 +77,7 @@ export const MAP_URL: { [key: string]: string } = {
 let currentMap = "Pronged";
 
 const DIFFICULTY_VALUES: { [key: string]: number } = {
-    easy: 19,
+    easy: 20,
     medium: 15,
     hard: 10,
     extreme: 5,
@@ -92,8 +92,8 @@ interface PlayerSidebarProps {
     ) => choiceTally;
     countTotalInfluence(map: Graph<Agent, Relation>, agent: Agent): String;
     round: () => void;
-    libraryRoleChange:() => void;
-    universityRoleChange:() => void;
+    libraryRoleChange: () => void;
+    universityRoleChange: () => void;
     getDonations(maxDonations: number): number;
     turnCount: number;
     promiseRelation: any;
@@ -140,8 +140,8 @@ export class PlayerSidebar extends React.Component<
 }
 
 interface PlayerDisplayProps {
-    libraryRoleChange:() => void;
-    universityRoleChange:() => void;
+    libraryRoleChange: () => void;
+    universityRoleChange: () => void;
     getDonations(donationsMax: number): number;
     sidebarState: SidebarState;
     map: Graph<Agent, Relation>;
@@ -165,21 +165,20 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         this.universityCount = 0;
     }
     //set the text to the hint if the players hover over the invest button
-    setText(newText: string){
+    setText(newText: string) {
         this.hintText = <div className="hint-text">{newText}</div>
-        this.setState({PlayerDisplay: this})
+        this.setState({ PlayerDisplay: this })
     };
 
     //resets the hint 
-    setEmpty(){
+    setEmpty() {
         this.hintText = <div className="hint-empty">{"Invest in Public Services"}</div>
-        this.setState({PlayerDisplay: this})       
+        this.setState({ PlayerDisplay: this })
     }
 
     //After the component is finished rendering, check if the reset is true, if it is, set it to false since we're done resetting
     componentDidUpdate(prevProps: Readonly<PlayerDisplayProps>, prevState: Readonly<{}>, snapshot?: any): void {
-        if(this.props.reset)
-        {
+        if (this.props.reset) {
             this.props.resetState();
         }
     }
@@ -201,12 +200,12 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             donations = this.props.getDonations(donationsMax);
             if (donations > 0)
                 this.libraryCount += donations
-            
+
 
             if (this.libraryCount == 15) {
                 this.props.libraryRoleChange()
                 // Reapply the university changes in case the university was invested first
-                if(this.universityCount == 15)
+                if (this.universityCount == 15)
                     this.props.universityRoleChange()
             }
         }
@@ -215,16 +214,14 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
             let donations = 0
 
             donations = this.props.getDonations(donationsMax)
-            if (donations > 0) 
+            if (donations > 0)
                 this.universityCount += donations
-            
+
             if (this.universityCount == 15)
                 this.props.universityRoleChange()
         }
-   
-        
-        if(this.props.reset)
-        {
+
+        if (this.props.reset) {
             this.resetInvestments();
         }
         return (
@@ -240,68 +237,66 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     turnCount={this.props.turnCount}
                     tutorial={false}
                 />
-            <div className="investmentSidebar">
-                <div className="influence-title">
-                    {this.hintText}
-                </div>
-                <button
-                    id="library"
-                    className="investmentButton"
-                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Suspicous to Students")}
-                    onMouseLeave= {() =>this.setEmpty()}
-                    onClick={() => {
-                        //if the invested amount is less than 14 keep adding to the count
-                        if(this.libraryCount < 14 && this.props.sidebarState.player.resources > 0){
-                            this.libraryCount += 1
-                            this.props.sidebarState.player.resources -= 1
-                            this.props.sidebarState.player.donated +=1
-                            this.setState({PlayerDisplay: this})
-                        }
-                        //if the count is equal to 14, add to the count and change the personas
-                        else if(this.libraryCount == 14 && this.props.sidebarState.player.resources > 0)
-                        {
-                            this.libraryCount += 1
-                            this.props.sidebarState.player.resources -= 1
-                            this.props.sidebarState.player.donated +=1
-                            this.props.libraryRoleChange()
-                            //reapply the university changes in case the university was invested first
-                            if(this.universityCount == 15)
+                <div className="investmentSidebar">
+                    <div className="influence-title">
+                        {this.hintText}
+                    </div>
+                    <button
+                        id="library"
+                        className="investmentButton"
+                        onMouseEnter={() => this.setText("Hint: Invest 15 to change Suspicous to Students")}
+                        onMouseLeave={() => this.setEmpty()}
+                        onClick={() => {
+                            //if the invested amount is less than 14 keep adding to the count
+                            if (this.libraryCount < 14 && this.props.sidebarState.player.resources > 0) {
+                                this.libraryCount += 1
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.sidebarState.player.donated += 1
+                                this.setState({ PlayerDisplay: this })
+                            }
+                            //if the count is equal to 14, add to the count and change the personas
+                            else if (this.libraryCount == 14 && this.props.sidebarState.player.resources > 0) {
+                                this.libraryCount += 1
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.sidebarState.player.donated += 1
+                                this.props.libraryRoleChange()
+                                //reapply the university changes in case the university was invested first
+                                if (this.universityCount == 15)
+                                    this.props.universityRoleChange()
+                            }
+                        }}
+                    >
+                        {" "}
+                        Library: {this.libraryCount}
+                    </button>
+
+                    <button
+                        id="university"
+                        className="investmentButton"
+                        onMouseEnter={() => this.setText("Hint: Invest 15 to change Students to Reciprocators")}
+                        onMouseLeave={() => this.setEmpty()}
+                        onClick={() => {
+                            //if the invested amount is less than 14 keep adding to the count
+                            if (this.universityCount < 14 && this.props.sidebarState.player.resources > 0) {
+                                this.universityCount += 1
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.sidebarState.player.donated += 1
+                                this.setState({ PlayerDisplay: this })
+                            }
+
+                            //if the count is equal to 14, add to the count and change the personas
+                            else if (this.universityCount == 14 && this.props.sidebarState.player.resources > 0) {
+                                this.universityCount += 1
+                                this.props.sidebarState.player.resources -= 1
+                                this.props.sidebarState.player.donated += 1
                                 this.props.universityRoleChange()
-                        }
-                    }}
-                >
-                    {" "}
-                    Library: {this.libraryCount}
-                </button>
-
-                <button
-                    id="university"
-                    className="investmentButton"
-                    onMouseEnter= {() =>this.setText("Hint: Invest 15 to change Students to Reciprocators")}
-                    onMouseLeave= {() =>this.setEmpty()}
-                    onClick={() => {
-                        //if the invested amount is less than 14 keep adding to the count
-                        if(this.universityCount < 14 && this.props.sidebarState.player.resources > 0){
-                            this.universityCount += 1
-                            this.props.sidebarState.player.resources -= 1
-                            this.props.sidebarState.player.donated +=1
-                            this.setState({PlayerDisplay: this})
-                        }
-
-                        //if the count is equal to 14, add to the count and change the personas
-                        else if(this.universityCount == 14 && this.props.sidebarState.player.resources > 0)
-                        {
-                            this.universityCount += 1
-                            this.props.sidebarState.player.resources -= 1
-                            this.props.sidebarState.player.donated +=1
-                            this.props.universityRoleChange()
-                        }
-                    }}
-                >
-                    {" "}
-                    University: {this.universityCount}
-                </button>
-              </div>
+                            }
+                        }}
+                    >
+                        {" "}
+                        University: {this.universityCount}
+                    </button>
+                </div>
             </div>
         );
     }
@@ -322,7 +317,7 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
         const neighbors = this.props.map.getEdges(
             this.props.sidebarState.player
         )!;
-        
+
         if (this.props.sidebarState.player instanceof Agent) {
             if (this.props.turnCount % 1 == 0) {
                 return (
@@ -520,9 +515,9 @@ class InfluenceEntry extends React.Component<
             case 0:
                 return "solo";
             case 1:
-                return "match";
-            case 2:
                 return "together";
+            case 2:
+                return "match";
         }
     }
 
@@ -548,7 +543,7 @@ class InfluenceEntry extends React.Component<
     }
 
     handleButtonChange = (commitment: string) => {
-        
+
         this.setState((prevState) => {
             if (prevState.buttonClicked === commitment) {
                 // Deselect the currently selected button
@@ -567,7 +562,7 @@ class InfluenceEntry extends React.Component<
         const agent = this.props.agent;
         const aiCommitment = this.getPromiseBetween(agent, player);
         const playerCommitment = this.getPromiseBetween(player, agent);
-        
+
         if (this.props.turnCount % 1 == 0) {
             //promise phase
             return (
@@ -595,7 +590,7 @@ class InfluenceEntry extends React.Component<
                             onClick={() => {
                                 player.updatePromise(Commitment.Cooperate, agent);
                                 this.handleButtonChange("cooperate"); // update buttonClicked state
-                                
+
                             }}
                         >
                             {" "}
@@ -675,7 +670,7 @@ class InfluenceEntry extends React.Component<
                             <button
                                 className={`phase-buttons ${buttonClicked === "compete" ? "selected-buttons" : ""}`}
                                 id="compete"
-                                onClick={() => { 
+                                onClick={() => {
                                     console.log("Select compete");
                                     player.updateChoice(Choice.Compete, agent);
                                     this.handleButtonChange("compete");

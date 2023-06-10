@@ -326,7 +326,7 @@ export class Agent extends AttributeContainer {
 
     canDonate(): boolean {
         // If an agent has at least 20 resources and has an ideology that can donate return true
-        if (this.resources >= 20 && this.ideology.canDonate()) {
+        if (this.resources > 20 && this.ideology.canDonate()) {
             return true;
         }
         return false;
