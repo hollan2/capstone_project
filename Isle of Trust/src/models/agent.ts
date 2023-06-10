@@ -5,7 +5,7 @@ export const AGENT_RADIUS = 15;
 
 //Set Default Pawn aesthetics based on level
 const getDefaultPawns = (level: number) => {
-    if (level >= 0 && level < 5) {
+    if (level >= 1 && level < 6) {
         return [
             {
                 defName: "Tutor",
@@ -45,7 +45,7 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
-    if (level === 5) {
+    if (level === 6) {
         return [
             {
                 defName: "Tutor",
@@ -73,7 +73,7 @@ const getDefaultPawns = (level: number) => {
             },
         ];
     }
-    if (level === 6) {
+    if (level === 7) {
         return [
             {
                 defName: "Tutor",
@@ -82,9 +82,9 @@ const getDefaultPawns = (level: number) => {
                 resources: 10,
             },
             {
-                defName: "Profe",
-                defFace: 1,
-                defHat: 5,
+                defName: "Rec",
+                defFace: 2,
+                defHat: 3,
                 resources: 5,
             },
             {
@@ -94,16 +94,16 @@ const getDefaultPawns = (level: number) => {
                 resources: 0,
             },
             {
-                defName: "Susi",
-                defFace: 5,
-                defHat: 1,
-                resources: 2,
+                defName: "Domran",
+                defFace: 6,
+                defHat: 2,
+                resources: 8,
             },
             {
-                defName: "Susi",
-                defFace: 5,
-                defHat: 1,
-                resources: 2,
+                defName: "Profe",
+                defFace: 1,
+                defHat: 5,
+                resources: 15,
             },
             {
                 defName: "Susi",
@@ -250,17 +250,14 @@ export class Agent extends AttributeContainer {
     updateIdeology() {}
     */
 
-    setInitialStrategy(strategy: Strategy)
-    {
+    setInitialStrategy(strategy: Strategy) {
         this.initialStrategy = strategy;
     }
     //Reset the resources
-    resetResources(initialResources: number)
-    {
+    resetResources(initialResources: number) {
         this.resources = initialResources;
         this.donated = 0;
     }
-
 
     //adds a promise to list of promises in agent
     updatePromise(commitment: Commitment, promiseTo: Agent) {
@@ -330,15 +327,15 @@ export class Agent extends AttributeContainer {
     canDonate(): boolean {
         // If an agent has at least 20 resources and has an ideology that can donate return true
         if (this.resources >= 20 && this.ideology.canDonate()) {
-            return true
+            return true;
         }
-        return false
+        return false;
     }
 
     donate(donate: number): number {
-        this.resources -= donate
-        this.donated += donate
-        return donate
+        this.resources -= donate;
+        this.donated += donate;
+        return donate;
     }
 
     /*This function doesn't serve a purpose anymore, can be removed
@@ -386,11 +383,9 @@ export class Agent extends AttributeContainer {
         }
     }
 
-
     spendResources(cost: number) {
         this.resources -= cost;
     }
-
 }
 
 //generosity and forgivness still need to be removed
@@ -401,9 +396,11 @@ export class Ideology extends AttributeContainer {
     // how likely they are to NOT hold a grudge.
     private forgiveness: number;
 
+    private isTutorial: boolean;
+    
     private role: Strategy;
 
-    constructor(generosity: number, forgiveness: number) {
+    constructor(generosity: number, forgiveness: number, isTutorial: boolean) {
         super();
         if (
             this.attributeInBounds(generosity) &&
@@ -411,38 +408,39 @@ export class Ideology extends AttributeContainer {
         ) {
             this.generosity = generosity;
             this.forgiveness = forgiveness;
+            this.isTutorial = isTutorial;
         } else {
             throw new Error(
                 "generosity/forgiveness out of bounds: should be [0, 20)"
             );
         }
         // Sets Strategy to Player type
-        if ( generosity === 12){
+        if (generosity === 12 && isTutorial == true) {
             this.role = 5;
         }
         // Sets Strategy to Reciprocator type
-        else if (generosity === 19) {
+        else if (generosity === 19 && isTutorial == true) {
             this.role = 3;
-        } 
+        }
         // Sets Strategy to Student type
-        else if (generosity === 15) {
+        else if (generosity === 15 && isTutorial == true) {
             this.role = 1;
-        } 
+        }
         // Sets Strategy to Teacher type
-        else if (generosity === 13) {
+        else if (generosity === 13 && isTutorial == true) {
             this.role = 4;
         }
         // Sets Strategy to Random type
-        else if (generosity === 10) {
+        else if (generosity === 10 && isTutorial == true) {
             this.role = 2;
         }
-        // Sets Strategy to Supicious type 
-        else if (generosity === 5) {
+        // Sets Strategy to Supicious type
+        else if (generosity === 5 && isTutorial == true) {
             this.role = 0;
-        } 
+        }
         // Randomly selects a Strategy
         else {
-            this.role = Math.floor(Math.random() * 6);
+            this.role = Math.floor(Math.random() * 5);
         }
     }
 
@@ -458,9 +456,9 @@ export class Ideology extends AttributeContainer {
     canDonate(): boolean {
         // Returns true for reciprocators and teachers since they can to donate. All others can't
         if (this.role == 3 || this.role == 4) {
-            return true
+            return true;
         }
-        return false
+        return false;
     }
 }
 

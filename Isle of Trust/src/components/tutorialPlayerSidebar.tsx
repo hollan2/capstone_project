@@ -101,23 +101,24 @@ interface PlayerDisplayProps {
 class PlayerDisplay extends React.Component<PlayerDisplayProps> {
     //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
-        //Tutorial Level 0 and 6.
-        if (this.props.level === 0 && this.props.stageCount === 3) {
+        //Tutorial Level 1, 5, and 7.
+        if (this.props.level === 1 && this.props.stageCount === 2) {
             return true;
-        }
-        else if (this.props.level === 6 && (this.props.stageCount === 1 || this.props.stageCount === 2)) {
+        } else if (this.props.level === 7 && this.props.stageCount === 2) {
+            return true;
+        } else if (this.props.level === 5 && this.props.stageCount === 12) {
             return true;
         }
         return false;
     }
     //Decides whether or not to apply the highlightText CSS class based on level and stageCount
     displayTextHighlight(): boolean {
-        //Tutorial Level 0.
+        //Tutorial Level 1.
         if (
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 5 &&
                 this.props.stageCount <= 6) ||
-            (this.props.level === 0 &&
+            (this.props.level === 1 &&
                 this.props.stageCount >= 10 &&
                 this.props.stageCount <= 11)
         ) {
@@ -128,6 +129,13 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
 
     private library_count = 0;
     private university_count = 0;
+
+    componentDidUpdate(): void {
+        if (this.props.level === 5 && this.props.stageCount === 10) {
+            this.library_count = 12;
+        }
+    }
+
     hintText = (
         <div className="hint-empty">{"Invest in Public Services"}</div>
     );
@@ -145,6 +153,7 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
         );
         this.setState({ PlayerDisplay: this });
     }
+
     render() {
         let choices = new choiceTally();
         let name: string = "";
@@ -173,64 +182,70 @@ class PlayerDisplay extends React.Component<PlayerDisplayProps> {
                     tutorial={true}
                 />
 
-                <div className={ this.displaySpotlight() && this.props.level === 6 ? "player-display spotlight" : "investmentSidebar" }>
-                <div className="investmentSidebar">
-                    <div className="influence-title">{this.hintText}</div>
-                    <button
-                        id="library"
-                        className="investmentButton"
-                        onMouseEnter={() =>
-                            this.setText(
-                                "Hint: Invest 15 to change Suspicous to Students"
-                            )
-                        }
-                        onMouseLeave={() => this.setEmpty()}
-                        onClick={() => {
-                            //if the invested amount is less than 14 keep adding to the count
-                            if (
-                                this.library_count < 14 &&
-                                this.props.sidebarState.player.resources > 0
-                            ) {
-                                this.library_count += 1;
-                                this.props.sidebarState.player.resources -= 1;
-                                this.setState({ PlayerDisplay: this });
+                <div
+                    className={
+                        this.displaySpotlight()
+                            ? "player-display spotlight"
+                            : "investmentSidebar"
+                    }
+                >
+                    <div className="investmentSidebar">
+                        <div className="influence-title">{this.hintText}</div>
+                        <button
+                            id="library"
+                            className="investmentButton"
+                            onMouseEnter={() =>
+                                this.setText(
+                                    "Hint: Invest 15 to change Suspicous to Students"
+                                )
                             }
-                            //if the count is equal to 14, add to the count and change the personas
-                            else if (
-                                this.library_count == 14 &&
-                                this.props.sidebarState.player.resources > 0
-                            ) {
-                                this.library_count += 1;
-                                this.props.sidebarState.player.resources -= 1
-                                this.props.libraryrolechange()
-                                //reapply the university changes in case the university was invested first
-                                if(this.university_count == 15)
-                                    this.props.universityrolechange()
-                            }
-                        }}
-                    >
-                        {" "}
-                        Library: {this.library_count}
-                    </button>
+                            onMouseLeave={() => this.setEmpty()}
+                            onClick={() => {
+                                //if the invested amount is less than 14 keep adding to the count
+                                if (
+                                    this.library_count < 14 &&
+                                    this.props.sidebarState.player.resources > 0
+                                ) {
+                                    this.library_count += 1;
+                                    this.props.sidebarState.player.resources -= 1;
+                                    this.setState({ PlayerDisplay: this });
+                                }
+                                //if the count is equal to 14, add to the count and change the personas
+                                else if (
+                                    this.library_count == 14 &&
+                                    this.props.sidebarState.player.resources > 0
+                                ) {
+                                    this.library_count += 1;
+                                    this.props.sidebarState.player.resources -= 1;
+                                    this.props.libraryrolechange();
+                                    //reapply the university changes in case the university was invested first
+                                    if (this.university_count == 15)
+                                        this.props.universityrolechange();
+                                }
+                            }}
+                        >
+                            {" "}
+                            Library: {this.library_count}
+                        </button>
 
-                    <button
-                        id="university"
-                        className="investmentButton"
-                        onMouseEnter={() =>
-                            this.setText(
-                                "Hint: Invest 15 to change Students to Reciprocators"
-                            )
-                        }
-                        onMouseLeave={() => this.setEmpty()}
-                        onClick={() => {
-                            //if the invested amount is less than 14 keep adding to the count
-                            if (
-                                this.university_count < 14 &&
-                                this.props.sidebarState.player.resources > 0
-                            ) {
-                                this.university_count += 1;
-                                this.props.sidebarState.player.resources -= 1;
-                                this.setState({ PlayerDisplay: this });
+                        <button
+                            id="university"
+                            className="investmentButton"
+                            onMouseEnter={() =>
+                                this.setText(
+                                    "Hint: Invest 15 to change Students to Reciprocators"
+                                )
+                            }
+                            onMouseLeave={() => this.setEmpty()}
+                            onClick={() => {
+                                //if the invested amount is less than 14 keep adding to the count
+                                if (
+                                    this.university_count < 14 &&
+                                    this.props.sidebarState.player.resources > 0
+                                ) {
+                                    this.university_count += 1;
+                                    this.props.sidebarState.player.resources -= 1;
+                                    this.setState({ PlayerDisplay: this });
                                 }
 
                                 //if the count is equal to 14, add to the count and change the personas
@@ -268,14 +283,14 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
     public spendingMap = new SpendingContainer();
     //Decides wheter or not to apply the spotlight CSS class based on level and stageCount
     displaySpotlight(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            (this.props.level === 0 &&
-                this.props.stageCount >= 4 &&
-                this.props.stageCount <= 7) ||
-            (this.props.level === 0 &&
-                this.props.stageCount >= 10 &&
-                this.props.stageCount <= 11)
+            (this.props.level === 1 &&
+                this.props.stageCount >= 3 &&
+                this.props.stageCount <= 6) ||
+            (this.props.level === 1 &&
+                this.props.stageCount >= 9 &&
+                this.props.stageCount <= 10)
         ) {
             return true;
         }
@@ -284,14 +299,14 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
 
     //Decides wheter or not to apply the highlightText CSS class based on level and stageCount
     displayTextHighlight(): boolean {
-        //Tutorial Level 0
+        //Tutorial Level 1
         if (
-            (this.props.level === 0 &&
-                this.props.stageCount >= 5 &&
-                this.props.stageCount <= 6) ||
-            (this.props.level === 0 &&
-                this.props.stageCount >= 10 &&
-                this.props.stageCount <= 11)
+            (this.props.level === 1 &&
+                this.props.stageCount >= 4 &&
+                this.props.stageCount <= 5) ||
+            (this.props.level === 1 &&
+                this.props.stageCount >= 9 &&
+                this.props.stageCount <= 10)
         ) {
             return true;
         }
@@ -300,17 +315,13 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
 
     //Decides wheter or not to disable the InfluenceMenu based on level and stageCount
     disableScreen(): boolean {
-        //Tutorial Level 0
-        if (
-            this.props.level === 0 &&
-            this.props.stageCount !== 8 &&
-            this.props.stageCount !== 12 &&
-            this.props.stageCount < 21
-        ) {
-            return true;
-        }
         //Tutorial Level 1
-        if (this.props.level === 1 && this.props.stageCount < 5) {
+        if (
+            this.props.level === 1 &&
+            this.props.stageCount !== 7 &&
+            this.props.stageCount !== 11 &&
+            this.props.stageCount < 20
+        ) {
             return true;
         }
         //Tutorial Level 2
@@ -318,25 +329,33 @@ class InfluenceMenu extends React.Component<InfluenceMenuProps> {
             return true;
         }
         //Tutorial Level 3
-        if (this.props.level === 3 && this.props.stageCount < 4) {
+        if (this.props.level === 3 && this.props.stageCount < 5) {
             return true;
         }
         //Tutorial Level 4
-        if (this.props.level === 4 && this.props.stageCount < 3) {
+        if (this.props.level === 4 && this.props.stageCount < 4) {
             return true;
         }
         //Tutorial Level 5
-        if (this.props.level === 5 && this.props.stageCount < 4) {
+        if (
+            (this.props.level === 5 && this.props.stageCount < 3) ||
+            (this.props.level === 5 &&
+                this.props.stageCount >= 11 &&
+                this.props.stageCount <= 12)
+        ) {
             return true;
         }
         //Tutorial Level 6
-        if (this.props.level === 6 && this.props.stageCount < 5) {
+        if (this.props.level === 6 && this.props.stageCount < 4) {
+            return true;
+        }
+        //Tutorial Level 7
+        if (this.props.level === 7 && this.props.stageCount < 4) {
             return true;
         }
 
         return false;
     }
-
     render() {
         const neighbors = this.props.map.getEdges(
             this.props.sidebarState.player

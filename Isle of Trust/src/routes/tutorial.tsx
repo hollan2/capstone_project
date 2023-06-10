@@ -24,10 +24,6 @@ export default function Levels() {
 
             <span>
                 <article id="levels">
-                    <Link className="link" to="/level0">
-                        <button> 0 </button>
-                    </Link>
-                    <div className="divider" />
                     <Link className="link" to="/level1">
                         <button> 1 </button>
                     </Link>
@@ -35,14 +31,14 @@ export default function Levels() {
                     <Link className="link" to="/level2">
                         <button> 2 </button>
                     </Link>
+                    <div className="divider" />
+                    <Link className="link" to="/level3">
+                        <button> 3 </button>
+                    </Link>
                 </article>
             </span>
             <span>
                 <article id="levels">
-                    <Link className="link" to="/level3">
-                        <button> 3 </button>
-                    </Link>
-                    <div className="divider" />
                     <Link className="link" to="/level4">
                         <button> 4 </button>
                     </Link>
@@ -53,6 +49,10 @@ export default function Levels() {
                     <div className="divider" />
                     <Link className="link" to="/level6">
                         <button> 6 </button>
+                    </Link>
+                    <div className="divider" />
+                    <Link className="link" to="/level7">
+                        <button> 7 </button>
                     </Link>
                 </article>
             </span>

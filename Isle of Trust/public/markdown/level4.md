@@ -1,7 +1,7 @@
-Looks like there’s yet another person that has washed ashore, Pessimo! However, it seems that Pessimo has come along with absolutely nothing of value, 0 tons of cherries.
-~Pessimo, like Susi, is suspicious. However, you may find they may not be as swayed to join your favor as Susi... This person is unable to trust, and as a result will favor competition over all else.
-~To beat this level: Make sure nobody on the island is out of the game for yet another 10 years. Once that is over, each person must pay their share of 5 tons of cherries for the mortgage. As always, if you have more, feel free to help others to keep them afloat!
-~Stage 4 filler
+Ahoy! Domran has arrived. However, unlike Susi and Rec, Domran has washed ashore with a staggering 8 tons of cherries!
+~You find out that Domran spends their time drinking, and as a result, you have no certainty as to whether they will keep their word, nor their general behavior.
+~Remember that history exists, and may be helpful for more than one individual, and perhaps any trends you may notice!
+~To beat this level: Make sure that no one on the island is out of the game for another 10 years. Once this is over, each person must pay another 5 tons in mortgage. ~Feel free to be friendly and help others to keep the group afloat.
 ~Stage 5 filler
 ~Stage 6 filler
 ~Stage 7 filler
@@ -11,3 +11,4 @@ Looks like there’s yet another person that has washed ashore, Pessimo! However
 ~Stage 11 filler
 ~Stage 12 filler
 ~Stage 13 filler
+~Stage 14 filler

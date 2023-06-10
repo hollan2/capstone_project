@@ -28,18 +28,15 @@ export function TutorialGuide({
     level,
 }: TutorialGuideProps) {
     function displayProfessor(): boolean {
-        //Tutorial Level 0
-        if (
-            level === 0 &&
-            stageCount !== 8 &&
-            stageCount !== 12 &&
-            stageCount !== 15 &&
-            stageCount < 21
-        ) {
-            return true;
-        }
+        console.log("Tutorial Stage: " + stageCount);
         //Tutorial Level 1
-        if (level === 1 && stageCount < 5) {
+        if (
+            level === 1 &&
+            stageCount !== 7 &&
+            stageCount !== 11 &&
+            stageCount !== 14 &&
+            stageCount < 20
+        ) {
             return true;
         }
         //Tutorial Level 2
@@ -47,19 +44,29 @@ export function TutorialGuide({
             return true;
         }
         //Tutorial Level 3
-        if (level === 3 && stageCount < 4) {
+        if (level === 3 && stageCount < 5) {
             return true;
         }
         //Tutorial Level 4
-        if (level === 4 && stageCount < 3) {
+        if (level === 4 && stageCount < 4) {
             return true;
         }
         //Tutorial Level 5
-        if (level === 5 && stageCount < 4) {
+        if (
+            (level === 5 && stageCount < 3) ||
+            (level === 5 && stageCount >= 11 && stageCount <= 12)
+        ) {
             return true;
         }
         //Tutorial Level 6
-        if (level === 6 && stageCount < 5) {
+        if (
+            (level === 6 && stageCount < 4) ||
+            (level === 6 && stageCount === 16)
+        ) {
+            return true;
+        }
+        //Tutorial Level 7
+        if (level === 7 && stageCount < 4) {
             return true;
         }
 

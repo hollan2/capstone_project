@@ -1,5 +1,17 @@
-I think you’re really starting to get the hang of this! In fact, why don’t you take over?
-~If you invest 15 tons (over as many rounds as you need) into the library, you can turn all suspicious personalities (like Pessimo) into students (like Susi)!
-~If you invest the same amount into the university, you can change all students (like Susi) to be like reciprocators (like Rec). Remember that you and teachers also have the power to manually convert nearby members from students into reciprocators!
-~To beat the game: There can be three results. If, by the end of 10 years, you can change everyone to be like Rec, you’ll get a gold medal! If you can change at least Domran to be like Rec, you’ll be rewarded with a silver medal. If you are able to simply survive, with the group as a whole accumulating at least 30 tons, then you’ll get a bronze medal.
-~Good luck! Once that is done, feel free to experiment with the free-play, where you’ll meet many different people with varying personalities just like the ones you’ve seen here.
+A new person has joined the island! Profe is a teacher by nature and has only one goal: to bring out the best in others.
+~Profe always follows through on their promises and will reciprocate your intentions as long as you don't compete with them. However, if you choose to engage in competition, Profe will try to show you the error of your ways by setting a good example.
+~This time you don't have direct contact with everyone on the island so you must rely on your immediate connections to help spread your intentions.
+~To beat this level: Just like before, make sure everyone survives the next 10 years and is able to pay 5 tons of cherries for their mortgage.
+~Stage 4 place holder
+~Stage 5 place holder
+~Stage 6 place holder
+~Stage 7 place holder
+~Stage 8 place holder
+~Stage 9 place holder
+~Stage 10 place holder
+~Stage 11 place holder
+~Stage 12 place holder
+~Stage 13 place holder
+~Stage 14 place holder
+~Stage 14 place holder
+~Look! Susi is starting to work with Profe!
